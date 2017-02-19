@@ -1,19 +1,3 @@
-/*
- Copyright (C) 2010 QDSS.org
- 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package cn.devezhao.commons.xml;
 
 import java.io.FileInputStream;
@@ -34,10 +18,10 @@ import cn.devezhao.commons.web.WebUtils;
 /**
  * XML helper
  * 
- * @author <a href="mailto:zhaofang123@gmail.com">Zhao Fangfang</a>
- * @version $Id: XmlHelper.java 6 2015-06-08 08:56:34Z zhaoff@wisecrm.com $
+ * @author Zhao Fangfang
+ * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@gmail.com $
  */
-public class XmlHelper {
+public class XMLHelper {
 	
 	private static final FastSAXReader fastSAXReader = new FastSAXReader(100);
 	

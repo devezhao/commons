@@ -1,19 +1,3 @@
-/*
- Copyright (C) 2009 QDSS.org
- 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package cn.devezhao.commons;
 
 import java.security.MessageDigest;
@@ -31,8 +15,8 @@ import org.apache.commons.lang.StringUtils;
 /**
  * 加密工具类
  * 
- * @author <a href="mailto:zhaofang123@gmail.com">Fangfang Zhao</a>
- * @version $Id: EncryptUtils.java 6 2015-06-08 08:56:34Z zhaoff@wisecrm.com $
+ * @author Zhao Fangfang
+ * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@gmail.com $
  * @see CodecUtils
  */
 public final class EncryptUtils {

@@ -1,7 +1,3 @@
-/*
- Copyright (c) 2012 QIDAPP.com. All rights reserved.
- QIDAPP.com PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package cn.devezhao.commons;
 
 import java.text.DateFormat;

@@ -1,7 +1,3 @@
-/*
- Copyright (C) 2011 QDSS.org. All rights reserved.
- QDSS.org PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package cn.devezhao.commons;
 
 import java.io.ByteArrayOutputStream;
@@ -18,8 +14,8 @@ import cn.devezhao.commons.encoder.UrlBase64Encoder;
 /**
  * 编码工具
  * 
- * @author <a href="mailto:zhaofang123@gmail.com">Zhao Fangfang</a>
- * @version $Id: CodecUtils.java 99 2012-09-07 17:05:19Z zhaofang123@gmail.com $
+ * @author Zhao Fangfang
+ * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@gmail.com $
  */
 public class CodecUtils {
 	

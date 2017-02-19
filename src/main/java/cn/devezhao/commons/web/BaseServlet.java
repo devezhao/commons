@@ -1,19 +1,3 @@
-/*
- Copyright (C) 2010 QDSS.org
- 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package cn.devezhao.commons.web;
 
 import java.io.IOException;
@@ -32,8 +16,8 @@ import cn.devezhao.commons.ThrowableUtils;
 /**
  * 统一的Servlet父类，便于统一处理
  * 
- * @author <a href="mailto:zhaofang123@gmail.com">FANGFANG ZHAO</a>
- * @version $Id: BaseServlet.java 78 2012-01-17 08:05:10Z zhaofang123@gmail.com $
+ * @author Zhao Fangfang
+ * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@gmail.com $
  */
 public abstract class BaseServlet extends HttpServlet implements RequestExecutor {
 	private static final long serialVersionUID = -4379864218946482170L;

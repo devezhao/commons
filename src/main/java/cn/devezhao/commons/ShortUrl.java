@@ -1,19 +1,3 @@
-/*
- Copyright (C) 2012 QDSS.org
- 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
- 
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package cn.devezhao.commons;
 
 import static org.apache.commons.lang.StringUtils.EMPTY;
@@ -27,7 +11,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.qdss.commons.restservice.HttpClientExec;
+
+import cn.devezhao.commons.http.HttpClientExec;
 
 /**
  * 短链处理
@@ -79,8 +64,8 @@ public class ShortUrl {
 	 */
 	public static String shortUrl(String url) {
 		try {
-		    // iphone新浪微博客户端 App Key：5786724301
-			// weico.iphone版  App Key：82966982
+		    // iPhone 新浪微博客户端 APPKEY: 5786724301
+			// Weoco.iPhone 版 APPKEY:82966982
 			String to = String.format(
 					"http://api.weibo.com/2/short_url/shorten.json?source=%d&url_long=%s",
 					new Random().nextBoolean() ? 82966982L : 5786724301L,

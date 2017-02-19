@@ -1,7 +1,3 @@
-/*
- Copyright (C) 2011 QDSS.org. All rights reserved.
- QDSS.org PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package cn.devezhao.commons;
 
 import java.math.BigDecimal;
@@ -12,9 +8,8 @@ import org.apache.commons.lang.math.NumberUtils;
 /**
  * 对象处理相关
  * 
- * @author <a href="mailto:zhaofang123@gmail.com">Zhao Fangfang</a>
- * @version $Id: ObjectUtils.java 70 2011-09-29 08:26:42Z zhaofang123@gmail.com
- *          $
+ * @author Zhao Fangfang
+ * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@gmail.com $
  */
 public class ObjectUtils {
 	

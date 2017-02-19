@@ -1,7 +1,3 @@
-/*
- Copyright (C) 2011-2014 QIDAPP.com. All rights reserved.
- QIDAPP.com PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package cn.devezhao.commons;
 
 import java.util.regex.Pattern;
@@ -11,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * 
  * @author Zhao Fangfang
- * @version $Id: RegexUtils.java 6 2015-06-08 08:56:34Z zhaoff@wisecrm.com $
+ * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@gmail.com $
  * @since 0.2, 2014-4-18
  */
 public class RegexUtils {

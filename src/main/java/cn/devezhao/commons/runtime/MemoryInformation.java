@@ -1,7 +1,3 @@
-/*
- Copyright (C) 2011 QIDAPP.com. All rights reserved.
- QIDAPP.com PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package cn.devezhao.commons.runtime;
 
 /**
