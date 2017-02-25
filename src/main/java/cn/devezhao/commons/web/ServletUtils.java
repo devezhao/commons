@@ -308,7 +308,7 @@ public class ServletUtils {
 	 */
 	public static boolean isAjaxRequest(HttpServletRequest request) {
 		String hv = request.getHeader("x-requested-with");
-		return "XMLHttpRequest".equals(hv);
+		return "XMLHttpRequest".equalsIgnoreCase(hv);
 	}
 	
 	/**
@@ -318,9 +318,49 @@ public class ServletUtils {
 	 * @param minute
 	 */
 	public static void addCacheHead(HttpServletResponse response, int minute) {
-		response.setHeader("Cache-Control", "max-age=" + (minute * 60));
+		response.setHeader("Cache-Control", "public, max-age=" + (minute * 60));
     	response.setDateHeader("Expires", CalendarUtils.add(Calendar.MINUTE, minute).getTime());
-    	response.setHeader("X-Cache", "org.qdss.commons.xcache");
+    	response.setHeader("X-Cache", "cn.devezhao.commons.web.XCACHE");
+	}
+	
+	/**
+	 * 获取请求 URL（包括参数）
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static String getFullRequestUrl(HttpServletRequest request) {
+		String scheme = getScheme(request);
+		String serverName = request.getRemoteHost();
+		int port = request.getRemotePort();
+		
+		String fullUrl = scheme + "://" + serverName;
+		if ((scheme.equals("http") && port == 80) || (scheme.equals("https") && port == 443)) {
+			// 默认端口无需添加
+		} else {
+			fullUrl += ":" + port;
+		}
+		fullUrl += request.getRequestURI();
+		
+		String qstr = request.getQueryString();
+		if (StringUtils.isNotBlank(qstr)) {
+			fullUrl += "?" + qstr;
+		}
+		return fullUrl;
+	}
+	
+	/**
+	 * 获取请求协议
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static String getScheme(HttpServletRequest request) {
+		String scheme = request.getHeader("x-forwarded-proto");
+		if (StringUtils.isBlank(scheme)) {
+			scheme = request.getScheme();
+		}
+		return scheme;
 	}
 	
 	// -----------------------------------------------------------------------------------
