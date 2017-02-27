@@ -25,6 +25,7 @@ public class ShortUrl {
 	private static final Log LOG = LogFactory.getLog(ShortUrl.class);
 
 	final static Pattern URL_PATTERN = Pattern.compile("http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=#,]*)?");
+	
 	/**
 	 * 将内容中的URL全部换为短链
 	 * 
@@ -46,7 +47,8 @@ public class ShortUrl {
 		}
 		
 		for (String url : urls) {
-			if (url.startsWith("http://t.cn") || url.startsWith("http://url.cn")) {
+			if (url.startsWith("http://t.cn") || url.startsWith("http://url.cn")
+					|| url.startsWith("http://tb.cn") || url.startsWith("http://dwz.cn")) {
 				continue;
 			}
 			
@@ -57,14 +59,14 @@ public class ShortUrl {
 	}
 	
 	/**
-	 * 短链
+	 * 新浪短链
 	 * 
 	 * @param url
 	 * @return
 	 */
 	public static String shortUrl(String url) {
 		try {
-		    // iPhone 新浪微博客户端 APPKEY: 5786724301
+		    // iPhone 新浪微博客户端 APPKEY:5786724301
 			// Weoco.iPhone 版 APPKEY:82966982
 			String to = String.format(
 					"http://api.weibo.com/2/short_url/shorten.json?source=%d&url_long=%s",
@@ -75,12 +77,11 @@ public class ShortUrl {
 			if (split.length != 2) {
 				return url;
 			}
-			
 			String sUrl = split[1].split("url_long")[0].split(",")[0];
-			sUrl = "http://t.cn" + sUrl.replaceAll("\"", EMPTY).replaceAll(",", EMPTY);
+			sUrl = "t.cn" + sUrl.replaceAll("\"", EMPTY).replaceAll(",", EMPTY);
 			return sUrl;
 		} catch (Exception ex) {
-			LOG.error("short URL fail!", ex);
+			LOG.error("Shortting URL fail: " + url, ex);
 			return url;
 		}
 	}
@@ -96,7 +97,6 @@ public class ShortUrl {
 		method.addParameter("url", url);
 		String r = HttpClientExec.getInstance().executeMethod(method);
 		r = r.replace("\\", "");
-		
 		String[] r_split = r.split("dwz.cn");
 		String sUrl = r_split[1].split("\"")[0];
 		sUrl = "dwz.cn" + sUrl;

@@ -170,10 +170,4 @@ public final class EncryptUtils {
 	}
 	
 	private EncryptUtils() {}
-	
-	public static void main(String[] args) {
-		String en = aesEncrypt("1823265756@qq.com#innobuddystudy521！", "02133558055".getBytes());
-		System.out.println(en);
-		System.out.println(aesDecrypt(en, "02133558055".getBytes()));
-	}
 }
