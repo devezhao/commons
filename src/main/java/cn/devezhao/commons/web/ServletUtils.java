@@ -330,23 +330,12 @@ public class ServletUtils {
 	 * @return
 	 */
 	public static String getFullRequestUrl(HttpServletRequest request) {
-		String scheme = getScheme(request);
-		String serverName = request.getRemoteHost();
-		int port = request.getRemotePort();
-		
-		String fullUrl = scheme + "://" + serverName;
-		if ((scheme.equals("http") && port == 80) || (scheme.equals("https") && port == 443)) {
-			// 默认端口无需添加
-		} else {
-			fullUrl += ":" + port;
-		}
-		fullUrl += request.getRequestURI();
-		
+		StringBuffer fullUrl = request.getRequestURL();
 		String qstr = request.getQueryString();
 		if (StringUtils.isNotBlank(qstr)) {
-			fullUrl += "?" + qstr;
+			fullUrl.append("?").append(qstr);
 		}
-		return fullUrl;
+		return fullUrl.toString();
 	}
 	
 	/**
