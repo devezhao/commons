@@ -16,20 +16,20 @@ public class WebUtils {
 	// ---------------------------------------------- TOKENs
 
 	/**
-	 * Key前缀  */
+	 * KEY 前缀  */
 	public static final String KEY_PREFIX 		= WebUtils.class.getPackage().getName() + "__";
 	/**
 	 * 当前会话中的用户 */
 	public static final String CURRENT_USER 	= KEY_PREFIX + "CURRENT_USER";
 	/**
-	 * Request#attribute中的消息 */
+	 * Request#attribute 中的消息 */
 	public static final String REQUEST_MESSAGE 	= KEY_PREFIX + "REQUEST_MESSAGE";
 	
 	// ---------------------------------------------- STATUS CODEs
 	
-	public static final int OK 		= 1000;
-	public static final int FAIL 	= 1001;
-	public static final int ERROR 	= 1002;
+	public static final int STATUS_OK 		= 0;
+	public static final int STATUS_FAIL 	= 1;
+	public static final int STATUS_ERROR 	= 2;
 	
 	/**
 	 * @param request

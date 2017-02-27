@@ -24,11 +24,15 @@ public interface RequestContext {
 	
 	String getParameter(String paramName);
 	
+	int getIntParameter(String paramName);
+	
+	long getLongParameter(String paramName);
+	
+	double getDoubleParameter(String paramName);
+	
 	void write(Object value) throws IOException;
 	
-	void writeJson(Object value) throws IOException;
+	void writeJSON(Object value) throws IOException;
 	
 	void writeStatus(int status, Object message) throws IOException;
-	
-	void setMessage(String message);
 }

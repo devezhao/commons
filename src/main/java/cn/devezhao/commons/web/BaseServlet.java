@@ -14,7 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import cn.devezhao.commons.ThrowableUtils;
 
 /**
- * 统一的Servlet父类，便于统一处理
+ * 统一的 SERVLET 父类，便于统一处理
  * 
  * @author Zhao Fangfang
  * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@gmail.com $
@@ -95,7 +95,7 @@ public abstract class BaseServlet extends HttpServlet implements RequestExecutor
 	protected Throwable getRootCause(Throwable cause) {
 		Throwable rootCause = null;
 		if (cause == null) {
-			rootCause = new RuntimeException("未知错误！");
+			rootCause = new RuntimeException("未知错误");
 		} else if (cause instanceof InvocationTargetException) {
 			rootCause = ((InvocationTargetException) cause).getTargetException();
 		} else {

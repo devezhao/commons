@@ -11,7 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import cn.devezhao.commons.ThrowableUtils;
 
 /**
- * 页面转发。如果不想暴露为.jsp页面
+ * 页面转发，如果不想暴露为 .JSP 页面
  * 
  * @author Zhao Fangfang
  * @version $Id: JhtmlForward.java 110 2013-06-22 09:40:22Z zhaofang123@gmail.com $
@@ -41,10 +41,11 @@ public class JhtmlForward extends BaseServlet {
 			ServletUtils.forward(
 					context.getRequest(), context.getResponse(), toUrl);
 		} catch (Exception ex) {
-			if (ThrowableUtils.getRootCause(ex) instanceof FileNotFoundException) {
-				context.getResponse().sendError(HttpServletResponse.SC_NOT_FOUND);
+			Throwable root = ThrowableUtils.getRootCause(ex);
+			if (root instanceof FileNotFoundException) {
+				context.getResponse().sendError(HttpServletResponse.SC_NOT_FOUND, root.getLocalizedMessage());
 			} else {
-				context.getResponse().sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				context.getResponse().sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, root.getLocalizedMessage());
 			}
 		}
 	}

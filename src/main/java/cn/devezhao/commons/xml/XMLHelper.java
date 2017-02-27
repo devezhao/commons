@@ -55,7 +55,6 @@ public class XMLHelper {
 	 */
 	public static Document createDocument(InputStream stream) {
 		SAXReader saxReader = fastSAXReader.getSAXParser();
-		
 		try {
 			saxReader.setEncoding(WebUtils.ENCODING_DEFAULT);
 			return saxReader.read(stream);
@@ -63,7 +62,6 @@ public class XMLHelper {
 			throw new RuntimeException("Could't read XML from InputStream!", ex);
 		} finally {
 			fastSAXReader.release(saxReader);
-			
 			try {
 				stream.close();
 			} catch (IOException ioex) {}
@@ -85,7 +83,6 @@ public class XMLHelper {
 	 */
 	public static Document createDocument(Reader reader, String encoding) {
 		SAXReader saxReader = fastSAXReader.getSAXParser();
-		
 		try {
 			saxReader.setEncoding(encoding);
 			return saxReader.read(reader);
@@ -93,7 +90,6 @@ public class XMLHelper {
 			throw new RuntimeException("Could't read XML from InputStream!", ex);
 		} finally {
 			fastSAXReader.release(saxReader);
-			
 			try {
 				reader.close();
 			} catch (IOException ioex) {}

@@ -127,9 +127,6 @@ public class Bean2Json {
 		}
 		
 		String jn = json.toString();
-		if (jn.contains("&")) {
-			jn = jn.replaceAll("&", "&amp;");
-		}
 		if (jn.contains("\"")) {
 			jn = jn.replaceAll("\"", "&quot;");
 		}
@@ -152,7 +149,6 @@ public class Bean2Json {
 		
 		String str = json.toString();
 		str = str.replaceAll("&quot;", "\"");
-		str = str.replaceAll("&amp;", "&");
 		return str;
 	}
 	

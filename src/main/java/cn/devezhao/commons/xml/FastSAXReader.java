@@ -28,7 +28,6 @@ public class FastSAXReader {
 	
 	public FastSAXReader(int initial) {
 		this.initial = initial;
-		
 		doInitAllCache();
 	}
 	
@@ -57,7 +56,6 @@ public class FastSAXReader {
 	 */
 	private void doInitAllCache() {
 		LOG.debug("Initializing " + initial + " SAXReader in cache");
-		
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			
@@ -70,12 +68,12 @@ public class FastSAXReader {
 	}
 	
 	private XMLReader doCachingOneReader(SAXParserFactory factory) {
-		if (factory == null)
+		if (factory == null) {
 			factory = SAXParserFactory.newInstance();
+		}
 		
-		SAXParser parser;
 		try {
-			parser = factory.newSAXParser();
+			SAXParser parser = factory.newSAXParser();
 			XMLReader reader = parser.getXMLReader();
 			reader.setFeature("http://xml.org/sax/features/validation", false);
 			xmlReadres.add(reader);
