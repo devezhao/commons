@@ -10,7 +10,9 @@ import org.apache.commons.lang.math.NumberUtils;
  * @author Zhao Fangfang
  * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@g.com $
  * @since 1.0, 2013-7-2
+ * @deprecated Using fastjson
  */
+@Deprecated
 public class Bean2Json {
 
 	/**

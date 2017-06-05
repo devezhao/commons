@@ -16,6 +16,7 @@ import cn.devezhao.commons.ObjectUtils;
  * @author Zhao Fangfang
  * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@gmail.com $
  */
+@SuppressWarnings("deprecation")
 public class RequestContextImpl implements RequestContext {
 
 	volatile private HttpServletRequest request;

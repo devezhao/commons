@@ -2,17 +2,23 @@ package cn.devezhao.commons;
 
 import static org.apache.commons.lang.StringUtils.EMPTY;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
 
-import cn.devezhao.commons.http.HttpClientExec;
+import cn.devezhao.commons.http4.HttpClientEx;
 
 /**
  * 短链处理
@@ -27,7 +33,7 @@ public class ShortUrl {
 	final static Pattern URL_PATTERN = Pattern.compile("http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=#,]*)?");
 	
 	/**
-	 * 将内容中的URL全部换为短链
+	 * 将内容中的 URL 全部换为短链
 	 * 
 	 * @param content
 	 * @return
@@ -66,13 +72,13 @@ public class ShortUrl {
 	 */
 	public static String shortUrl(String url) {
 		try {
-		    // iPhone 新浪微博客户端 APPKEY:5786724301
-			// Weoco.iPhone 版 APPKEY:82966982
+		    // iPhone 新浪微博客户端 APPKEY: 5786724301
+			// Weoco.iPhone APPKEY: 82966982
 			String to = String.format(
 					"http://api.weibo.com/2/short_url/shorten.json?source=%d&url_long=%s",
 					new Random().nextBoolean() ? 82966982L : 5786724301L,
 					CodecUtils.urlEncode(url));
-			String result = HttpClientExec.getInstance().executeGet(to);
+			String result = HttpClientEx.instance().get(to);
 			String split[] = result.split("http://t.cn");
 			if (split.length != 2) {
 				return url;
@@ -93,10 +99,17 @@ public class ShortUrl {
 	 * @return
 	 */
 	public static String dwzUrl(String url) {
-		PostMethod method = new PostMethod("http://dwz.cn/create.php");
-		method.addParameter("url", url);
-		String r = HttpClientExec.getInstance().executeMethod(method);
-		r = r.replace("\\", "");
+		HttpPost post = new HttpPost("http://dwz.cn/create.php");
+		List<NameValuePair> nvp = new ArrayList<>();
+		nvp.add(new BasicNameValuePair("url", url));
+		try {
+			post.setEntity(new UrlEncodedFormEntity(nvp));
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
+		
+		String r = HttpClientEx.instance().execMethod(post);
+		r = r.replace("\\", EMPTY);
 		String[] r_split = r.split("dwz.cn");
 		String sUrl = r_split[1].split("\"")[0];
 		sUrl = "dwz.cn" + sUrl;

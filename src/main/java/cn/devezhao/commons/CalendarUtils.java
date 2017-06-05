@@ -61,7 +61,7 @@ public class CalendarUtils extends DateFormatUtils {
 	 * @return
 	 */
 	public static Date addDay(int amount) {
-		return add(Calendar.DAY_OF_MONTH, amount);
+		return add(amount, Calendar.DAY_OF_MONTH);
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class CalendarUtils extends DateFormatUtils {
 	 * @return
 	 */
 	public static Date addMonth(int amount) {
-		return add(Calendar.MONTH, amount);
+		return add(amount, Calendar.MONTH);
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public class CalendarUtils extends DateFormatUtils {
 	 * @return
 	 */
 	public static Date addDay(Date date, int amount) {
-		return add(date, Calendar.DAY_OF_MONTH, amount);
+		return add(date, amount, Calendar.DAY_OF_MONTH);
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class CalendarUtils extends DateFormatUtils {
 	 * @return
 	 */
 	public static Date addMonth(Date date, int amount) {
-		return add(date, Calendar.MONTH, amount);
+		return add(date, amount, Calendar.MONTH);
 	}
 	
 	/**
