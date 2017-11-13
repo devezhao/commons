@@ -78,7 +78,7 @@ public class Cell {
 	
 	public Boolean asBool() {
 		if (value == null) {
-			return null;
+			return Boolean.FALSE;
 		}
 		if (value instanceof Boolean) {
 			return (Boolean) value;

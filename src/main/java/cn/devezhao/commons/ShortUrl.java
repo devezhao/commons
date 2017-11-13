@@ -64,6 +64,7 @@ public class ShortUrl {
 		return content;
 	}
 	
+	private static final Random RND = new Random();
 	/**
 	 * 新浪短链
 	 * 
@@ -76,7 +77,7 @@ public class ShortUrl {
 			// Weoco.iPhone APPKEY: 82966982
 			String to = String.format(
 					"http://api.weibo.com/2/short_url/shorten.json?source=%d&url_long=%s",
-					new Random().nextBoolean() ? 82966982L : 5786724301L,
+					RND.nextBoolean() ? 82966982L : 5786724301L,
 					CodecUtils.urlEncode(url));
 			String result = HttpClientEx.instance().get(to);
 			String split[] = result.split("http://t.cn");

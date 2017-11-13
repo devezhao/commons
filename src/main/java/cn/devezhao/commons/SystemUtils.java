@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -85,19 +86,16 @@ public final class SystemUtils {
 		}
 		lastGcTime = System.currentTimeMillis();
 		
-		int sleepWait = 60 * 1000;
 		try {
 			 System.gc();
-			 Thread.sleep(sleepWait);
-	         
+			 TimeUnit.SECONDS.sleep(30);
 	         System.runFinalization();
-	         Thread.sleep(sleepWait);
+	         TimeUnit.SECONDS.sleep(30);
 	         
 	         System.gc();
-	         Thread.sleep(sleepWait);
-	         
+	         TimeUnit.SECONDS.sleep(30);
 	         System.runFinalization();
-	         Thread.sleep(sleepWait);
+	         TimeUnit.SECONDS.sleep(30);
 	         
 		} catch (Exception ex) {
 			//...
