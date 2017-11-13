@@ -64,7 +64,7 @@ public class HttpClientEx {
 	 * @return
 	 */
 	public String post(String url, Object data) {
-		HttpPost httpPost = new HttpPost();
+		HttpPost httpPost = new HttpPost(url);
 		if (data != null) {
 			httpPost.setEntity(new StringEntity(data.toString(), charset));
 		}

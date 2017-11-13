@@ -11,7 +11,7 @@ public class HttpClientExTest {
 
 	@Test
 	public void testGet() {
-		String r = new HttpClientEx().get("https://www.baidu.com/");
+		String r = new HttpClientEx().get("https://a.dev.wisecrm.com/scrm/");
 		System.out.println(r);
 	}
 }
