@@ -2,6 +2,7 @@ package cn.devezhao.commons;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -83,6 +84,16 @@ public class DateFormatUtils {
 	 */
 	public static DateFormat getDateFormat(String formatted) {
 		return new SimpleDateFormat(formatted, DEFAULT_LOCALE);
+	}
+	
+	/**
+	 * @param formatted
+	 * @param date
+	 * @return
+	 */
+	public static String format(String formatted, Date date) {
+		SimpleDateFormat sdf = new SimpleDateFormat(formatted, DEFAULT_LOCALE);
+		return sdf.format(date);
 	}
 	
 	public static final String CN_DATE_FORMAT = "yyyy年MM月dd日";
