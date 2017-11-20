@@ -1,15 +1,23 @@
 package cn.devezhao.commons.http4;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 /**
@@ -20,7 +28,7 @@ import org.apache.http.util.EntityUtils;
 public class HttpClientEx {
 	
 	private HttpClient httpClient;
-	private String charset;
+	private String encoding;
 
 	public HttpClientEx() {
 		this(30 * 1000, "utf-8");
@@ -28,10 +36,10 @@ public class HttpClientEx {
 	
 	/**
 	 * @param timeout
-	 * @param charset
+	 * @param encoding
 	 */
-	public HttpClientEx(int timeout, String charset) {
-		this.charset = charset == null ? "utf-8" : charset;
+	public HttpClientEx(int timeout, String encoding) {
+		this.encoding = encoding == null ? "utf-8" : encoding;
 		
 		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
 		cm.setMaxTotal(100);
@@ -63,10 +71,34 @@ public class HttpClientEx {
 	 * @param data
 	 * @return
 	 */
-	public String post(String url, Object data) {
+	public String post(String url, String data) {
 		HttpPost httpPost = new HttpPost(url);
 		if (data != null) {
-			httpPost.setEntity(new StringEntity(data.toString(), charset));
+			httpPost.setEntity(new StringEntity(data, encoding));
+		}
+		return execMethod(httpPost);
+	}
+	
+	/**
+	 * @param url
+	 * @param dataMap
+	 * @return
+	 */
+	public String post(String url, Map<String, Object> dataMap) {
+		HttpPost httpPost = new HttpPost(url);
+		if (dataMap != null && !dataMap.isEmpty()) {
+			List<NameValuePair> params = new ArrayList<>();
+			for (Map.Entry<String, Object> e : dataMap.entrySet()) {
+				if (e.getValue() != null) {
+					params.add(new BasicNameValuePair(e.getKey(), e.getValue().toString()));
+				}
+			}
+			
+			try {
+				httpPost.setEntity(new UrlEncodedFormEntity(params, encoding));
+			} catch (UnsupportedEncodingException e) {
+				throw new ExecuteHttpMethodException("设置 POST 参数失败", e);
+			}
 		}
 		return execMethod(httpPost);
 	}
@@ -82,7 +114,7 @@ public class HttpClientEx {
 				throw new ExecuteHttpMethodException("无效 HTTP 状态: " + resp.getStatusLine());
 			}
 			
-			String r = EntityUtils.toString(resp.getEntity(), charset);
+			String r = EntityUtils.toString(resp.getEntity(), encoding);
 			return r;
 		} catch (Exception e) {
 			throw new ExecuteHttpMethodException(e);
