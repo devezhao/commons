@@ -54,7 +54,7 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 	 * @return
 	 */
 	public String[] getSheetNames() {
-		List<String> names = new ArrayList<>();
+		List<String> names = new ArrayList<String>();
 		for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
 			names.add(workbook.getSheetName(i));
 		}
@@ -92,7 +92,7 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 
 	@Override
 	public Cell[] next() {
-		List<Cell> rowValues = new ArrayList<>();
+		List<Cell> rowValues = new ArrayList<Cell>();
 		Row row = sheet.getRow(rowIndex++);
 		for (int i = 0; i < row.getPhysicalNumberOfCells(); i++) {
 			org.apache.poi.ss.usermodel.Cell cell = row.getCell(i);

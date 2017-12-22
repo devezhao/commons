@@ -87,7 +87,7 @@ public class HttpClientEx {
 	public String post(String url, Map<String, Object> dataMap) {
 		HttpPost httpPost = new HttpPost(url);
 		if (dataMap != null && !dataMap.isEmpty()) {
-			List<NameValuePair> params = new ArrayList<>();
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			for (Map.Entry<String, Object> e : dataMap.entrySet()) {
 				if (e.getValue() != null) {
 					params.add(new BasicNameValuePair(e.getKey(), e.getValue().toString()));

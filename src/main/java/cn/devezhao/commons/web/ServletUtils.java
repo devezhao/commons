@@ -319,8 +319,7 @@ public class ServletUtils {
 	 */
 	public static void addCacheHead(HttpServletResponse response, int minute) {
 		response.setHeader("Cache-Control", "public, max-age=" + (minute * 60));
-    	response.setDateHeader("Expires", CalendarUtils.add(Calendar.MINUTE, minute).getTime());
-    	response.setHeader("X-Cache", "cn.devezhao.commons.web.XCACHE");
+    	response.setDateHeader("Expires", CalendarUtils.add(minute, Calendar.MINUTE).getTime());
 	}
 	
 	/**

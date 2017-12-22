@@ -49,7 +49,7 @@ public class XExcelReader extends ExcelReader {
 	
 	@Override
 	public String[] getSheetNames() {
-		List<String> names = new ArrayList<>();
+		List<String> names = new ArrayList<String>();
 		XSSFReader.SheetIterator iter;
 		try {
 			iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
@@ -154,7 +154,7 @@ public class XExcelReader extends ExcelReader {
 	 * @throws XMLStreamException 
 	 */
 	private Cell[] readRow() throws XMLStreamException {
-		List<Cell> rowValues = new ArrayList<>();
+		List<Cell> rowValues = new ArrayList<Cell>();
         while (xmlReader.hasNext()) {
             xmlReader.next();
             if (xmlReader.isStartElement()) {

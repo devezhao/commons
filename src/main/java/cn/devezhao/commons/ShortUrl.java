@@ -101,7 +101,7 @@ public class ShortUrl {
 	 */
 	public static String dwzUrl(String url) {
 		HttpPost post = new HttpPost("http://dwz.cn/create.php");
-		List<NameValuePair> nvp = new ArrayList<>();
+		List<NameValuePair> nvp = new ArrayList<NameValuePair>();
 		nvp.add(new BasicNameValuePair("url", url));
 		try {
 			post.setEntity(new UrlEncodedFormEntity(nvp));
