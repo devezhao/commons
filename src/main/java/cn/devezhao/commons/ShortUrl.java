@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,7 +63,6 @@ public class ShortUrl {
 		return content;
 	}
 	
-	private static final Random RND = new Random();
 	/**
 	 * 新浪短链
 	 * 
@@ -73,11 +71,11 @@ public class ShortUrl {
 	 */
 	public static String shortUrl(String url) {
 		try {
-		    // iPhone 新浪微博客户端 APPKEY: 5786724301
+		    // iPhone 新浪微博客户端 APPKEY: 5786724301  // 18.02.09 不能用了
 			// Weoco.iPhone APPKEY: 82966982
 			String to = String.format(
 					"http://api.weibo.com/2/short_url/shorten.json?source=%d&url_long=%s",
-					RND.nextBoolean() ? 82966982L : 5786724301L,
+					82966982L,
 					CodecUtils.urlEncode(url));
 			String result = HttpClientEx.instance().get(to);
 			String split[] = result.split("http://t.cn");
