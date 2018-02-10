@@ -1,5 +1,6 @@
 package cn.devezhao.commons;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,7 +13,14 @@ public class ShortUrlTest {
 
 	@Test
 	public void testShortUrl() {
-		String s = ShortUrl.shortUrl("https://www.baidu.com/");
+		String s = ShortUrl.shortUrl("https://www.baidu.com/?s=" + RandomUtils.nextInt());
+		Assert.assertNotNull(s);
+		System.out.println(s);
+	}
+	
+	@Test
+	public void testFt12Url() {
+		String s = ShortUrl.ft12Url("https://www.baidu.com/?s=" + RandomUtils.nextInt());
 		Assert.assertNotNull(s);
 		System.out.println(s);
 	}

@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.NameValuePair;
@@ -63,40 +64,50 @@ public class ShortUrl {
 		return content;
 	}
 	
+	private static final HttpClientEx HTTP_CLIENT_EX = new HttpClientEx(3 * 1000, "utf-8");
+	private static final String APPKEYS[] = new String[] { "5786724301", "82966982", "405597125", "3822648575" };
+	private static String LAST_APPKEY = null;
 	/**
-	 * 新浪短链
+	 * t.cn
 	 * 
 	 * @param url
 	 * @return
 	 */
 	public static String shortUrl(String url) {
-		try {
-		    // iPhone 新浪微博客户端 APPKEY: 5786724301  // 18.02.09 不能用了
-			// Weoco.iPhone APPKEY: 82966982
-			String to = String.format(
-					"http://api.weibo.com/2/short_url/shorten.json?source=%d&url_long=%s",
-					82966982L,
-					CodecUtils.urlEncode(url));
-			String result = HttpClientEx.instance().get(to);
-			String split[] = result.split("http://t.cn");
-			if (split.length != 2) {
-				return url;
+		String appkey = LAST_APPKEY;
+		for (int i = 0; i < 5; i++) {
+			if (i > 0 || appkey == null) {
+				appkey = APPKEYS[RandomUtils.nextInt(APPKEYS.length)];
 			}
-			String sUrl = split[1].split("url_long")[0].split(",")[0];
-			sUrl = "t.cn" + sUrl.replaceAll("\"", EMPTY).replaceAll(",", EMPTY);
-			return sUrl;
-		} catch (Exception ex) {
-			LOG.error("Shortting URL fail: " + url, ex);
-			return url;
+			
+			try {
+				String api = String.format(
+						"http://api.weibo.com/2/short_url/shorten.json?source=%s&url_long=%s",
+						appkey,
+						CodecUtils.urlEncode(url));
+				String result = HTTP_CLIENT_EX.get(api);
+				String split[] = result.split("http://t.cn");
+				if (split.length != 2) {
+					return url;
+				}
+				String sUrl = split[1].split("url_long")[0].split(",")[0];
+				sUrl = "t.cn" + sUrl.replaceAll("\"", EMPTY).replaceAll(",", EMPTY);
+				LAST_APPKEY = appkey;
+				return sUrl;
+			} catch (Exception ex) {
+				LOG.error("短网址失败: " + url + " << " + appkey + " >> " + ex.getLocalizedMessage());
+			}
 		}
+		return url;
 	}
 	
 	/**
-	 * 使用百度 dwz.cn 缩短网址
+	 * 使用百度 dwz.la 缩短网址
 	 * 
 	 * @param url
 	 * @return
 	 */
+	@Deprecated
 	public static String dwzUrl(String url) {
 		HttpPost post = new HttpPost("http://dwz.cn/create.php");
 		List<NameValuePair> nvp = new ArrayList<NameValuePair>();
@@ -113,5 +124,24 @@ public class ShortUrl {
 		String sUrl = r_split[1].split("\"")[0];
 		sUrl = "dwz.cn" + sUrl;
 		return sUrl;
+	}
+	
+	/**
+	 * dwz.la
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public static String ft12Url(String url) {
+		try {
+			String to = String.format(
+					"http://api.ft12.com/api.php?url=%s",
+					CodecUtils.urlEncode(url));
+			String result = HttpClientEx.instance().get(to);
+			return result;
+		} catch (Exception ex) {
+			LOG.error("短网址失败: " + url + " >> " + ex.getLocalizedMessage());
+		}
+		return url;
 	}
 }

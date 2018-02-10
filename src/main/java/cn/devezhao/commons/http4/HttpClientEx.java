@@ -110,11 +110,13 @@ public class HttpClientEx {
 	public String execMethod(HttpUriRequest request) {
 		try {
 			HttpResponse resp = httpClient.execute(request);
-			if (resp.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-				throw new ExecuteHttpMethodException("无效 HTTP 状态: " + resp.getStatusLine());
+			String r = null;
+			if (resp.getEntity() != null) {
+				r = EntityUtils.toString(resp.getEntity(), encoding);
 			}
-			
-			String r = EntityUtils.toString(resp.getEntity(), encoding);
+			if (resp.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+				throw new ExecuteHttpMethodException("无效 HTTP 状态: " + resp.getStatusLine() + (r == null ? "" : (":" + r)));
+			}
 			return r;
 		} catch (Exception e) {
 			throw new ExecuteHttpMethodException(e);
