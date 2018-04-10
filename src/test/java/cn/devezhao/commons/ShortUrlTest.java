@@ -13,9 +13,11 @@ public class ShortUrlTest {
 
 	@Test
 	public void testShortUrl() {
-		String s = ShortUrl.shortUrl("https://www.baidu.com/?s=" + RandomUtils.nextInt());
-		Assert.assertNotNull(s);
-		System.out.println(s);
+		for (int i = 0; i < 1; i++) {
+			String s = ShortUrl.shortUrl("https://www.baidu.com/?s=" + RandomUtils.nextInt());
+			Assert.assertNotNull(s);
+			System.out.println(s);
+		}
 	}
 	
 	@Test

@@ -65,7 +65,8 @@ public class ShortUrl {
 	}
 	
 	private static final HttpClientEx HTTP_CLIENT_EX = new HttpClientEx(3 * 1000, "utf-8");
-	private static final String APPKEYS[] = new String[] { "5786724301", "82966982", "405597125", "3822648575" };
+	// http://blog.sina.com.cn/s/blog_9e1ea13a01017y3n.html
+	private static final String APPKEYS[] = new String[] { "5786724301", "82966982", "405597125", "3822648575", "2849184197", "2702428363", "211160679", "31641035" };
 	private static String LAST_APPKEY = null;
 	/**
 	 * t.cn
