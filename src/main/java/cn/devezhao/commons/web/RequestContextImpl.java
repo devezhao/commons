@@ -19,8 +19,8 @@ import cn.devezhao.commons.ObjectUtils;
 @SuppressWarnings("deprecation")
 public class RequestContextImpl implements RequestContext {
 
-	volatile private HttpServletRequest request;
-	volatile private HttpServletResponse response;
+	private HttpServletRequest request;
+	private HttpServletResponse response;
 
 	public RequestContextImpl(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
