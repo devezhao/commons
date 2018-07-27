@@ -20,9 +20,9 @@ import cn.devezhao.commons.ThrowableUtils;
 public class JhtmlForward extends BaseServlet {
 	private static final long serialVersionUID = -6821655106468381401L;
 	
-	private String contextPath;
-	private String prefix;
-	private String suffix;
+	protected String contextPath;
+	protected String prefix;
+	protected String suffix;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {

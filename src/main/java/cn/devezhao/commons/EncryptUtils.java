@@ -1,5 +1,6 @@
 package cn.devezhao.commons;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -27,7 +28,7 @@ public final class EncryptUtils {
 	 * @param input
 	 * @return
 	 */
-	public static byte[] toMD5(byte[] input) {
+	private static byte[] toMD5(byte[] input) {
 		MessageDigest digest = null;
 		try {
 			digest = MessageDigest.getInstance("MD5");
@@ -49,15 +50,29 @@ public final class EncryptUtils {
 	}
 
 	/**
+	 * MD5加密
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static String toMD5Hex(String input) {
+		try {
+			return toMD5Hex(input.getBytes("utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
 	 * SHA1加密
 	 * 
 	 * @param input
 	 * @return
 	 */
-	public static byte[] toSHA1(byte[] input) {
+	private static byte[] toSHA(byte[] input, String algorithm) {
 		MessageDigest digest = null;
 		try {
-			digest = MessageDigest.getInstance("SHA1");
+			digest = MessageDigest.getInstance(algorithm);
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);
 		}
@@ -72,7 +87,45 @@ public final class EncryptUtils {
 	 * @return
 	 */
 	public static String toSHA1Hex(byte[] input) {
-		return toHexString(toSHA1(input));
+		return toHexString(toSHA(input, "SHA1"));
+	}
+
+	/**
+	 * SHA1加密
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static String toSHA1Hex(String input) {
+		try {
+			return toSHA1Hex(input.getBytes("utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * SHA-256加密
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static String toSHA256Hex(byte[] input) {
+		return toHexString(toSHA(input, "SHA-256"));
+	}
+
+	/**
+	 * SHA-256加密
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static String toSHA256Hex(String input) {
+		try {
+			return toSHA256Hex(input.getBytes("utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
