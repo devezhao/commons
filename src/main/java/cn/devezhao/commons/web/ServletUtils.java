@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 
+import com.alibaba.fastjson.JSON;
+
 import cn.devezhao.commons.CalendarUtils;
 import cn.devezhao.commons.xml.XMLHelper;
 
@@ -210,6 +212,16 @@ public class ServletUtils {
 			return null;
 		}
 		return XMLHelper.createDocument(reader);
+	}
+	
+	/**
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	public static JSON getRequestJson(ServletRequest request) throws IOException {
+		String req = getRequestString(request);
+		return (JSON) JSON.parse(req);
 	}
 
 	/**

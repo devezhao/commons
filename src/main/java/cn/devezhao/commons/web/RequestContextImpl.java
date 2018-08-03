@@ -2,6 +2,8 @@ package cn.devezhao.commons.web;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,14 +11,14 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import cn.devezhao.commons.Bean2Json;
+import com.alibaba.fastjson.JSON;
+
 import cn.devezhao.commons.ObjectUtils;
 
 /**
  * @author Zhao Fangfang
  * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@gmail.com $
  */
-@SuppressWarnings("deprecation")
 public class RequestContextImpl implements RequestContext {
 
 	private HttpServletRequest request;
@@ -81,10 +83,11 @@ public class RequestContextImpl implements RequestContext {
 	
 	@Override
 	public void writeStatus(int status, Object message) throws IOException {
+		Map<String, Object> map = new HashMap<>();
+		map.put("status", status);
 		if (message != null) {
-			writeJSON(String.format("{status:%d, message:\"%s\"}", status, Bean2Json.escape(message)));
-		} else {
-			writeJSON(String.format("{status:%d}", status));
+			map.put("message", message);
 		}
+		writeJSON(JSON.toJSONString(map));
 	}
 }
