@@ -1,6 +1,11 @@
 package cn.devezhao.commons.web;
 
+import java.util.Enumeration;
+
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * 
@@ -45,5 +50,35 @@ public class WebUtils {
 	 */
 	public static String getMessage(ServletRequest request) {
 		return (String) request.getAttribute(WebUtils.REQUEST_MESSAGE);
+	}
+	
+	/**
+	 * @param request
+	 * @return
+	 */
+	public static String dumpHeaders(HttpServletRequest request) {
+		StringBuffer sb = new StringBuffer();
+		Enumeration<?> names = request.getHeaderNames();
+		while (names.hasMoreElements()) {
+			String headerName = (String) names.nextElement();
+			String headerValue = request.getHeader(headerName);
+			sb.append(headerName).append('=').append(StringUtils.isBlank(headerValue) ? "<blank>" : headerValue);
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * @param request
+	 * @return
+	 */
+	public static String dumpAttributes(HttpServletRequest request) {
+		StringBuffer sb = new StringBuffer();
+		Enumeration<?> names = request.getAttributeNames();
+		while (names.hasMoreElements()) {
+			String attrName = (String) names.nextElement();
+			Object attrValue = request.getAttribute(attrName);
+			sb.append(attrName).append('=').append(attrValue == null ? "<null>" : attrValue);
+		}
+		return sb.toString();
 	}
 }
