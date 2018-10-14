@@ -60,9 +60,9 @@ public class WebUtils {
 		StringBuffer sb = new StringBuffer();
 		Enumeration<?> names = request.getHeaderNames();
 		while (names.hasMoreElements()) {
-			String headerName = (String) names.nextElement();
-			String headerValue = request.getHeader(headerName);
-			sb.append(headerName).append('=').append(StringUtils.isBlank(headerValue) ? "<blank>" : headerValue);
+			String name = (String) names.nextElement();
+			String value = request.getHeader(name);
+			sb.append(name).append('=').append(StringUtils.isBlank(value) ? "<blank>" : value).append("; ");
 		}
 		return sb.toString();
 	}
@@ -75,9 +75,24 @@ public class WebUtils {
 		StringBuffer sb = new StringBuffer();
 		Enumeration<?> names = request.getAttributeNames();
 		while (names.hasMoreElements()) {
-			String attrName = (String) names.nextElement();
-			Object attrValue = request.getAttribute(attrName);
-			sb.append(attrName).append('=').append(attrValue == null ? "<null>" : attrValue);
+			String name = (String) names.nextElement();
+			Object value = request.getAttribute(name);
+			sb.append(name).append('=').append(value == null ? "<null>" : value).append("; ");
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * @param request
+	 * @return
+	 */
+	public static String dumpParameters(HttpServletRequest request) {
+		StringBuffer sb = new StringBuffer();
+		Enumeration<?> names = request.getParameterNames();
+		while (names.hasMoreElements()) {
+			String name = (String) names.nextElement();
+			Object value = request.getParameter(name);
+			sb.append(name).append('=').append(value == null ? "<null>" : value).append("; ");
 		}
 		return sb.toString();
 	}
