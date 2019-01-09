@@ -1,6 +1,5 @@
 package cn.devezhao.commons.excel;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang.BooleanUtils;
@@ -140,9 +139,6 @@ public class Cell {
 	
 	@Override
 	public String toString() {
-		if (value != null && value instanceof Date) {
-			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss,SSS").format(value);
-		}
-		return this.asString();
+		return asString();
 	}
 }
