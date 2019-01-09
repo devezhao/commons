@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 /**
+ * Excel 读取 .xls
  * 
  * @author zhaofang123@gmail.com
  * @since 06/02/2017
@@ -25,8 +26,8 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 	private Workbook workbook;
 	private Sheet sheet;
 	
-	private int rowCount = 0;
-	private int rowIndex = 0;
+	protected int rowCount = 0;
+	protected int rowIndex = 0;
 	
 	protected ExcelReader() {
 		// For subclass ...
@@ -77,17 +78,26 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 	}
 	
 	/**
-	 * 获取行数
+	 * 总计行数
 	 * 
 	 * @return
 	 */
 	public int getRowCount() {
 		return rowCount;
 	}
+	
+	/**
+	 * 当前行号
+	 * 
+	 * @return
+	 */
+	public int getRowIndex() {
+		return rowIndex;
+	}
 
 	@Override
 	public boolean hasNext() {
-		return rowIndex < rowCount;
+		return getRowIndex() < getRowCount();
 	}
 
 	@Override
@@ -143,9 +153,7 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 	}
 	
 	@Override
-	public void close() throws IOException {
-		if (workbook != null) {
-			workbook.close();
-		}
+	public void close() {
+		ExcelReaderFactory.close(workbook);
 	}
 }

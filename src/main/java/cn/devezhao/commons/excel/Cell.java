@@ -10,12 +10,16 @@ import org.apache.commons.lang.math.NumberUtils;
 import cn.devezhao.commons.CalendarUtils;
 
 /**
+ * 单元格
  * 
  * @author zhaofang123@gmail.com
  * @since 06/02/2017
  */
 public class Cell {
 	
+	/**
+	 * 空单元格
+	 */
 	public static final Cell NULL = new Cell(null);
 	
 	private Object value;
@@ -28,46 +32,82 @@ public class Cell {
 		return value;
 	}
 	
+	/**
+	 * @return returns true if null or ''
+	 */
 	public boolean isEmpty() {
-		return value == null || StringUtils.isEmpty(value.toString());
+		return StringUtils.isEmpty(asString());
 	}
 	
 	public String asString() {
 		return value == null ? null : value.toString();
 	}
 	
+	/**
+	 * @return
+	 * @see NumberUtils#toInt(String)
+	 */
 	public Integer asInt() {
-		if (value == null) {
+		if (isEmpty()) {
 			return null;
 		}
 		if (value instanceof Integer) {
 			return (Integer) value;
 		}
-		return NumberUtils.toInt(asString());
+		String istr = asString().replace(",", "");
+		return NumberUtils.toInt(istr);
 	}
 	
+	/**
+	 * @return
+	 * @see NumberUtils#toLong(String)
+	 */
 	public Long asLong() {
-		if (value == null) {
+		if (isEmpty()) {
 			return null;
 		}
 		if (value instanceof Long) {
 			return (Long) value;
 		}
-		return NumberUtils.toLong(asString());
+		String istr = asString().replace(",", "");
+		return NumberUtils.toLong(istr);
 	}
 	
+	/**
+	 * @return
+	 * @see NumberUtils#toDouble(String)
+	 */
 	public Double asDouble() {
-		if (value == null) {
+		if (isEmpty()) {
 			return null;
 		}
 		if (value instanceof Double) {
 			return (Double) value;
 		}
-		return NumberUtils.toDouble(asString());
+		String istr = asString().replace(",", "");
+		return NumberUtils.toDouble(istr);
 	}
 	
+	/**
+	 * @return
+	 * @see BooleanUtils#toBoolean(String)
+	 */
+	public Boolean asBool() {
+		if (isEmpty()) {
+			return null;
+		}
+		if (value instanceof Boolean) {
+			return (Boolean) value;
+		}
+		return BooleanUtils.toBoolean(asString());
+	}
+	
+	/**
+	 * @return
+	 * @see CalendarUtils#parse(String)
+	 */
 	public Date asDate() {
-		if (value == null) {
+		if (isEmpty()) {
 			return null;
 		}
 		if (value instanceof Date) {
@@ -76,14 +116,26 @@ public class Cell {
 		return CalendarUtils.parse(asString());
 	}
 	
-	public Boolean asBool() {
-		if (value == null) {
-			return Boolean.FALSE;
+	/**
+	 * @param formatDefines
+	 * @return
+	 */
+	public Date asDate(String formatDefines[]) {
+		if (isEmpty()) {
+			return null;
 		}
-		if (value instanceof Boolean) {
-			return (Boolean) value;
+		if (value instanceof Date) {
+			return (Date) value;
 		}
-		return BooleanUtils.toBoolean(asString());
+		
+		String istr = asString();
+		for (String format : formatDefines) {
+			Date d = CalendarUtils.parse(istr, format);
+			if (d != null) {
+				return d;
+			}
+		}
+		return null;
 	}
 	
 	@Override

@@ -18,14 +18,24 @@ public class ExcelReaderFactory {
 	 * @throws ExcelReaderException
 	 */
 	public static ExcelReader create(File excel) throws ExcelReaderException {
+		return create(excel, "utf-8");
+	}
+	
+	/**
+	 * @param excel
+	 * @param encoding
+	 * @return
+	 * @throws ExcelReaderException
+	 */
+	public static ExcelReader create(File excel, String encoding) throws ExcelReaderException {
 		if (excel != null && excel.getName().endsWith(".xlsx")) {
 			return new XExcelReader(excel);
 		} else if (excel != null && excel.getName().endsWith(".xls")) {
 			return new ExcelReader(excel);
 		} else if (excel != null && excel.getName().endsWith(".csv")) {
-			return new CSVReader(excel);
+			return new CSVReader(excel, encoding);
 		} else {
-			throw new ExcelReaderException("无效 Excel 文件: " + excel);
+			throw new ExcelReaderException("无效 Excel/CSV 文件: " + excel);
 		}
 	}
 	

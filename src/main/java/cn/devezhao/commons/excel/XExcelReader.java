@@ -1,7 +1,6 @@
 package cn.devezhao.commons.excel;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 
 /**
- * 
+ * XExcel 读取 .xlsx
  * @author zhaofang123@gmail.com
  * @since 06/02/2017
  */
@@ -204,11 +203,9 @@ public class XExcelReader extends ExcelReader {
 	}
 	
 	@Override
-	public void close() throws IOException {
+	public void close() {
 		super.close();
-		if (xmlReader != null) {
-			ExcelReaderFactory.close(xmlReader);
-		}
-		pkg.close();
+		ExcelReaderFactory.close(xmlReader);
+		ExcelReaderFactory.close(pkg);
 	}
 }
