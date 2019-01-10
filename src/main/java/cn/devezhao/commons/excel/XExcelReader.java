@@ -41,6 +41,7 @@ public class XExcelReader extends ExcelReader {
 			xssfReader = new XSSFReader(pkg);
 			sharedStringsTable = new ReadOnlySharedStringsTable(pkg);
 		} catch (Exception e) {
+			close();
 			throw new ExcelReaderException(e);
 		}
 		sheetAt(0);

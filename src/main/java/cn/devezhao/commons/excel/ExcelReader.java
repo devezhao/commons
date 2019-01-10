@@ -42,9 +42,8 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 			fs = new NPOIFSFileSystem(excel);
 			workbook = new HSSFWorkbook(fs);
 		} catch (IOException e) {
+			close();
 			throw new ExcelReaderException(e);
-		} finally {
-			ExcelReaderFactory.close(fs);
 		}
 		sheetAt(0);
 	}
