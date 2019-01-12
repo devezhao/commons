@@ -127,28 +127,28 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 				return new Cell(cell.getNumericCellValue());
 			}
 		} else if (type == CellType.STRING) {
-			// TODO 是否需要将空格或换行替换?
-			return new Cell(trimToEmpty(cell.getStringCellValue()));
+			return trimToStringCell(cell.getStringCellValue());
 		} else {
 			return Cell.NULL;
+		}
+	}
+	
+	/**
+	 * @param cellText
+	 * @return
+	 */
+	protected Cell trimToStringCell(String cellText) {
+		if (cellText == null) {
+			return Cell.NULL;
+		} else {
+			cellText = cellText.replaceAll("\n\t", "").replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "").replaceAll(" ", "").trim();
+			return new Cell(cellText);
 		}
 	}
 
 	@Override
 	public void remove() {
 		throw new UnsupportedOperationException();
-	}
-	
-	/**
-	 * @param str
-	 * @return
-	 */
-	protected String trimToEmpty(String str) {
-		if (str == null) {
-			return "";
-		} else {
-			return str.replaceAll("\n\t", "").replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "").replaceAll(" ", "").trim();
-		}
 	}
 	
 	@Override

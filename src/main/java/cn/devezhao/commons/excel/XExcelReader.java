@@ -27,9 +27,9 @@ public class XExcelReader extends ExcelReader {
 	private XSSFReader xssfReader;
 	private ReadOnlySharedStringsTable sharedStringsTable;
 	
-	private XMLStreamReader xmlReader;
-	
 	private int sheetIndex = 0;
+	
+	private XMLStreamReader cellReader;
 	
 	/**
 	 * @param excel
@@ -44,7 +44,6 @@ public class XExcelReader extends ExcelReader {
 			close();
 			throw new ExcelReaderException(e);
 		}
-		sheetAt(0);
 	}
 	
 	@Override
@@ -66,22 +65,22 @@ public class XExcelReader extends ExcelReader {
 	
 	@Override
 	public void sheetAt(int index) {
-		if (xmlReader != null) {
-			ExcelReaderFactory.close(xmlReader);
-			xmlReader = null;
+		if (cellReader != null) {
+			ExcelReaderFactory.close(cellReader);
+			cellReader = null;
 		}
 		
-		int currentIndex = 0;
 		try {
 			XSSFReader.SheetIterator iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
+			int currentIndex = 0;
 			while(iter.hasNext()) {
 				InputStream is = iter.next();
 				if (currentIndex++ == index) {
-					xmlReader = XMLInputFactory.newInstance().createXMLStreamReader(is);
-					while (xmlReader.hasNext()) {
-			            xmlReader.next();
-			            if (xmlReader.isStartElement()) {
-			                if (xmlReader.getLocalName().equals("sheetData")) {
+					cellReader = XMLInputFactory.newInstance().createXMLStreamReader(is);
+					while (cellReader.hasNext()) {
+			            cellReader.next();
+			            if (cellReader.isStartElement()) {
+			                if (cellReader.getLocalName().equals("sheetData")) {  // Locate firse cell 
 			                	break;
 			                }
 			            }
@@ -95,7 +94,7 @@ public class XExcelReader extends ExcelReader {
 			throw new ExcelReaderException(e);
 		}
 		
-		if (xmlReader == null) {
+		if (cellReader == null) {
 			throw new ExcelReaderException("无效 SHEET 位置: " + index);
 		}
 		sheetIndex = index;
@@ -106,10 +105,10 @@ public class XExcelReader extends ExcelReader {
 		sheetAt(sheetIndex);
 		int rowCount = 0;
 		try {
-			while (xmlReader.hasNext()) {
-				xmlReader.next();
-				if (xmlReader.isStartElement()) {
-					if (xmlReader.getLocalName().equals("row")) {
+			while (cellReader.hasNext()) {
+				cellReader.next();
+				if (cellReader.isStartElement()) {
+					if (cellReader.getLocalName().equals("row")) {
 						rowCount++;
 					}
 				}
@@ -117,14 +116,19 @@ public class XExcelReader extends ExcelReader {
 		} catch (XMLStreamException e) {
 			throw new ExcelReaderException(e);
 		}
+		
 		sheetAt(sheetIndex);
 		return rowCount;
 	}
 	
 	@Override
 	public boolean hasNext() {
+		if (cellReader == null) {
+			sheetAt(sheetIndex);
+		}
+		
 		try {
-			return xmlReader.hasNext();
+			return cellReader.hasNext();
 		} catch (XMLStreamException e) {
 			return false;
 		}
@@ -132,15 +136,19 @@ public class XExcelReader extends ExcelReader {
 	
 	@Override
 	public Cell[] next() {
+		if (cellReader == null) {
+			sheetAt(sheetIndex);
+		}
+		
 		try {
 			do {
-				xmlReader.next();
-				if (xmlReader.isStartElement()) {
-					if (xmlReader.getLocalName().equals("row")) {
+				cellReader.next();
+				if (cellReader.isStartElement()) {
+					if (cellReader.getLocalName().equals("row")) {
 						return readRow();
 					}
 				}
-			} while (xmlReader.hasNext());
+			} while (cellReader.hasNext());
 		} catch (XMLStreamException e) {
 			throw new ExcelReaderException(e);
 		}
@@ -154,26 +162,26 @@ public class XExcelReader extends ExcelReader {
 	 * @throws XMLStreamException 
 	 */
 	private Cell[] readRow() throws XMLStreamException {
-		List<Cell> rowValues = new ArrayList<Cell>();
-        while (xmlReader.hasNext()) {
-            xmlReader.next();
-            if (xmlReader.isStartElement()) {
-                if (xmlReader.getLocalName().equals("c")) {
-                    CellReference cellReference = new CellReference(xmlReader.getAttributeValue(null, "r"));
-                    while (rowValues.size() < cellReference.getCol()) {
-                        rowValues.add(Cell.NULL);
+		List<Cell> cellList = new ArrayList<Cell>();
+        while (cellReader.hasNext()) {
+            cellReader.next();
+            if (cellReader.isStartElement()) {
+                if (cellReader.getLocalName().equals("c")) {
+                    CellReference cellReference = new CellReference(cellReader.getAttributeValue(null, "r"));
+                    while (cellList.size() < cellReference.getCol()) {
+                        cellList.add(Cell.NULL);
                     }
-                    String cellType = xmlReader.getAttributeValue(null, "t");
+                    
+                    String cellType = cellReader.getAttributeValue(null, "t");
                     String cellValue = readCell(cellType);
-                    // cellValue 有大量空格???
-                    rowValues.add(new Cell(trimToEmpty(cellValue)));
+                    cellList.add(trimToStringCell(cellValue));
                 }
-            } else if (xmlReader.isEndElement()
-                    && xmlReader.getLocalName().equals("row")) {
+            } else if (cellReader.isEndElement()
+                    && cellReader.getLocalName().equals("row")) {
                 break;
             }
         }
-        return rowValues.toArray(new Cell[rowValues.size()]);
+        return cellList.toArray(new Cell[cellList.size()]);
 	}
 	
 	/**
@@ -185,18 +193,18 @@ public class XExcelReader extends ExcelReader {
 	 * @throws NumberFormatException 
 	 */
 	private String readCell(String cellType) throws NumberFormatException, XMLStreamException {
-		while (xmlReader.hasNext()) {
-			xmlReader.next();
-			if (xmlReader.isStartElement()) {
-				if (xmlReader.getLocalName().equals("v")) {
+		while (cellReader.hasNext()) {
+			cellReader.next();
+			if (cellReader.isStartElement()) {
+				if (cellReader.getLocalName().equals("v")) {
 					if (cellType != null && cellType.equals("s")) {
-						int idx = Integer.parseInt(xmlReader.getElementText());
+						int idx = Integer.parseInt(cellReader.getElementText());
 						return new XSSFRichTextString(sharedStringsTable.getEntryAt(idx)).toString();
 					} else {
-						return xmlReader.getElementText();
+						return cellReader.getElementText();
 					}
 				}
-			} else if (xmlReader.isEndElement() && xmlReader.getLocalName().equals("c")) {
+			} else if (cellReader.isEndElement() && cellReader.getLocalName().equals("c")) {
 				break;
 			}
 		}
@@ -206,7 +214,7 @@ public class XExcelReader extends ExcelReader {
 	@Override
 	public void close() {
 		super.close();
-		ExcelReaderFactory.close(xmlReader);
+		ExcelReaderFactory.close(cellReader);
 		ExcelReaderFactory.close(pkg);
 	}
 }
