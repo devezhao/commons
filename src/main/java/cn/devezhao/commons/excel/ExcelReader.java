@@ -117,6 +117,10 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 	 * @return
 	 */
 	private Cell readCell(org.apache.poi.ss.usermodel.Cell cell) {
+		if (cell == null) {
+			return Cell.NULL;
+		}
+		
 		CellType type = cell.getCellTypeEnum();
 		if (type == CellType.BOOLEAN) {
 			return new Cell(cell.getBooleanCellValue());
