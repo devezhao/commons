@@ -172,8 +172,7 @@ public class XExcelReader extends ExcelReader {
                         cellList.add(Cell.NULL);
                     }
                     
-                    String cellType = cellReader.getAttributeValue(null, "t");
-                    String cellValue = readCell(cellType);
+                    String cellValue = readCell(cellReader.getAttributeValue(null, "t"));
                     cellList.add(trimToStringCell(cellValue));
                 }
             } else if (cellReader.isEndElement()

@@ -1,6 +1,7 @@
 package cn.devezhao.commons.excel;
 
 import java.io.File;
+import java.net.URL;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
@@ -13,14 +14,14 @@ import org.junit.Test;
 public class ExcelReaderTest {
 
 	@Test
-	public void testXLSX() {
-		String excel = "d:/acc.xlsx";
-
-		ExcelReader excelReader = ExcelReaderFactory.create(new File(excel));
+	public void testXLSX() throws Exception {
+		URL fileUrl = ExcelReaderTest.class.getClassLoader().getResource("test.xlsx");
+		
+		ExcelReader excelReader = ExcelReaderFactory.create(new File(fileUrl.toURI()));
 		String[] sNames = excelReader.getSheetNames();
 		System.out.println("SHEET 列表 : " + StringUtils.join(sNames, " | "));
 
-		int sheetIndex = 2;
+		int sheetIndex = 0;
 		excelReader.sheetAt(sheetIndex);
 		System.out.println("SHEET-" + sheetIndex + " 行总数 : " + excelReader.getRowCount());
 		System.out.println();
@@ -31,6 +32,8 @@ public class ExcelReaderTest {
 			if (row == null) {
 				break;
 			}
+			System.out.println("DATE : " + row[3].asDate());
+			System.out.println("DATETIME : " + row[4].asDate());
 			System.out.println("#" + index++ + " >> " + StringUtils.join(row, " | "));
 		}
 	}

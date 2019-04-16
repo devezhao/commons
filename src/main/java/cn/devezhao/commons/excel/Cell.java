@@ -5,6 +5,7 @@ import java.util.Date;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.poi.ss.usermodel.DateUtil;
 
 import cn.devezhao.commons.CalendarUtils;
 
@@ -104,6 +105,7 @@ public class Cell {
 	/**
 	 * @return
 	 * @see CalendarUtils#parse(String)
+	 * @see #asDate(String[])
 	 */
 	public Date asDate() {
 		if (isEmpty()) {
@@ -112,7 +114,14 @@ public class Cell {
 		if (value instanceof Date) {
 			return (Date) value;
 		}
-		return CalendarUtils.parse(asString());
+		
+		String istr = asString();
+		if (NumberUtils.isNumber(istr)) {
+			double d = NumberUtils.toDouble(istr);
+			return DateUtil.getJavaDate(d);
+		} else {
+			return CalendarUtils.parse(istr);
+		}
 	}
 	
 	/**
