@@ -1,5 +1,6 @@
 package cn.devezhao.commons.excel;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.commons.lang.BooleanUtils;
@@ -15,8 +16,9 @@ import cn.devezhao.commons.CalendarUtils;
  * @author zhaofang123@gmail.com
  * @since 06/02/2017
  */
-public class Cell {
-	
+public class Cell implements Serializable {
+	private static final long serialVersionUID = -1590140578303295189L;
+
 	/**
 	 * 空单元格
 	 */
@@ -24,10 +26,16 @@ public class Cell {
 	
 	private Object value;
 
+	/**
+	 * @param value
+	 */
 	public Cell(Object value) {
 		this.value = value;
 	}
 	
+	/**
+	 * @return
+	 */
 	public Object getRawValue() {
 		return value;
 	}
