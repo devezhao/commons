@@ -8,12 +8,15 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 
 /**
  * 日期时间工具
  * 
  * @author Zhao Fangfang
  * @version $Id: CalendarUtils.java 107 2012-12-28 02:42:28Z zhaofang123@gmail.com $
+ * 
+ * @see DateUtils
  */
 public class CalendarUtils extends DateFormatUtils {
 	

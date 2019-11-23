@@ -24,14 +24,42 @@ public class Cell implements Serializable {
 	 */
 	public static final Cell NULL = new Cell(null);
 	
-	private Object value;
+	final private Object value;
+	
+	final private int rowNo;
+    final private int columnNo;
 
-	/**
+    /**
 	 * @param value
 	 */
 	public Cell(Object value) {
-		this.value = value;
+		this(value, -1, -1);
 	}
+	
+    /**
+     * @param value
+     * @param rowNo
+     * @param columnNo
+     */
+    public Cell(Object value, int rowNo, int columnNo) {
+    	this.value = value;
+    	this.rowNo = rowNo;
+    	this.columnNo = columnNo;
+    }
+
+    /**
+     * @return
+     */
+	public int getRowNo() {
+        return rowNo;
+    }
+	
+	/**
+	 * @return
+	 */
+    public int getColumnNo() {
+        return columnNo;
+    }
 	
 	/**
 	 * @return
@@ -47,8 +75,16 @@ public class Cell implements Serializable {
 		return StringUtils.isEmpty(asString());
 	}
 	
+	/**
+	 * @return
+	 */
 	public String asString() {
 		return value == null ? null : value.toString();
+	}
+	
+	@Override
+	public String toString() {
+		return asString();
 	}
 	
 	/**
@@ -133,10 +169,10 @@ public class Cell implements Serializable {
 	}
 	
 	/**
-	 * @param formatDefines
+	 * @param parsePatterns
 	 * @return
 	 */
-	public Date asDate(String formatDefines[]) {
+	public Date asDate(String parsePatterns[]) {
 		if (isEmpty()) {
 			return null;
 		}
@@ -145,17 +181,12 @@ public class Cell implements Serializable {
 		}
 		
 		String istr = asString();
-		for (String format : formatDefines) {
-			Date d = CalendarUtils.parse(istr, format);
+		for (String pattern : parsePatterns) {
+			Date d = CalendarUtils.parse(istr, pattern);
 			if (d != null) {
 				return d;
 			}
 		}
 		return null;
-	}
-	
-	@Override
-	public String toString() {
-		return asString();
 	}
 }
