@@ -62,6 +62,6 @@ public class InsertBuilder extends BaseBuilder {
 	}
 	
 	public boolean hasColumn() {
-		return columns.isEmpty();
+		return !this.columns.isEmpty();
 	}
 }

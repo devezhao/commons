@@ -65,6 +65,6 @@ public class UpdateBuilder extends ConditionalBuilder {
 	}
 	
 	public boolean hasColumn() {
-		return columns.isEmpty();
+		return !this.columns.isEmpty();
 	}
 }

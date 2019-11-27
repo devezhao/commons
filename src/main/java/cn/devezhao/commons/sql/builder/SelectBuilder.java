@@ -101,4 +101,8 @@ public class SelectBuilder extends ConditionalBuilder {
 		}
 		return sql.toString();
 	}
+	
+	public boolean hasColumn() {
+		return !this.columns.isEmpty();
+	}
 }
