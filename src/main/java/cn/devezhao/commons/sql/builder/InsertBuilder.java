@@ -60,4 +60,8 @@ public class InsertBuilder extends BaseBuilder {
 		sql.append(values).append(")");
 		return sql.toString();
 	}
+	
+	public boolean hasColumn() {
+		return columns.isEmpty();
+	}
 }

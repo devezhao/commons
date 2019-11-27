@@ -63,4 +63,8 @@ public class UpdateBuilder extends ConditionalBuilder {
 		}
 		return sql.toString();
 	}
+	
+	public boolean hasColumn() {
+		return columns.isEmpty();
+	}
 }
