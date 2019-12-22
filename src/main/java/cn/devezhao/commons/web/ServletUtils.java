@@ -18,6 +18,7 @@ import org.dom4j.Document;
 import com.alibaba.fastjson.JSON;
 
 import cn.devezhao.commons.CalendarUtils;
+import cn.devezhao.commons.CodecUtils;
 import cn.devezhao.commons.xml.XMLHelper;
 
 /**
@@ -125,7 +126,12 @@ public class ServletUtils {
 		if (cookie == null) {
 			return null;
 		}
-		return cookie.getValue();
+		
+		String cookieValue = cookie.getValue();
+		if (StringUtils.isBlank(cookieValue)) {
+			return cookieValue;
+		}
+		return CodecUtils.urlDecode(cookieValue);
 	}
 	
 	/**
@@ -146,7 +152,7 @@ public class ServletUtils {
 	 * @param path
 	 */
 	public static void addCookie(HttpServletResponse response, String cookieName, String cookieValue, int maxAge, String domain, String path) {
-		Cookie cookie = new Cookie(cookieName, cookieValue);
+		Cookie cookie = new Cookie(cookieName, CodecUtils.urlEncode(cookieValue));
 		cookie.setMaxAge(maxAge);
 		if (domain != null) {
 			cookie.setDomain(domain);
