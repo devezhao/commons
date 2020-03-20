@@ -1,11 +1,22 @@
 package cn.devezhao.commons;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.Enumeration;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * 反射工具
@@ -205,6 +216,106 @@ public final class ReflectUtils {
 		}
 		
 		return (Class<?>) genTypes[0];
+	}
+	
+	/**
+	 * 获取所有子类
+	 * 
+	 * @param scanPackage
+	 * @param superClass
+	 * @return
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public static Set<Class<?>> getAllSubclasses(String scanPackage, Class<?> superClass)
+			throws IOException, ClassNotFoundException {
+		Set<Class<?>> classes = new LinkedHashSet<>();
+
+		boolean recursive = true;
+		String packageName = scanPackage;
+		String packageDirName = packageName.replace('.', '/');
+
+		Enumeration<URL> dirs = Thread.currentThread().getContextClassLoader().getResources(packageDirName);
+		while (dirs.hasMoreElements()) {
+			URL url = dirs.nextElement();
+			String protocol = url.getProtocol();
+			if ("file".equals(protocol)) {
+				String filePath = URLDecoder.decode(url.getFile(), "utf-8");
+				scanClassesInPackage(packageName, filePath, recursive, superClass, classes);
+			} else if ("jar".equals(protocol)) {
+				JarFile jar;
+				jar = ((JarURLConnection) url.openConnection()).getJarFile();
+
+				Enumeration<JarEntry> entries = jar.entries();
+				while (entries.hasMoreElements()) {
+					JarEntry entry = entries.nextElement();
+					String name = entry.getName();
+					if (name.charAt(0) == '/') {
+						name = name.substring(1);
+					}
+
+					if (name.startsWith(packageDirName)) {
+						int idx = name.lastIndexOf('/');
+						if (idx != -1) {
+							packageName = name.substring(0, idx).replace('/', '.');
+						}
+
+						if ((idx != -1) || recursive) {
+							if (name.endsWith(".class") && !entry.isDirectory()) {
+								String className = name.substring(packageName.length() + 1, name.length() - 6);
+								addScanClass(packageName + '.' + className, superClass, classes);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return classes;
+	}
+
+	/**
+	 * @param packageName
+	 * @param packagePath
+	 * @param recursive
+	 * @param superClass
+	 * @param classes
+	 * @throws ClassNotFoundException
+	 */
+	private static void scanClassesInPackage(String packageName, String packagePath, boolean recursive, Class<?> superClass,
+			Set<Class<?>> classes) throws ClassNotFoundException {
+		File dir = new File(packagePath);
+		if (!dir.exists() || !dir.isDirectory()) {
+			return;
+		}
+
+		File[] dirfiles = dir.listFiles(new FileFilter() {
+			public boolean accept(File file) {
+				return (recursive && file.isDirectory()) || (file.getName().endsWith(".class"));
+			}
+		});
+
+		for (File file : dirfiles) {
+			if (file.isDirectory()) {
+				scanClassesInPackage(packageName + "." + file.getName(), file.getAbsolutePath(), recursive, superClass, classes);
+			} else {
+				String className = file.getName().substring(0, file.getName().length() - 6);
+				addScanClass(packageName + '.' + className, superClass, classes);
+			}
+		}
+	}
+	
+	/**
+	 * @param className
+	 * @param superClass
+	 * @param into
+	 * @throws ClassNotFoundException
+	 */
+	private static void addScanClass(String className, Class<?> superClass, Set<Class<?>> into) throws ClassNotFoundException {
+		Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
+		if (superClass == null || (superClass.isAssignableFrom(clazz) && !superClass.equals(clazz))) {
+			into.add(clazz);
+		}
 	}
 	
 	private ReflectUtils() {}
