@@ -26,10 +26,13 @@ public class RateCounter implements RateLimiter {
 		if (limit < 0) {
 			throw new IllegalArgumentException("limit less than zero");
 		}
+
 		this.limit = limit;
 		counter = new AtomicInteger();
+
 		TimestampHolder holder = new TimestampHolder();
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
+
 		executorService.submit(() -> {
 			while (true) {
 				long cur = System.currentTimeMillis();

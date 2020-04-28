@@ -33,6 +33,7 @@ public class LeakyBucketLimiter implements RateLimiter {
 
 		TimestampHolder holder = new TimestampHolder(System.nanoTime());
 		long interval = NANO_SECOND / limit;
+
 		threadPool.submit(() -> {
 			while (true) {
 				long cur = System.nanoTime();
