@@ -34,7 +34,8 @@ public class UpdateBuilder extends ConditionalBuilder {
 		return this;
 	}
 	
-	public String toSql() {
+	@Override
+    public String toSql() {
 		StringBuffer sql = new StringBuffer("update ");
 		sql.append(SqlHelper.wrapIdent(table.toLowerCase())).append(" set ");
 		

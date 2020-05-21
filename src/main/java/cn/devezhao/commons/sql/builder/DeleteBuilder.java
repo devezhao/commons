@@ -16,7 +16,8 @@ public class DeleteBuilder extends ConditionalBuilder {
 		super(table);
 	}
 	
-	public String toSql() {
+	@Override
+    public String toSql() {
 		StringBuffer sql = new StringBuffer("delete from ");
 		sql.append(SqlHelper.wrapIdent(table.toLowerCase())).append(" where (1 = 1)");
 		

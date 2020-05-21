@@ -85,7 +85,8 @@ public class WhereClause implements Builder {
 		return this;
 	}
 	
-	public String toSql() {
+	@Override
+    public String toSql() {
 		StringBuilder sql = new StringBuilder("( ");
 		for (String s : caluseQueue) {
 			sql.append(s).append(' ');

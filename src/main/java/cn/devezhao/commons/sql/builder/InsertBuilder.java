@@ -33,7 +33,8 @@ public class InsertBuilder extends BaseBuilder {
 		return this;
 	}
 	
-	public String toSql() {
+	@Override
+    public String toSql() {
 		StringBuffer sql = new StringBuffer("insert into ");
 		sql.append(SqlHelper.wrapIdent(getTable().toLowerCase())).append(" (");
 		

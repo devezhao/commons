@@ -290,7 +290,8 @@ public final class ReflectUtils {
 		}
 
 		File[] dirfiles = dir.listFiles(new FileFilter() {
-			public boolean accept(File file) {
+			@Override
+            public boolean accept(File file) {
 				return (recursive && file.isDirectory()) || (file.getName().endsWith(".class"));
 			}
 		});

@@ -80,7 +80,7 @@ public class XExcelReader extends ExcelReader {
 					while (cellReader.hasNext()) {
 			            cellReader.next();
 			            if (cellReader.isStartElement()) {
-			                if (cellReader.getLocalName().equals("sheetData")) {  // Locate firse cell 
+			                if ("sheetData".equals(cellReader.getLocalName())) {  // Locate firse cell
 			                	break;
 			                }
 			            }
@@ -108,7 +108,7 @@ public class XExcelReader extends ExcelReader {
 			while (cellReader.hasNext()) {
 				cellReader.next();
 				if (cellReader.isStartElement()) {
-					if (cellReader.getLocalName().equals("row")) {
+					if ("row".equals(cellReader.getLocalName())) {
 						rowCount++;
 					}
 				}
@@ -144,7 +144,7 @@ public class XExcelReader extends ExcelReader {
 			do {
 				cellReader.next();
 				if (cellReader.isStartElement()) {
-					if (cellReader.getLocalName().equals("row")) {
+					if ("row".equals(cellReader.getLocalName())) {
 						return readRow();
 					}
 				}
@@ -166,7 +166,7 @@ public class XExcelReader extends ExcelReader {
         while (cellReader.hasNext()) {
             cellReader.next();
             if (cellReader.isStartElement()) {
-                if (cellReader.getLocalName().equals("c")) {
+                if ("c".equals(cellReader.getLocalName())) {
                     CellReference cellReference = new CellReference(cellReader.getAttributeValue(null, "r"));
                     while (cellList.size() < cellReference.getCol()) {
                         cellList.add(Cell.NULL);
@@ -176,7 +176,7 @@ public class XExcelReader extends ExcelReader {
                     cellList.add(trimToStringCell(cellValue));
                 }
             } else if (cellReader.isEndElement()
-                    && cellReader.getLocalName().equals("row")) {
+                    && "row".equals(cellReader.getLocalName())) {
                 break;
             }
         }
@@ -195,15 +195,15 @@ public class XExcelReader extends ExcelReader {
 		while (cellReader.hasNext()) {
 			cellReader.next();
 			if (cellReader.isStartElement()) {
-				if (cellReader.getLocalName().equals("v")) {
-					if (cellType != null && cellType.equals("s")) {
+				if ("v".equals(cellReader.getLocalName())) {
+					if (cellType != null && "s".equals(cellType)) {
 						int idx = Integer.parseInt(cellReader.getElementText());
 						return new XSSFRichTextString(sharedStringsTable.getEntryAt(idx)).toString();
 					} else {
 						return cellReader.getElementText();
 					}
 				}
-			} else if (cellReader.isEndElement() && cellReader.getLocalName().equals("c")) {
+			} else if (cellReader.isEndElement() && "c".equals(cellReader.getLocalName())) {
 				break;
 			}
 		}

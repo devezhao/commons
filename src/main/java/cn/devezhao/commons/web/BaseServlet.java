@@ -68,7 +68,8 @@ public abstract class BaseServlet extends HttpServlet implements RequestExecutor
 	/**
 	 * Logging Exception
 	 */
-	public void handleException(RequestContext context, Throwable ex) {
+	@Override
+    public void handleException(RequestContext context, Throwable ex) {
 		Throwable cause = getRootCause(ex);
 		LOG.error("Execute request failure!", cause);
 		

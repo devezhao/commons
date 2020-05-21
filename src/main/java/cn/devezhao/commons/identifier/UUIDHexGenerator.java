@@ -51,7 +51,8 @@ public class UUIDHexGenerator implements IdentifierGenerator {
 	 * 
 	 * @return
 	 */
-	public Serializable generate() {
+	@Override
+    public Serializable generate() {
 		return new StringBuilder(getLength()).append(format(getIP())).append(sep)
 				.append(format(getJVM())).append(sep).append(
 						format(getMoTime())).append(sep).append(
@@ -59,7 +60,8 @@ public class UUIDHexGenerator implements IdentifierGenerator {
 						format(getCount())).toString();
 	}
 	
-	public int getLength() {
+	@Override
+    public int getLength() {
 		return 36;
 	}
 

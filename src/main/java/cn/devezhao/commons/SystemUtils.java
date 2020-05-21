@@ -159,22 +159,34 @@ public final class SystemUtils {
 		
 		final RuntimeInformation memory = new RuntimeInformation();
 		list.add(new MemoryInformation() {
-			public String getName() { return "Heap"; }
-			public long getUsed() { return memory.getTotalHeapMemoryUsed(); }
-			public long getTotal() { return memory.getTotalHeapMemory(); }
-			public long getFree() { return getTotal() - getUsed(); }
+			@Override
+            public String getName() { return "Heap"; }
+			@Override
+            public long getUsed() { return memory.getTotalHeapMemoryUsed(); }
+			@Override
+            public long getTotal() { return memory.getTotalHeapMemory(); }
+			@Override
+            public long getFree() { return getTotal() - getUsed(); }
 		});
 		list.add(new MemoryInformation() {
-			public String getName() { return "PermGen"; }
-			public long getUsed() { return memory.getTotalPermGenMemoryUsed(); }
-			public long getTotal() { return memory.getTotalPermGenMemory(); }
-			public long getFree() { return getTotal() - getUsed(); }
+			@Override
+            public String getName() { return "PermGen"; }
+			@Override
+            public long getUsed() { return memory.getTotalPermGenMemoryUsed(); }
+			@Override
+            public long getTotal() { return memory.getTotalPermGenMemory(); }
+			@Override
+            public long getFree() { return getTotal() - getUsed(); }
 		});
 		list.add(new MemoryInformation() {
-			public String getName() { return "NonHeap"; }
-			public long getUsed() { return memory.getTotalNonHeapMemoryUsed(); }
-			public long getTotal() { return memory.getTotalNonHeapMemory(); }
-			public long getFree() { return getTotal() - getUsed(); }
+			@Override
+            public String getName() { return "NonHeap"; }
+			@Override
+            public long getUsed() { return memory.getTotalNonHeapMemoryUsed(); }
+			@Override
+            public long getTotal() { return memory.getTotalNonHeapMemory(); }
+			@Override
+            public long getFree() { return getTotal() - getUsed(); }
 		});
 		
 		if (containsPool) {

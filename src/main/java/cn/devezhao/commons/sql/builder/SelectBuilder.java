@@ -32,15 +32,13 @@ public class SelectBuilder extends ConditionalBuilder {
 	}
 	
 	public SelectBuilder addColumns(String columns[]) {
-		for (String c : columns)
-			this.columns.add(c);
+		for (String c : columns) this.columns.add(c);
 		return this;
 	}
 	
 	public SelectBuilder addColumns(String column, String...columns) {
 		this.columns.add(column);
-		for (String c : columns)
-			this.columns.add(c);
+		for (String c : columns) this.columns.add(c);
 		return this;
 	}
 	
@@ -64,7 +62,8 @@ public class SelectBuilder extends ConditionalBuilder {
 		return this;
 	}
 	
-	public String toSql() {
+	@Override
+    public String toSql() {
 		StringBuffer sql = new StringBuffer("select ");
 		
 		for (String c : columns) {

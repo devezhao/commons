@@ -102,10 +102,14 @@ public class RuntimeInformation {
 			}
 		}
 		return new MemoryInformation() {
-			public String getName() { return ""; }
-			public long getTotal() { return -1; }
-			public long getUsed() { return -1; }
-			public long getFree() { return -1; }
+			@Override
+            public String getName() { return ""; }
+			@Override
+            public long getTotal() { return -1; }
+			@Override
+            public long getUsed() { return -1; }
+			@Override
+            public long getFree() { return -1; }
 		};
 	}
 }

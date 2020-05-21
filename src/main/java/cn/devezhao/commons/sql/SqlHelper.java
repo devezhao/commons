@@ -133,9 +133,8 @@ public class SqlHelper {
 	public static int executeBtachSql(Builder[] builders) {
 		String asqls[] = new String[builders.length];
 		int idx = 0;
-		for (Builder b : builders)
-			asqls[idx++] = b.toSql();
-		
+		for (Builder b : builders) asqls[idx++] = b.toSql();
+
 		return executeBtachSql(asqls);
 	}
 	
@@ -144,16 +143,14 @@ public class SqlHelper {
 	 * @return
 	 */
 	public static int executeBtachSql(String[] asqls) {
-		if (asqls.length == 1)
-			return executeSql(asqls[0]);
+		if (asqls.length == 1) return executeSql(asqls[0]);
 		
 		Connection connect = getConnection();
 		Statement stmt = null;
 		try {
 			stmt = connect.createStatement();
 			
-			for (String asql : asqls)
-				stmt.addBatch(asql);
+			for (String asql : asqls) stmt.addBatch(asql);
 			
 			int[] affs = stmt.executeBatch();
 			int aff = 0;
@@ -265,8 +262,7 @@ public class SqlHelper {
 				}
 			}
 			
-			if (tmp == null)
-				return null;
+			if (tmp == null) return null;
 			return tmp;
 		} catch (SQLException ex) {
 			LOG.error("Execute SQL(select) failure!", ex);
@@ -297,8 +293,7 @@ public class SqlHelper {
 	public static long count(String table, WhereClause clause) {
 		StringBuffer asql = new StringBuffer("select count(*) from ");
 		asql.append(wrapIdent(table.toLowerCase()));
-		if (clause != null)
-			asql.append(" where ").append(clause.toSql());
+		if (clause != null) asql.append(" where ").append(clause.toSql());
 		
 		Object[][] result = executeQuery(asql.toString());
 		return (result == null || result.length == 0) ? 0 : (Long) result[0][0];
@@ -308,11 +303,9 @@ public class SqlHelper {
 	 * @param connect
 	 */
 	public static void attemptClose(Connection connect) {
-		if (connect == null)
-			return;
+		if (connect == null) return;
 		try {
-			if (connect.isClosed())
-				return;
+			if (connect.isClosed()) return;
 			connect.close();
 		} catch (AbstractMethodError err) {
 		} catch (SQLException sqlex) {
@@ -324,11 +317,9 @@ public class SqlHelper {
 	 * @param stmt
 	 */
 	public static void attemptClose(Statement stmt) {
-		if (stmt == null)
-			return;
+		if (stmt == null) return;
 		try {
-			if (stmt.isClosed())
-				return;
+			if (stmt.isClosed()) return;
 			stmt.close();
 		} catch (AbstractMethodError err) {
 		} catch (SQLException sqlex) {
@@ -340,11 +331,9 @@ public class SqlHelper {
 	 * @param rs
 	 */
 	public static void attemptClose(ResultSet rs) {
-		if (rs == null)
-			return;
+		if (rs == null) return;
 		try {
-			if (rs.isClosed())
-				return;
+			if (rs.isClosed()) return;
 			rs.close();
 		} catch (AbstractMethodError err) {
 		} catch (SQLException sqlex) {
@@ -356,11 +345,9 @@ public class SqlHelper {
 	 * @param stmt
 	 */
 	public static void clear(Statement stmt) {
-		if (stmt == null)
-			return;
+		if (stmt == null) return;
 		try {
-			if (stmt instanceof PreparedStatement)
-				((PreparedStatement) stmt).clearParameters();
+			if (stmt instanceof PreparedStatement) ((PreparedStatement) stmt).clearParameters();
 			stmt.clearBatch();
 			stmt.clearWarnings();
 		} catch (Throwable ex) {
@@ -381,11 +368,8 @@ public class SqlHelper {
 	 * @return
 	 */
 	public static String escapeSql(Object value) {
-		if (value == null)
-			return StringUtils.EMPTY;
-		
-		if (Number.class.isAssignableFrom(value.getClass()))
-			return value.toString();
+		if (value == null) return StringUtils.EMPTY;
+		if (Number.class.isAssignableFrom(value.getClass())) return value.toString();
 		return StringUtils.replace(value.toString(), "'", "''");
 	}
 	

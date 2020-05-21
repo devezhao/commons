@@ -19,19 +19,23 @@ public class MemoryInformationBean implements MemoryInformation {
 		this.memoryPool = memoryPoolMXBean;
 	}
 
-	public String getName() {
+	@Override
+    public String getName() {
 		return memoryPool.getName();
 	}
 
-	public long getTotal() {
+	@Override
+    public long getTotal() {
 		return (memoryPool.getUsage().getMax());
 	}
 
-	public long getUsed() {
+	@Override
+    public long getUsed() {
 		return (memoryPool.getUsage().getUsed());
 	}
 
-	public long getFree() {
+	@Override
+    public long getFree() {
 		return getTotal() - getUsed();
 	}
 

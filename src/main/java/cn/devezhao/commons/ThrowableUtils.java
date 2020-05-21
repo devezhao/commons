@@ -46,9 +46,8 @@ public final class ThrowableUtils {
 			print = new PrintWriter(writer);
 			ex.printStackTrace(print);
 			print.flush();
-			
-			String stack = writer.toString();
-			return stack;
+
+            return writer.toString();
 		} finally {
 			try {
 				print.close();

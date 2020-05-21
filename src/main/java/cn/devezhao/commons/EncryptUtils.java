@@ -159,8 +159,7 @@ public final class EncryptUtils {
 	 */
 	public static String toCRC32HexPadding(byte[] input) {
 		String crc32 = toCRC32Hex(input);
-		if (crc32.length() == 8)
-			return crc32;
+		if (crc32.length() == 8) return crc32;
 		return StringUtils.rightPad(crc32, 8, '0');
 	}
 

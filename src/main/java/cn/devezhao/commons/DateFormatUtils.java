@@ -98,36 +98,43 @@ public class DateFormatUtils {
 	
 	public static final String CN_DATE_FORMAT = "yyyy年MM月dd日";
 	private static final ThreadLocal<DateFormat> CN_DATE_FORMAT_TL = new ThreadLocal<DateFormat>(){
-		protected DateFormat initialValue() { return new SimpleDateFormat(CN_DATE_FORMAT); }
+		@Override
+        protected DateFormat initialValue() { return new SimpleDateFormat(CN_DATE_FORMAT); }
 	};
 	
 	public static final String CN_TIME_FORMAT = "HH时mm分ss秒";
 	private static final ThreadLocal<DateFormat> CN_TIME_FORMAT_TL = new ThreadLocal<DateFormat>(){
-		protected DateFormat initialValue() { return new SimpleDateFormat(CN_TIME_FORMAT); }
+		@Override
+        protected DateFormat initialValue() { return new SimpleDateFormat(CN_TIME_FORMAT); }
 	};
 	
 	public static final String CN_DATETIME_FORMAT = "yyyy年MM月dd日 HH时mm分ss秒";
 	private static final ThreadLocal<DateFormat> CN_DATETIME_FORMAT_TL = new ThreadLocal<DateFormat>(){
-		protected DateFormat initialValue() { return new SimpleDateFormat(CN_DATETIME_FORMAT); }
+		@Override
+        protected DateFormat initialValue() { return new SimpleDateFormat(CN_DATETIME_FORMAT); }
 	};
 	
 	public static final String UTC_DATE_FORMAT = "yyyy-MM-dd";
 	private static final ThreadLocal<DateFormat> UTC_DATE_FORMAT_TL = new ThreadLocal<DateFormat>(){
-		protected DateFormat initialValue() { return new SimpleDateFormat(UTC_DATE_FORMAT); }
+		@Override
+        protected DateFormat initialValue() { return new SimpleDateFormat(UTC_DATE_FORMAT); }
 	};
 	
 	public static final String UTC_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	private static final ThreadLocal<DateFormat> UTC_DATETIME_FORMAT_TL = new ThreadLocal<DateFormat>(){
-		protected DateFormat initialValue() { return new SimpleDateFormat(UTC_DATETIME_FORMAT); }
+		@Override
+        protected DateFormat initialValue() { return new SimpleDateFormat(UTC_DATETIME_FORMAT); }
 	};
 	
 	public static final String PLAIN_DATE_FORMAT = "yyyyMMdd";
 	private static final ThreadLocal<DateFormat> PLAIN_DATE_FORMAT_TL = new ThreadLocal<DateFormat>(){
-		protected DateFormat initialValue() { return new SimpleDateFormat(PLAIN_DATE_FORMAT); }
+		@Override
+        protected DateFormat initialValue() { return new SimpleDateFormat(PLAIN_DATE_FORMAT); }
 	};
 	
 	public static final String PLAIN_DATETIME_FORMAT = "yyyyMMddHHmmss";
 	private static final ThreadLocal<DateFormat> PLAIN_DATETIME_FORMAT_TL = new ThreadLocal<DateFormat>(){
-		protected DateFormat initialValue() { return new SimpleDateFormat(PLAIN_DATETIME_FORMAT); }
+		@Override
+        protected DateFormat initialValue() { return new SimpleDateFormat(PLAIN_DATETIME_FORMAT); }
 	};
 }
