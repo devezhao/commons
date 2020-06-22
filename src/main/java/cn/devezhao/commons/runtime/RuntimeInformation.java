@@ -1,5 +1,8 @@
 package cn.devezhao.commons.runtime;
 
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import javax.management.Query;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryPoolMXBean;
@@ -9,6 +12,7 @@ import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 运行时信息
@@ -152,5 +156,23 @@ public class RuntimeInformation {
 		preTime = currentTime;
 		preUsedTime = totalTime;
 		return (((double) usedTime) / totalPassedTime / osMXBean.getAvailableProcessors()) * 100;
+	}
+
+	/**
+	 * 获取容器端口
+	 *
+	 * @return
+	 */
+	public int getServletPort() {
+		MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer();
+		try {
+			Set<ObjectName> objectNames = beanServer.queryNames(
+					new ObjectName("*:type=Connector,*"), Query.match(Query.attr("protocol"), Query.value("HTTP/1.1")));
+			String port = objectNames.iterator().next().getKeyProperty("port");
+			return Integer.parseInt(port);
+
+		} catch (Exception e) {
+			return -1;
+		}
 	}
 }

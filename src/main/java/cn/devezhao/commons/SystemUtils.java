@@ -1,5 +1,9 @@
 package cn.devezhao.commons;
 
+import cn.devezhao.commons.runtime.MemoryInformation;
+import cn.devezhao.commons.runtime.RuntimeInformation;
+import org.apache.commons.lang.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -8,11 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.lang.StringUtils;
-
-import cn.devezhao.commons.runtime.MemoryInformation;
-import cn.devezhao.commons.runtime.RuntimeInformation;
 
 /**
  * JVM 系统工具
@@ -79,8 +78,7 @@ public final class SystemUtils {
 	/**
 	 * 执行 GC
 	 */
-	synchronized
-	public static void gc() {
+	synchronized public static void gc() {
 		if (System.currentTimeMillis() - lastGcTime < 60 * 1000) {
 			return;
 		}
@@ -129,8 +127,7 @@ public final class SystemUtils {
 	 * 
 	 * @return
 	 */
-	synchronized
-	public static RuntimeInformation getRuntimeInformation() {
+	synchronized public static RuntimeInformation getRuntimeInformation() {
 		if (runtimeInformation == null) {
 			if (!org.apache.commons.lang.SystemUtils.isJavaVersionAtLeast(1.5f)) {
 				throw new RuntimeException("Java version least 1.5");
@@ -155,44 +152,44 @@ public final class SystemUtils {
 	 * @return
 	 */
 	public static List<MemoryInformation> getMemoryStatistics(boolean containsPool) {
-		List<MemoryInformation> list = new ArrayList<MemoryInformation>();
-		
-		final RuntimeInformation memory = new RuntimeInformation();
-		list.add(new MemoryInformation() {
+		List<MemoryInformation> stats = new ArrayList<>();
+
+		final RuntimeInformation runtime = getRuntimeInformation();
+		stats.add(new MemoryInformation() {
 			@Override
             public String getName() { return "Heap"; }
 			@Override
-            public long getUsed() { return memory.getTotalHeapMemoryUsed(); }
+            public long getUsed() { return runtime.getTotalHeapMemoryUsed(); }
 			@Override
-            public long getTotal() { return memory.getTotalHeapMemory(); }
+            public long getTotal() { return runtime.getTotalHeapMemory(); }
 			@Override
             public long getFree() { return getTotal() - getUsed(); }
 		});
-		list.add(new MemoryInformation() {
+		stats.add(new MemoryInformation() {
 			@Override
             public String getName() { return "PermGen"; }
 			@Override
-            public long getUsed() { return memory.getTotalPermGenMemoryUsed(); }
+            public long getUsed() { return runtime.getTotalPermGenMemoryUsed(); }
 			@Override
-            public long getTotal() { return memory.getTotalPermGenMemory(); }
+            public long getTotal() { return runtime.getTotalPermGenMemory(); }
 			@Override
             public long getFree() { return getTotal() - getUsed(); }
 		});
-		list.add(new MemoryInformation() {
+		stats.add(new MemoryInformation() {
 			@Override
             public String getName() { return "NonHeap"; }
 			@Override
-            public long getUsed() { return memory.getTotalNonHeapMemoryUsed(); }
+            public long getUsed() { return runtime.getTotalNonHeapMemoryUsed(); }
 			@Override
-            public long getTotal() { return memory.getTotalNonHeapMemory(); }
+            public long getTotal() { return runtime.getTotalNonHeapMemory(); }
 			@Override
             public long getFree() { return getTotal() - getUsed(); }
 		});
 		
 		if (containsPool) {
-			list.addAll(memory.getMemoryPoolInformation());
+			stats.addAll(runtime.getMemoryPoolInformation());
 		}
-		return Collections.unmodifiableList(list);
+		return Collections.unmodifiableList(stats);
 	}
 	
 	/**
