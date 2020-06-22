@@ -3,7 +3,9 @@ package cn.devezhao.commons.runtime;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryPoolMXBean;
+import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.RuntimeMXBean;
+import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,12 +20,19 @@ public class RuntimeInformation {
 
 	private final MemoryMXBean memory;
 	private final RuntimeMXBean runtime;
+	private final OperatingSystemMXBean osMXBean;
+	private final ThreadMXBean threadMXBean;
+
+	private long preTime = System.nanoTime();
+	private long preUsedTime = 0;
 
 	/**
 	 */
 	public RuntimeInformation() {
 		this.memory = ManagementFactory.getMemoryMXBean();
 		this.runtime = ManagementFactory.getRuntimeMXBean();
+		this.osMXBean = ManagementFactory.getOperatingSystemMXBean();
+		this.threadMXBean = ManagementFactory.getThreadMXBean();
 	}
 
 	/**
@@ -81,6 +90,8 @@ public class RuntimeInformation {
 	}
 
 	/**
+	 * 获取 JVM 输入参数
+	 *
 	 * @return
 	 */
 	public String getJvmInputArguments() {
@@ -92,6 +103,8 @@ public class RuntimeInformation {
 	}
 
 	/**
+	 * 获取永久代内存
+	 *
 	 * @return
 	 */
 	private MemoryInformation getPermGen() {
@@ -111,5 +124,33 @@ public class RuntimeInformation {
 			@Override
             public long getFree() { return -1; }
 		};
+	}
+
+	/**
+	 * 获取系统负载
+	 *
+	 * @return
+	 */
+	public double getSystemLoad() {
+		return osMXBean.getSystemLoadAverage();
+	}
+
+	/**
+	 * 获取 JVM 进程负载
+	 *
+	 * @return
+	 */
+	public double getProcessLoad() {
+		long totalTime = 0;
+		for (long id : threadMXBean.getAllThreadIds()) {
+			totalTime += threadMXBean.getThreadCpuTime(id);
+		}
+
+		long currentTime = System.nanoTime();
+		long usedTime = totalTime - preUsedTime;
+		long totalPassedTime = currentTime - preTime;
+		preTime = currentTime;
+		preUsedTime = totalTime;
+		return (((double) usedTime) / totalPassedTime / osMXBean.getAvailableProcessors()) * 100;
 	}
 }
