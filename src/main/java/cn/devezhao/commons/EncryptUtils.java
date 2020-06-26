@@ -1,17 +1,16 @@
 package cn.devezhao.commons;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.zip.CRC32;
+import org.apache.commons.lang.StringUtils;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.lang.StringUtils;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.zip.CRC32;
 
 /**
  * 加密工具类
@@ -29,7 +28,7 @@ public final class EncryptUtils {
 	 * @return
 	 */
 	private static byte[] toMD5(byte[] input) {
-		MessageDigest digest = null;
+		MessageDigest digest;
 		try {
 			digest = MessageDigest.getInstance("MD5");
 		} catch (NoSuchAlgorithmException e) {
@@ -56,11 +55,7 @@ public final class EncryptUtils {
 	 * @return
 	 */
 	public static String toMD5Hex(String input) {
-		try {
-			return toMD5Hex(input.getBytes("utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
+		return toMD5Hex(input.getBytes(StandardCharsets.UTF_8));
 	}
 	
 	/**
@@ -70,7 +65,7 @@ public final class EncryptUtils {
 	 * @return
 	 */
 	private static byte[] toSHA(byte[] input, String algorithm) {
-		MessageDigest digest = null;
+		MessageDigest digest;
 		try {
 			digest = MessageDigest.getInstance(algorithm);
 		} catch (NoSuchAlgorithmException e) {
@@ -97,11 +92,7 @@ public final class EncryptUtils {
 	 * @return
 	 */
 	public static String toSHA1Hex(String input) {
-		try {
-			return toSHA1Hex(input.getBytes("utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
+		return toSHA1Hex(input.getBytes(StandardCharsets.UTF_8));
 	}
 	
 	/**
@@ -121,11 +112,7 @@ public final class EncryptUtils {
 	 * @return
 	 */
 	public static String toSHA256Hex(String input) {
-		try {
-			return toSHA256Hex(input.getBytes("utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
+		return toSHA256Hex(input.getBytes(StandardCharsets.UTF_8));
 	}
 
 	/**
@@ -184,15 +171,13 @@ public final class EncryptUtils {
 	 */
 	public static String aesEncrypt(String input, byte[] passwd) {
 		try {
-			KeyGenerator kgen = KeyGenerator.getInstance("AES");
-			kgen.init(128, new SecureRandom(passwd));
-			SecretKey secretKey = kgen.generateKey();
-			byte[] enCodeFormat = secretKey.getEncoded();
-			SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
+			SecretKeySpec key = buildAesSecretKey(passwd);
 			Cipher cipher = Cipher.getInstance("AES");
 			cipher.init(Cipher.ENCRYPT_MODE, key);
-			byte[] result = cipher.doFinal(input.getBytes("UTF-8"));
+
+			byte[] result = cipher.doFinal(input.getBytes(StandardCharsets.UTF_8));
 			return new String(CodecUtils.base64Encode(result));
+
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -207,15 +192,30 @@ public final class EncryptUtils {
 	 */
 	public static String aesDecrypt(String input, byte[] passwd) {
 		try {
+			SecretKeySpec key = buildAesSecretKey(passwd);
+			Cipher cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.DECRYPT_MODE, key);
+
+			byte[] result = cipher.doFinal(CodecUtils.base64Decode(input.getBytes(StandardCharsets.UTF_8)));
+			return new String(result);
+
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * @param passwd
+	 * @return
+	 */
+	private static SecretKeySpec buildAesSecretKey(byte[] passwd) {
+		try {
 			KeyGenerator kgen = KeyGenerator.getInstance("AES");
 			kgen.init(128, new SecureRandom(passwd));
 			SecretKey secretKey = kgen.generateKey();
 			byte[] enCodeFormat = secretKey.getEncoded();
-			SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-			Cipher cipher = Cipher.getInstance("AES");
-			cipher.init(Cipher.DECRYPT_MODE, key);
-			byte[] result = cipher.doFinal(CodecUtils.base64Decode(input.getBytes("UTF-8")));
-			return new String(result);
+			return new SecretKeySpec(enCodeFormat, "AES");
+
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -14,7 +14,7 @@ public class ExpiresMap <K, V> implements Map<K, V> {
 
 	public static final int HOUR_IN_SECOND = 60 * 60;
 
-	private Map<K, Object[]> nestable = new HashMap<K, Object[]>();
+	private final Map<K, Object[]> nestable = new HashMap<>();
 
 	/**
 	 * @param key

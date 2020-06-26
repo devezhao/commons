@@ -1,16 +1,15 @@
 package cn.devezhao.commons.xml;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.io.SAXReader;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * SAXReader 缓存
@@ -22,9 +21,9 @@ public class FastSAXReader {
 	
 	private static final Log LOG = LogFactory.getLog(FastSAXReader.class);
 	
-	private int initial;
+	private final int initial;
 	
-	private Queue<XMLReader> xmlReadres = new ConcurrentLinkedQueue<XMLReader>();
+	private final Queue<XMLReader> xmlReadres = new ConcurrentLinkedQueue<>();
 	
 	public FastSAXReader(int initial) {
 		this.initial = initial;

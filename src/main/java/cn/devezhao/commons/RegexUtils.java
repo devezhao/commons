@@ -1,8 +1,8 @@
 package cn.devezhao.commons;
 
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang.StringUtils;
+
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -23,12 +23,11 @@ public class RegexUtils {
 	 */
 	public static boolean isEMail(String email) {
 		if (StringUtils.isNotBlank(email) && EMAIL_PATTERN.matcher(email).find()
-				&& !(email.endsWith("yahoo.cn") || email.endsWith("yahoo.com.cn") 
-						|| email.endsWith(".") || email.startsWith(".") || StringUtils.countMatches(email, "@") > 1 || email.contains(".."))) {
+				&& !(email.endsWith("yahoo.cn") || email.endsWith("yahoo.com.cn") || email.endsWith(".")
+				|| email.startsWith(".") || StringUtils.countMatches(email, "@") > 1 || email.contains(".."))) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 	
 	/**

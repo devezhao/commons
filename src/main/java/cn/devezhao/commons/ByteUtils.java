@@ -15,8 +15,8 @@ import java.util.List;
  * @version $Id: ByteUtils.java 8 2015-06-08 09:09:03Z zhaoff@wisecrm.com $
  */
 public class ByteUtils {
-	
-	static final int BUFFER_SIZE = 1024;
+
+	private static final int BUFFER_SIZE = 1024;
 	private static MessageDigest md5Digest = null;
 	
 	private ByteUtils() {
@@ -33,11 +33,11 @@ public class ByteUtils {
 	 * @throws IOException
 	 */
 	public static byte[] read(InputStream stream) throws IOException {
-		List<byte[]> array = new ArrayList<byte[]>();
+		List<byte[]> array = new ArrayList<>();
 		byte[] buffer = new byte[BUFFER_SIZE * 100];
 		int size = 0;
 		
-		int read = -1;
+		int read;
 		while ((read = stream.read(buffer)) > -1) {
 			if (read > 0) {
 				byte[] chunk = new byte[read];
@@ -49,20 +49,12 @@ public class ByteUtils {
 		if (size <= 0) {
 			throw new IllegalArgumentException("stream is empty");
 		}
-		
-		ByteArrayOutputStream baos = null;
-		try {
-			baos = new ByteArrayOutputStream(size);
+
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream(size)) {
 			for (byte[] chunk : array) {
 				baos.write(chunk);
 			}
 			return baos.toByteArray();
-		} catch (IOException ioex) {
-			throw ioex;
-		} finally {
-			if (baos != null) {
-				baos.close();
-			}
 		}
 	}
 	
@@ -74,7 +66,7 @@ public class ByteUtils {
 	public static String read(Reader reader) throws IOException {
 		char[] buffer = new char[BUFFER_SIZE * 100];
 		
-		int read = -1;
+		int read;
 		StringBuilder content = new StringBuilder();
 		while ((read = reader.read(buffer)) > 0) {
 			char[] chunk = new char[read];
@@ -92,7 +84,7 @@ public class ByteUtils {
 	public static long size(InputStream stream) throws IOException {
 		byte[] buffer = new byte[BUFFER_SIZE * 100];
 		long size = 0;
-		int read = -1;
+		int read;
 		while ((read = stream.read(buffer)) > -1) {
 			size += read;
 		}
@@ -105,9 +97,9 @@ public class ByteUtils {
 	 * @throws IOException
 	 */
 	public static long size(Reader reader) throws IOException {
-		char buffer[] = new char[BUFFER_SIZE * 100];
+		char[] buffer = new char[BUFFER_SIZE * 100];
 		long size = 0;
-		int read = 0;
+		int read;
 		while ((read = reader.read(buffer)) > -1) {
 			size += read;
 		}
@@ -153,14 +145,13 @@ public class ByteUtils {
 	/**
 	 * @param stream
 	 * @return
-	 * @throws NoSuchAlgorithmException
 	 * @throws IOException
 	 */
-	public static String hash(InputStream stream) throws NoSuchAlgorithmException, IOException {
+	public static String hash(InputStream stream) throws IOException {
 		md5Digest.reset();
 		
 		byte[] buffer = new byte[1024];
-		int read = 0;
+		int read;
 		while ((read = stream.read(buffer)) > -1) {
 			md5Digest.update(buffer, 0, read);
 		}

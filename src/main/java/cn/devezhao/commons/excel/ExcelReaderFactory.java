@@ -1,9 +1,8 @@
 package cn.devezhao.commons.excel;
 
+import javax.xml.stream.XMLStreamReader;
 import java.io.Closeable;
 import java.io.File;
-
-import javax.xml.stream.XMLStreamReader;
 
 /**
  * 
@@ -47,8 +46,7 @@ public class ExcelReaderFactory {
 			if (closeable != null) {
 				closeable.close();
 			}
-		} catch (Exception e) {
-		}
+		} catch (Exception ignore) { }
 	}
 	
 	/**
@@ -59,7 +57,6 @@ public class ExcelReaderFactory {
 			if (reader != null) {
 				reader.close();
 			}
-		} catch (Exception e) {
-		}
+		} catch (Exception ignore) { }
 	}
 }

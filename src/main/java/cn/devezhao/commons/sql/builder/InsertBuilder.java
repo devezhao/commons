@@ -1,11 +1,10 @@
 package cn.devezhao.commons.sql.builder;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import cn.devezhao.commons.sql.SqlHelper;
 import org.apache.commons.lang.ObjectUtils;
 
-import cn.devezhao.commons.sql.SqlHelper;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * insert
@@ -15,7 +14,7 @@ import cn.devezhao.commons.sql.SqlHelper;
  */
 public class InsertBuilder extends BaseBuilder {
 
-	final private Map<String, Object> columns = new LinkedHashMap<String, Object>();
+	final private Map<String, Object> columns = new LinkedHashMap<>();
 	
 	public InsertBuilder(String table) {
 		super(table);
@@ -35,10 +34,10 @@ public class InsertBuilder extends BaseBuilder {
 	
 	@Override
     public String toSql() {
-		StringBuffer sql = new StringBuffer("insert into ");
+		StringBuilder sql = new StringBuilder("insert into ");
 		sql.append(SqlHelper.wrapIdent(getTable().toLowerCase())).append(" (");
 		
-		StringBuffer values = new StringBuffer(") values (");
+		StringBuilder values = new StringBuilder(") values (");
 		
 		for (Map.Entry<String, Object> e : columns.entrySet()) {
 			sql.append(SqlHelper.wrapIdent(e.getKey())).append(", ");

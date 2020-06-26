@@ -54,7 +54,7 @@ public final class ThreadPool {
 	public static ExecutorService newFixedThreadPool(int nThreads) {
 		ThreadPoolExecutor exec = new ThreadPoolExecutor(nThreads, nThreads,
                                       0L, TimeUnit.MILLISECONDS,
-                                      new LinkedBlockingQueue<Runnable>(nThreads));
+				new LinkedBlockingQueue<>(nThreads));
 		exec.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 		return exec;
     }

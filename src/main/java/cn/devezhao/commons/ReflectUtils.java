@@ -1,7 +1,6 @@
 package cn.devezhao.commons;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -86,7 +85,7 @@ public final class ReflectUtils {
 			if (contextClassLoader != null) {
 				return contextClassLoader.loadClass(clazzName);
 			}
-		} catch (Throwable t) {
+		} catch (Throwable ignore) {
 		}
 		return Class.forName(clazzName);
 	}
@@ -103,7 +102,7 @@ public final class ReflectUtils {
 			throws ClassNotFoundException {
 		try {
 			return Class.forName(clazzName, true, caller.getClassLoader());
-		} catch (Throwable e) {
+		} catch (Throwable ignore) {
 		}
 		return classForName(clazzName);
 	}
@@ -289,19 +288,15 @@ public final class ReflectUtils {
 			return;
 		}
 
-		File[] dirfiles = dir.listFiles(new FileFilter() {
-			@Override
-            public boolean accept(File file) {
-				return (recursive && file.isDirectory()) || (file.getName().endsWith(".class"));
-			}
-		});
-
-		for (File file : dirfiles) {
-			if (file.isDirectory()) {
-				scanClassesInPackage(packageName + "." + file.getName(), file.getAbsolutePath(), recursive, superClass, classes);
-			} else {
-				String className = file.getName().substring(0, file.getName().length() - 6);
-				addScanClass(packageName + '.' + className, superClass, classes);
+		File[] dirfiles = dir.listFiles(file -> (recursive && file.isDirectory()) || (file.getName().endsWith(".class")));
+		if (dirfiles != null) {
+			for (File file : dirfiles) {
+				if (file.isDirectory()) {
+					scanClassesInPackage(packageName + "." + file.getName(), file.getAbsolutePath(), recursive, superClass, classes);
+				} else {
+					String className = file.getName().substring(0, file.getName().length() - 6);
+					addScanClass(packageName + '.' + className, superClass, classes);
+				}
 			}
 		}
 	}

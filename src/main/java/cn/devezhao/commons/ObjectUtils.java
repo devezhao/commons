@@ -1,9 +1,9 @@
 package cn.devezhao.commons;
 
-import java.math.BigDecimal;
-
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.math.NumberUtils;
+
+import java.math.BigDecimal;
 
 /**
  * 对象处理相关
@@ -117,11 +117,8 @@ public class ObjectUtils {
 	 * @see Object#equals(Object)
 	 */
 	public static boolean equals(Object object, Object another) {
-		if (object == null) {
-			return another == null;
-		} else if (another == null) {
-			return object == null;
-		}
+		if (object == null && another == null) return true;
+		if (object == null || another == null) return false;
 		return object.equals(another);
 	}
 	

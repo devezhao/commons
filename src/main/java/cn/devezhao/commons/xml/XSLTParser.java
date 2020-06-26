@@ -1,15 +1,14 @@
 package cn.devezhao.commons.xml;
 
-import java.io.StringWriter;
-
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.stream.StreamResult;
-
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.DocumentSource;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
+import java.io.StringWriter;
 
 /**
  * XSLT 解析者
@@ -19,7 +18,7 @@ import org.dom4j.io.DocumentSource;
  */
 public class XSLTParser {
 
-	private Transformer transformer;
+	private final Transformer transformer;
 	
 	/**
 	 * @param transformer

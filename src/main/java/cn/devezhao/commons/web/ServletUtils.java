@@ -1,9 +1,11 @@
 package cn.devezhao.commons.web;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Calendar;
+import cn.devezhao.commons.CalendarUtils;
+import cn.devezhao.commons.CodecUtils;
+import cn.devezhao.commons.xml.XMLHelper;
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang.StringUtils;
+import org.dom4j.Document;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -11,15 +13,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-import org.dom4j.Document;
-
-import com.alibaba.fastjson.JSON;
-
-import cn.devezhao.commons.CalendarUtils;
-import cn.devezhao.commons.CodecUtils;
-import cn.devezhao.commons.xml.XMLHelper;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Calendar;
 
 /**
  * SERVLET 工具集
@@ -105,11 +102,11 @@ public class ServletUtils {
 	 * @return
 	 */
 	public static Cookie getCookie(HttpServletRequest request, String cookieName) {
-		Cookie cookies[] = request.getCookies();
+		Cookie[] cookies = request.getCookies();
 		if (cookies != null && cookies[0] != null) {
-			for (int i = 0; i < cookies.length; i++) {
-				if (cookieName.equals(cookies[i].getName())) {
-					return cookies[i];
+			for (Cookie cookie : cookies) {
+				if (cookieName.equals(cookie.getName())) {
+					return cookie;
 				}
 			}
 		}
@@ -223,9 +220,8 @@ public class ServletUtils {
 	/**
 	 * @param request
 	 * @return
-	 * @throws IOException
 	 */
-	public static JSON getRequestJson(ServletRequest request) throws IOException {
+	public static JSON getRequestJson(ServletRequest request) {
 		String req = getRequestString(request);
 		return (JSON) JSON.parse(req);
 	}
@@ -245,7 +241,7 @@ public class ServletUtils {
 			throw new RuntimeException("Could't gets reader of response!", ex);
 		}
 		
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		try {
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -317,7 +313,7 @@ public class ServletUtils {
 	 * @return
 	 */
 	public static String getReferer(HttpServletRequest request) {
-		return (String) request.getHeader("referer");
+		return request.getHeader("referer");
 	}
 	
 	/**

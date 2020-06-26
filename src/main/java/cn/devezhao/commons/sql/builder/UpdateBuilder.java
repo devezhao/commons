@@ -1,12 +1,11 @@
 package cn.devezhao.commons.sql.builder;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import cn.devezhao.commons.sql.SqlHelper;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 
-import cn.devezhao.commons.sql.SqlHelper;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * update
@@ -16,7 +15,7 @@ import cn.devezhao.commons.sql.SqlHelper;
  */
 public class UpdateBuilder extends ConditionalBuilder {
 
-	final private Map<String, Object> columns = new LinkedHashMap<String, Object>();
+	final private Map<String, Object> columns = new LinkedHashMap<>();
 	
 	public UpdateBuilder(String table) {
 		super(table);
@@ -36,7 +35,7 @@ public class UpdateBuilder extends ConditionalBuilder {
 	
 	@Override
     public String toSql() {
-		StringBuffer sql = new StringBuffer("update ");
+		StringBuilder sql = new StringBuilder("update ");
 		sql.append(SqlHelper.wrapIdent(table.toLowerCase())).append(" set ");
 		
 		for (Map.Entry<String, Object> e : columns.entrySet()) {

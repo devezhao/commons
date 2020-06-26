@@ -1,9 +1,9 @@
 package cn.devezhao.commons;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
-import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * 异常对象工具
@@ -50,11 +50,11 @@ public final class ThrowableUtils {
             return writer.toString();
 		} finally {
 			try {
-				print.close();
-			} catch (Throwable ex1){};
+				if (print != null) print.close();
+			} catch (Throwable ex1){ };
 			try {
-				writer.close();
-			} catch (Throwable ex2){};
+				if (writer != null) writer.close();
+			} catch (Throwable ex2){ };
 		}
 	}
 }

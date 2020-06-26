@@ -86,7 +86,7 @@ public class RuntimeInformation {
 	 */
 	public List<MemoryInformation> getMemoryPoolInformation() {
 		List<MemoryPoolMXBean> mxBeans = ManagementFactory.getMemoryPoolMXBeans();
-		List<MemoryInformation> result = new ArrayList<MemoryInformation>(mxBeans.size());
+		List<MemoryInformation> result = new ArrayList<>(mxBeans.size());
 		for (MemoryPoolMXBean mxBean : mxBeans) {
 			result.add(new MemoryInformationBean(mxBean));
 		}

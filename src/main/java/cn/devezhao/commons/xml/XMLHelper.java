@@ -1,11 +1,6 @@
 package cn.devezhao.commons.xml;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-
+import cn.devezhao.commons.web.WebUtils;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -13,7 +8,11 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
-import cn.devezhao.commons.web.WebUtils;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * XML helper
@@ -64,7 +63,7 @@ public class XMLHelper {
 			fastSAXReader.release(saxReader);
 			try {
 				stream.close();
-			} catch (IOException ioex) {}
+			} catch (IOException ignore) { }
 		}
 	}
 	
@@ -92,7 +91,7 @@ public class XMLHelper {
 			fastSAXReader.release(saxReader);
 			try {
 				reader.close();
-			} catch (IOException ioex) {}
+			} catch (IOException ignore) { }
 		}
 	}
 	

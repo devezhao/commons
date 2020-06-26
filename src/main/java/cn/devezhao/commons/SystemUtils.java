@@ -69,8 +69,8 @@ public final class SystemUtils {
 			}
 		} finally {
 			try {
-				reader.close();
-			} catch (Exception ex) {}
+				if (reader != null) reader.close();
+			} catch (Exception ignore) { }
 		}
 	}
 	
@@ -114,11 +114,12 @@ public final class SystemUtils {
 			top = group;
 			group = group.getParent();
 		}
+
+		if (top == null) return 0L;
 		
 		int estimated_size = top.activeCount() * 2;
 		Thread[] slackList = new Thread[estimated_size];
-		int actual_size = top.enumerate(slackList);
-		return actual_size;
+		return top.enumerate(slackList);
 	}
 	
 	private static RuntimeInformation runtimeInformation;

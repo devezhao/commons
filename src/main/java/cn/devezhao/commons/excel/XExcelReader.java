@@ -1,20 +1,19 @@
 package cn.devezhao.commons.excel;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackageAccess;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.eventusermodel.ReadOnlySharedStringsTable;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * XExcel 读取 .xlsx
@@ -23,9 +22,9 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString;
  */
 public class XExcelReader extends ExcelReader {
 	
-	private OPCPackage pkg;
-	private XSSFReader xssfReader;
-	private ReadOnlySharedStringsTable sharedStringsTable;
+	private final OPCPackage pkg;
+	private final XSSFReader xssfReader;
+	private final ReadOnlySharedStringsTable sharedStringsTable;
 	
 	private int sheetIndex = 0;
 	
@@ -48,7 +47,7 @@ public class XExcelReader extends ExcelReader {
 	
 	@Override
 	public String[] getSheetNames() {
-		List<String> names = new ArrayList<String>();
+		List<String> names = new ArrayList<>();
 		XSSFReader.SheetIterator iter;
 		try {
 			iter = (XSSFReader.SheetIterator) xssfReader.getSheetsData();
@@ -60,7 +59,7 @@ public class XExcelReader extends ExcelReader {
 		} catch (Exception e) {
 			throw new ExcelReaderException(e);
 		}
-		return names.toArray(new String[names.size()]);
+		return names.toArray(new String[0]);
 	}
 	
 	@Override
@@ -162,7 +161,7 @@ public class XExcelReader extends ExcelReader {
 	 * @throws XMLStreamException 
 	 */
 	private Cell[] readRow() throws XMLStreamException {
-		List<Cell> cellList = new ArrayList<Cell>();
+		List<Cell> cellList = new ArrayList<>();
         while (cellReader.hasNext()) {
             cellReader.next();
             if (cellReader.isStartElement()) {
@@ -180,7 +179,7 @@ public class XExcelReader extends ExcelReader {
                 break;
             }
         }
-        return cellList.toArray(new Cell[cellList.size()]);
+        return cellList.toArray(new Cell[0]);
 	}
 	
 	/**
@@ -196,7 +195,7 @@ public class XExcelReader extends ExcelReader {
 			cellReader.next();
 			if (cellReader.isStartElement()) {
 				if ("v".equals(cellReader.getLocalName())) {
-					if (cellType != null && "s".equals(cellType)) {
+					if ("s".equals(cellType)) {
 						int idx = Integer.parseInt(cellReader.getElementText());
 						return new XSSFRichTextString(sharedStringsTable.getEntryAt(idx)).toString();
 					} else {

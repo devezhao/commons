@@ -1,9 +1,9 @@
 package cn.devezhao.commons.identifier;
 
+import cn.devezhao.commons.ByteUtils;
+
 import java.io.Serializable;
 import java.net.InetAddress;
-
-import cn.devezhao.commons.ByteUtils;
 
 /**
  * UUID Hex Generator
@@ -53,11 +53,11 @@ public class UUIDHexGenerator implements IdentifierGenerator {
 	 */
 	@Override
     public Serializable generate() {
-		return new StringBuilder(getLength()).append(format(getIP())).append(sep)
-				.append(format(getJVM())).append(sep).append(
-						format(getMoTime())).append(sep).append(
-						format(getLoTime())).append(sep).append(
-						format(getCount())).toString();
+		return format(getIP()) + sep +
+				format(getJVM()) + sep +
+				format(getMoTime()) + sep +
+				format(getLoTime()) + sep +
+				format(getCount());
 	}
 	
 	@Override

@@ -1,11 +1,12 @@
 package cn.devezhao.commons.sql.builder;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import cn.devezhao.commons.sql.SqlHelper;
 import org.apache.commons.lang.StringUtils;
 
-import cn.devezhao.commons.sql.SqlHelper;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * select
@@ -15,7 +16,7 @@ import cn.devezhao.commons.sql.SqlHelper;
  */
 public class SelectBuilder extends ConditionalBuilder {
 
-	final private List<String> columns = new LinkedList<String>();
+	final private List<String> columns = new LinkedList<>();
 	
 	private String orderBy;
 	private String groupBy;
@@ -31,14 +32,14 @@ public class SelectBuilder extends ConditionalBuilder {
 		return this;
 	}
 	
-	public SelectBuilder addColumns(String columns[]) {
-		for (String c : columns) this.columns.add(c);
+	public SelectBuilder addColumns(String[] columns) {
+		Collections.addAll(this.columns, columns);
 		return this;
 	}
 	
 	public SelectBuilder addColumns(String column, String...columns) {
 		this.columns.add(column);
-		for (String c : columns) this.columns.add(c);
+		this.columns.addAll(Arrays.asList(columns));
 		return this;
 	}
 	
@@ -64,7 +65,7 @@ public class SelectBuilder extends ConditionalBuilder {
 	
 	@Override
     public String toSql() {
-		StringBuffer sql = new StringBuffer("select ");
+		StringBuilder sql = new StringBuilder("select ");
 		
 		for (String c : columns) {
 			if (c.contains("(")) {  // 函数
@@ -86,10 +87,10 @@ public class SelectBuilder extends ConditionalBuilder {
 		}
 		
 		if (groupBy != null) {
-			sql.append(" group by " + groupBy);
+			sql.append(" group by ").append(groupBy);
 		}
 		if (orderBy != null) {
-			sql.append(" order by " + orderBy);
+			sql.append(" order by ").append(orderBy);
 		}
 		
 		if (limit > 0) {

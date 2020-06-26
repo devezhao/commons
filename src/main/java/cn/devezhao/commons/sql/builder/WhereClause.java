@@ -1,13 +1,12 @@
 package cn.devezhao.commons.sql.builder;
 
-import java.util.LinkedList;
-
+import cn.devezhao.commons.sql.Builder;
+import cn.devezhao.commons.sql.SqlHelper;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import cn.devezhao.commons.sql.Builder;
-import cn.devezhao.commons.sql.SqlHelper;
+import java.util.LinkedList;
 
 /**
  * [...] where ...
@@ -21,7 +20,7 @@ public class WhereClause implements Builder {
 	
 	private final Builder parentBuilder;
 	
-	private final LinkedList<String> caluseQueue = new LinkedList<String>();
+	private final LinkedList<String> caluseQueue = new LinkedList<>();
 	
 	/**
 	 * 1 = 谓词, 2 = 连接(or, and) */

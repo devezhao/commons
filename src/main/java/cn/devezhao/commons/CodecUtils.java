@@ -1,15 +1,16 @@
 package cn.devezhao.commons;
 
+import cn.devezhao.commons.encoder.Base64Encoder;
+import cn.devezhao.commons.encoder.UrlBase64Encoder;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Random;
-
-import cn.devezhao.commons.encoder.Base64Encoder;
-import cn.devezhao.commons.encoder.UrlBase64Encoder;
 
 /**
  * 编码工具
@@ -22,7 +23,6 @@ public class CodecUtils {
 	/** 0-9a-zA-Z */
 	public static final String CODES64 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
-	private static final String ENCODING_UTF8 = "utf-8";
 	private static final Base64Encoder BASE64_ENCODER = new Base64Encoder();
 	private static final UrlBase64Encoder URL_BASE64_ENCODER = new UrlBase64Encoder();
 	
@@ -100,7 +100,7 @@ public class CodecUtils {
 	 */
 	public static String urlEncode(String text) {
 		try {
-			return URLEncoder.encode(text, ENCODING_UTF8);
+			return URLEncoder.encode(text, StandardCharsets.UTF_8.name());
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("Exception encoding URL string: " + e);
 		}
@@ -114,7 +114,7 @@ public class CodecUtils {
 	 */
 	public static String urlDecode(String text) {
 		try {
-			return URLDecoder.decode(text, ENCODING_UTF8);
+			return URLDecoder.decode(text, StandardCharsets.UTF_8.name());
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("Exception decoding URL string: " + e);
 		}
@@ -160,7 +160,7 @@ public class CodecUtils {
 	 */
 	public static long any2dec(String number, int radix) {
 		long dec = 0;
-		long digitValue = 0;
+		long digitValue;
 		int len = number.length() - 1;
 		for (int t = 0; t <= len; t++) {
 			digitValue = CODES64.indexOf(number.charAt(t));
@@ -176,7 +176,7 @@ public class CodecUtils {
 	 * @return
 	 */
 	public static String randomCode(int length) {
-		StringBuffer code = new StringBuffer();
+		StringBuilder code = new StringBuilder();
 		Random random = new SecureRandom();
 		
 		int codeLength = CODES64.length();
@@ -193,11 +193,7 @@ public class CodecUtils {
 	 * @return
 	 */
 	public static String base64UrlEncode(String data) {
-		try {
-			return new String(base64UrlEncode(data.getBytes(ENCODING_UTF8)), ENCODING_UTF8);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("Exception encoding URL string: " + e);
-		}
+		return new String(base64UrlEncode(data.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
 	}
 	
 	/**
@@ -207,11 +203,7 @@ public class CodecUtils {
 	 * @return
 	 */
 	public static String base64UrlDecode(String data) {
-		try {
-			return new String(base64UrlDecode(data.getBytes(ENCODING_UTF8)), ENCODING_UTF8);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("Exception decoding URL string: " + e);
-		}
+		return new String(base64UrlDecode(data.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
 	}
 	
 	/**
@@ -221,11 +213,7 @@ public class CodecUtils {
 	 * @return
 	 */
 	public static String base64Encode(String data) {
-		try {
-			return new String(base64Encode(data.getBytes(ENCODING_UTF8)), ENCODING_UTF8);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("Exception encoding URL string: " + e);
-		}
+		return new String(base64Encode(data.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
 	}
 	
 	/**
@@ -235,11 +223,7 @@ public class CodecUtils {
 	 * @return
 	 */
 	public static String base64Decode(String data) {
-		try {
-			return new String(base64Decode(data.getBytes(ENCODING_UTF8)), ENCODING_UTF8);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("Exception decoding URL string: " + e);
-		}
+		return new String(base64Decode(data.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
 	}
 	
 	/**
@@ -249,9 +233,9 @@ public class CodecUtils {
 	 */
 	public static String encodeUnicode(String data) {
 		char[] utfBytes = data.toCharArray();
-		final StringBuffer buffer = new StringBuffer();
-		for (int i = 0; i < utfBytes.length; i++) {
-			String hexb = Integer.toHexString(utfBytes[i]);
+		final StringBuilder buffer = new StringBuilder();
+		for (char utfByte : utfBytes) {
+			String hexb = Integer.toHexString(utfByte);
 			if (hexb.length() <= 2) {
 				hexb = "00" + hexb;
 			}
@@ -267,19 +251,19 @@ public class CodecUtils {
 	 */
 	public static String decodeUnicode(String data) {
 		int start = 0;
-		int end = 0;
-		final StringBuffer buffer = new StringBuffer();
+		int end;
+		final StringBuilder buffer = new StringBuilder();
 		while (start > -1) {
 			end = data.indexOf("\\u", start + 2);
-			String charStr = "";
+			String charStr;
 			if (end == -1) {
-				charStr = data.substring(start + 2, data.length());
+				charStr = data.substring(start + 2);
 			} else {
 				charStr = data.substring(start + 2, end);
 			}
 			
 			char letter = (char) Integer.parseInt(charStr, 16);
-			buffer.append(new Character(letter).toString());
+			buffer.append(letter);
 			start = end;
 		}
 		return buffer.toString();

@@ -1,5 +1,13 @@
 package cn.devezhao.commons.sql;
 
+import cn.devezhao.commons.ThrowableUtils;
+import cn.devezhao.commons.sql.builder.WhereClause;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.mchange.v2.c3p0.cfg.C3P0Config;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,16 +17,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.mchange.v2.c3p0.cfg.C3P0Config;
-
-import cn.devezhao.commons.ThrowableUtils;
-import cn.devezhao.commons.sql.builder.WhereClause;
 
 /**
  * Sql help methods
@@ -131,11 +129,10 @@ public class SqlHelper {
 	 * @return
 	 */
 	public static int executeBtachSql(Builder[] builders) {
-		String asqls[] = new String[builders.length];
+		String[] sqls = new String[builders.length];
 		int idx = 0;
-		for (Builder b : builders) asqls[idx++] = b.toSql();
-
-		return executeBtachSql(asqls);
+		for (Builder b : builders) sqls[idx++] = b.toSql();
+		return executeBtachSql(sqls);
 	}
 	
 	/**
@@ -187,7 +184,7 @@ public class SqlHelper {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		List<Object[]> results = new LinkedList<Object[]>();
+		List<Object[]> results = new LinkedList<>();
 		try {
 			pstmt = connect.prepareStatement(asql);
 			if (inParameters.length > 0) {
@@ -261,9 +258,9 @@ public class SqlHelper {
 					tmp[i] = rs.getObject(i + 1);
 				}
 			}
-			
-			if (tmp == null) return null;
+
 			return tmp;
+
 		} catch (SQLException ex) {
 			LOG.error("Execute SQL(select) failure!", ex);
 			throw new DataAccessException("Execute SQL(select) failure!", ex);
@@ -291,12 +288,12 @@ public class SqlHelper {
 	 * @return
 	 */
 	public static long count(String table, WhereClause clause) {
-		StringBuffer asql = new StringBuffer("select count(*) from ");
-		asql.append(wrapIdent(table.toLowerCase()));
-		if (clause != null) asql.append(" where ").append(clause.toSql());
+		StringBuilder sql = new StringBuilder("select count(*) from ");
+		sql.append(wrapIdent(table.toLowerCase()));
+		if (clause != null) sql.append(" where ").append(clause.toSql());
 		
-		Object[][] result = executeQuery(asql.toString());
-		return (result == null || result.length == 0) ? 0 : (Long) result[0][0];
+		Object[][] result = executeQuery(sql.toString());
+		return result.length == 0 ? 0 : (Long) result[0][0];
 	}
 
 	/**
@@ -307,7 +304,7 @@ public class SqlHelper {
 		try {
 			if (connect.isClosed()) return;
 			connect.close();
-		} catch (AbstractMethodError err) {
+		} catch (AbstractMethodError ignore) {
 		} catch (SQLException sqlex) {
 			LOG.error("Close Connection failure!", sqlex);
 		}
@@ -321,7 +318,7 @@ public class SqlHelper {
 		try {
 			if (stmt.isClosed()) return;
 			stmt.close();
-		} catch (AbstractMethodError err) {
+		} catch (AbstractMethodError ignore) {
 		} catch (SQLException sqlex) {
 			LOG.error("Close Statement failure!", sqlex);
 		}
@@ -335,7 +332,7 @@ public class SqlHelper {
 		try {
 			if (rs.isClosed()) return;
 			rs.close();
-		} catch (AbstractMethodError err) {
+		} catch (AbstractMethodError ignore) {
 		} catch (SQLException sqlex) {
 			LOG.error("Close ResultSet failure!", sqlex);
 		}
@@ -360,7 +357,7 @@ public class SqlHelper {
 	 * @return
 	 */
 	public static String wrapIdent(String identifier) {
-		return new StringBuffer("`").append(identifier).append('`').toString();
+		return "`" + identifier + '`';
 	}
 	
 	/**
@@ -385,10 +382,7 @@ public class SqlHelper {
 		}
 		
 		Throwable cause = ThrowableUtils.getRootCause(ex);
-		if (cause instanceof SQLIntegrityConstraintViolationException) {
-			return true;
-		}
-		return false;
+		return cause instanceof SQLIntegrityConstraintViolationException;
 	}
 
 	// -------------------------------------------------------------------------------------
@@ -397,7 +391,7 @@ public class SqlHelper {
 		_instance = new SqlHelper();
 	}
 	
-	private ComboPooledDataSource comboPooledDataSource;
+	private final ComboPooledDataSource comboPooledDataSource;
 	private SqlHelper() {
 		try {
 			C3P0Config.initializeUserOverridesAsString();

@@ -1,17 +1,15 @@
 package cn.devezhao.commons.web;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import cn.devezhao.commons.ThrowableUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-
-import cn.devezhao.commons.ThrowableUtils;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * 页面转发，如果不想暴露为 .JSP 页面
@@ -36,7 +34,7 @@ public class JhtmlForward extends HttpServlet {
 	}
 	
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String toUrl = request.getRequestURI();
 		toUrl = toUrl.replaceFirst(contextPath, prefix);
 		toUrl = toUrl.replace(suffix, ".jsp");

@@ -1,11 +1,10 @@
 package cn.devezhao.commons.web;
 
-import java.util.Enumeration;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
+import java.util.Enumeration;
 
 /**
  * 
@@ -57,7 +56,7 @@ public class WebUtils {
 	 * @return
 	 */
 	public static String dumpHeaders(HttpServletRequest request) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		Enumeration<?> names = request.getHeaderNames();
 		while (names.hasMoreElements()) {
 			String name = (String) names.nextElement();
@@ -72,7 +71,7 @@ public class WebUtils {
 	 * @return
 	 */
 	public static String dumpAttributes(HttpServletRequest request) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		Enumeration<?> names = request.getAttributeNames();
 		while (names.hasMoreElements()) {
 			String name = (String) names.nextElement();
@@ -87,7 +86,7 @@ public class WebUtils {
 	 * @return
 	 */
 	public static String dumpParameters(HttpServletRequest request) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		Enumeration<?> names = request.getParameterNames();
 		while (names.hasMoreElements()) {
 			String name = (String) names.nextElement();

@@ -1,14 +1,13 @@
 package cn.devezhao.commons.excel;
 
-import java.io.Serializable;
-import java.util.Date;
-
+import cn.devezhao.commons.CalendarUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.poi.ss.usermodel.DateUtil;
 
-import cn.devezhao.commons.CalendarUtils;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 单元格
@@ -172,7 +171,7 @@ public class Cell implements Serializable {
 	 * @param parsePatterns
 	 * @return
 	 */
-	public Date asDate(String parsePatterns[]) {
+	public Date asDate(String[] parsePatterns) {
 		if (isEmpty()) {
 			return null;
 		}

@@ -1,6 +1,13 @@
 package cn.devezhao.commons;
 
-import static org.apache.commons.lang.StringUtils.EMPTY;
+import cn.devezhao.commons.http4.HttpClientEx;
+import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -10,15 +17,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.math.RandomUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
-
-import cn.devezhao.commons.http4.HttpClientEx;
+import static org.apache.commons.lang.StringUtils.EMPTY;
 
 /**
  * 短链处理
@@ -44,7 +43,7 @@ public class ShortUrl {
 		}
 		
 		Matcher matcher = URL_PATTERN.matcher(content);
-		Set<String> urls = new HashSet<String>();
+		Set<String> urls = new HashSet<>();
 		while (matcher.find()) {
 			urls.add(matcher.group());
 		}
@@ -66,7 +65,7 @@ public class ShortUrl {
 	
 	private static final HttpClientEx HTTP_CLIENT_EX = new HttpClientEx(3 * 1000, "utf-8");
 	// http://blog.sina.com.cn/s/blog_9e1ea13a01017y3n.html
-	private static final String APPKEYS[] = new String[] { "5786724301", "82966982", "405597125", "3822648575", "2849184197", "2702428363", "211160679", "31641035" };
+	private static final String[] APPKEYS = new String[] { "5786724301", "82966982", "405597125", "3822648575", "2849184197", "2702428363", "211160679", "31641035" };
 	private static String LAST_APPKEY = null;
 	/**
 	 * t.cn
@@ -87,7 +86,7 @@ public class ShortUrl {
 						appkey,
 						CodecUtils.urlEncode(url));
 				String result = HTTP_CLIENT_EX.get(api);
-				String split[] = result.split("http://t.cn");
+				String[] split = result.split("http://t.cn");
 				if (split.length != 2) {
 					return url;
 				}
@@ -111,7 +110,7 @@ public class ShortUrl {
 	@Deprecated
 	public static String dwzUrl(String url) {
 		HttpPost post = new HttpPost("http://dwz.cn/create.php");
-		List<NameValuePair> nvp = new ArrayList<NameValuePair>();
+		List<NameValuePair> nvp = new ArrayList<>();
 		nvp.add(new BasicNameValuePair("url", url));
 		try {
 			post.setEntity(new UrlEncodedFormEntity(nvp));
@@ -135,11 +134,9 @@ public class ShortUrl {
 	 */
 	public static String ft12Url(String url) {
 		try {
-			String to = String.format(
-					"http://api.ft12.com/api.php?url=%s",
-					CodecUtils.urlEncode(url));
-			String result = HttpClientEx.instance().get(to);
-			return result;
+			String url2 = String.format("http://api.ft12.com/api.php?url=%s", CodecUtils.urlEncode(url));
+			return HttpClientEx.instance().get(url2);
+
 		} catch (Exception ex) {
 			LOG.error("短网址失败: " + url + " >> " + ex.getLocalizedMessage());
 		}

@@ -1,14 +1,14 @@
 package cn.devezhao.commons;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
 
 /**
  * 日期时间工具
@@ -25,7 +25,7 @@ public class CalendarUtils extends DateFormatUtils {
 	/**
 	 * 2099.12.31
 	 */
-	public static final Date DATE_20991231 = new GregorianCalendar(2099, 11, 31).getTime();
+	public static final Date DATE_20991231 = new GregorianCalendar(2099, Calendar.DECEMBER, 31).getTime();
 	
 	/**
 	 * 获取<tt>Calendar</tt>实例
@@ -298,7 +298,7 @@ public class CalendarUtils extends DateFormatUtils {
 
 		int len = source.trim().length();
 		if (len == 8) {
-			return parse(source, getUTCDateFormat());
+			return parse(source, getPlainDateFormat());
 		} else if (len == 14) {
 			return parse(source, getPlainDateTimeFormat());
 		} else if (len == 10) {

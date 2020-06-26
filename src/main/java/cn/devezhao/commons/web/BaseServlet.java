@@ -1,17 +1,15 @@
 package cn.devezhao.commons.web;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+import cn.devezhao.commons.ThrowableUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import cn.devezhao.commons.ThrowableUtils;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * 统一的 SERVLET 父类，便于统一处理
@@ -94,7 +92,7 @@ public abstract class BaseServlet extends HttpServlet implements RequestExecutor
 	 * @return
 	 */
 	protected Throwable getRootCause(Throwable cause) {
-		Throwable rootCause = null;
+		Throwable rootCause;
 		if (cause == null) {
 			rootCause = new RuntimeException("未知错误");
 		} else if (cause instanceof InvocationTargetException) {

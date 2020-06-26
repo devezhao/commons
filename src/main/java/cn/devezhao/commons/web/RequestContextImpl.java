@@ -1,19 +1,16 @@
 package cn.devezhao.commons.web;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import cn.devezhao.commons.ObjectUtils;
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.alibaba.fastjson.JSON;
-
-import cn.devezhao.commons.ObjectUtils;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Zhao Fangfang
@@ -21,8 +18,8 @@ import cn.devezhao.commons.ObjectUtils;
  */
 public class RequestContextImpl implements RequestContext {
 
-	private HttpServletRequest request;
-	private HttpServletResponse response;
+	private final HttpServletRequest request;
+	private final HttpServletResponse response;
 
 	public RequestContextImpl(HttpServletRequest request, HttpServletResponse response) {
 		this.request = request;
@@ -83,7 +80,7 @@ public class RequestContextImpl implements RequestContext {
 	
 	@Override
 	public void writeStatus(int status, Object message) throws IOException {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("status", status);
 		if (message != null) {
 			map.put("message", message);

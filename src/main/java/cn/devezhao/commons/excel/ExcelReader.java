@@ -1,12 +1,5 @@
 package cn.devezhao.commons.excel;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
 import org.apache.poi.ss.usermodel.CellType;
@@ -14,6 +7,13 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Excel 读取 .xls
@@ -37,7 +37,7 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 	 * @param excel
 	 */
 	public ExcelReader(File excel) {
-		NPOIFSFileSystem fs = null;
+		NPOIFSFileSystem fs;
 		try {
 			fs = new NPOIFSFileSystem(excel);
 			workbook = new HSSFWorkbook(fs);
@@ -54,11 +54,11 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 	 * @return
 	 */
 	public String[] getSheetNames() {
-		List<String> names = new ArrayList<String>();
+		List<String> names = new ArrayList<>();
 		for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
 			names.add(workbook.getSheetName(i));
 		}
-		return names.toArray(new String[names.size()]);
+		return names.toArray(new String[0]);
 	}
 	
 	/**
@@ -101,13 +101,13 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 
 	@Override
 	public Cell[] next() {
-		List<Cell> rowValues = new ArrayList<Cell>();
+		List<Cell> rowValues = new ArrayList<>();
 		Row row = sheet.getRow(rowIndex++);
 		for (int i = 0; i < row.getPhysicalNumberOfCells(); i++) {
 			org.apache.poi.ss.usermodel.Cell cell = row.getCell(i);
 			rowValues.add(readCell(cell));
 		}
-		return rowValues.toArray(new Cell[rowValues.size()]);
+		return rowValues.toArray(new Cell[0]);
 	}
 	
 	/**

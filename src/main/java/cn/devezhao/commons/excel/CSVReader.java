@@ -1,5 +1,7 @@
 package cn.devezhao.commons.excel;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,8 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * CSV 读取 .csv
@@ -20,7 +20,7 @@ public class CSVReader extends ExcelReader  {
 
 	private BufferedReader bufferedReader;
 	
-	private List<String> numberLines = new ArrayList<>();
+	private final List<String> numberLines = new ArrayList<>();
 	
 	/**
 	 * @param csv
@@ -58,7 +58,7 @@ public class CSVReader extends ExcelReader  {
 	public int getRowCount() {
 		if (rowCount == -1) {
 			try {
-				String l = null;
+				String l;
 				while ((l = bufferedReader.readLine()) != null) {
 					numberLines.add(l);
 				}
@@ -86,13 +86,13 @@ public class CSVReader extends ExcelReader  {
 	 * @return
 	 */
 	private Cell[] parseLine(String line) {
-		String line_s[] = line.split(",");
-		Cell[] row = new Cell[line_s.length];
-		for (int i = 0; i < line_s.length; i++) {
-			if (StringUtils.isEmpty(line_s[i])) {
+		String[] lines = line.split(",");
+		Cell[] row = new Cell[lines.length];
+		for (int i = 0; i < lines.length; i++) {
+			if (StringUtils.isEmpty(lines[i])) {
 				row[i] = Cell.NULL;
 			} else {
-				row[i] = new Cell(line_s[i]);
+				row[i] = new Cell(lines[i]);
 			}
 		}
 		return row;
