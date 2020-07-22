@@ -214,7 +214,7 @@ public class ServletUtils {
 		if (reader == null) {
 			return null;
 		}
-		return XMLHelper.createDocument(reader);
+		return XMLHelper.createDocument(reader, WebUtils.ENCODING_DEFAULT, true);
 	}
 	
 	/**

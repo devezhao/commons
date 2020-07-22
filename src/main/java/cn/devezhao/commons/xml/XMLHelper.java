@@ -22,7 +22,7 @@ import java.io.Reader;
  */
 public class XMLHelper {
 	
-	private static final FastSAXReader fastSAXReader = new FastSAXReader(100);
+	private static final FastSAXReader FAST_SAX_READER = new FastSAXReader(100);
 	
 	/**
 	 * @param text
@@ -53,14 +53,14 @@ public class XMLHelper {
 	 * @return
 	 */
 	public static Document createDocument(InputStream stream) {
-		SAXReader saxReader = fastSAXReader.getSAXParser();
+		SAXReader saxReader = FAST_SAX_READER.getSAXParser(false);
 		try {
 			saxReader.setEncoding(WebUtils.ENCODING_DEFAULT);
 			return saxReader.read(stream);
 		} catch (DocumentException ex) {
 			throw new RuntimeException("Could't read XML from InputStream!", ex);
 		} finally {
-			fastSAXReader.release(saxReader);
+			FAST_SAX_READER.release(saxReader);
 			try {
 				stream.close();
 			} catch (IOException ignore) { }
@@ -74,21 +74,31 @@ public class XMLHelper {
 	public static Document createDocument(Reader reader) {
 		return createDocument(reader, WebUtils.ENCODING_DEFAULT);
 	}
-	
+
 	/**
 	 * @param reader
 	 * @param encoding
 	 * @return
 	 */
 	public static Document createDocument(Reader reader, String encoding) {
-		SAXReader saxReader = fastSAXReader.getSAXParser();
+		return createDocument(reader, encoding, false);
+	}
+	
+	/**
+	 * @param reader
+	 * @param encoding
+	 * @param xxe
+	 * @return
+	 */
+	public static Document createDocument(Reader reader, String encoding, boolean xxe) {
+		SAXReader saxReader = FAST_SAX_READER.getSAXParser(xxe);
 		try {
 			saxReader.setEncoding(encoding);
 			return saxReader.read(reader);
 		} catch (DocumentException ex) {
 			throw new RuntimeException("Could't read XML from InputStream!", ex);
 		} finally {
-			fastSAXReader.release(saxReader);
+			FAST_SAX_READER.release(saxReader);
 			try {
 				reader.close();
 			} catch (IOException ignore) { }

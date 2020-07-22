@@ -24,13 +24,20 @@ public class FastSAXReader {
 	private final int initial;
 	
 	private final Queue<XMLReader> xmlReadres = new ConcurrentLinkedQueue<>();
-	
+
+	/**
+	 * @param initial
+	 */
 	public FastSAXReader(int initial) {
 		this.initial = initial;
 		doInitAllCache();
 	}
-	
-	public SAXReader getSAXParser() {
+
+	/**
+	 * @param xxe
+	 * @return
+	 */
+	public SAXReader getSAXParser(boolean xxe) {
 		XMLReader xmlReader = xmlReadres.poll();
 		if (xmlReader == null) {
 			LOG.warn("No more cache, create new XMLReader ....");
@@ -39,9 +46,19 @@ public class FastSAXReader {
 		
 		SAXReader saxReader = new SAXReader(xmlReader);
 		saxReader.setMergeAdjacentText(true);
+		if (xxe) {
+			try {
+				saxReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+			} catch (SAXException ignored) {
+				// NOOP
+			}
+		}
 		return saxReader;
 	}
-	
+
+	/**
+	 * @param reader
+	 */
 	public void release(SAXReader reader) {
 		try {
 			xmlReadres.add(reader.getXMLReader());
