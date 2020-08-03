@@ -76,6 +76,15 @@ public class DateFormatUtils {
 	public static DateFormat getPlainDateTimeFormat() {
 		return PLAIN_DATETIME_FORMAT_TL.get();
 	}
+
+	/**
+	 * 获取日志格式<tt>yyyy-MM-dd HH:mm:ss 'UTC'Z</tt>
+	 *
+	 * @return
+	 */
+	public static DateFormat getUTCWithZoneDateTimeFormat() {
+		return UTC_WITH_ZONE_DATETIME_FORMAT_TL.get();
+	}
 	
 	/**
 	 * 获取指定格式的日志格式化对象
@@ -85,7 +94,7 @@ public class DateFormatUtils {
 	public static DateFormat getDateFormat(String formatted) {
 		return new SimpleDateFormat(formatted, DEFAULT_LOCALE);
 	}
-	
+
 	/**
 	 * @param formatted
 	 * @param date
@@ -116,4 +125,7 @@ public class DateFormatUtils {
 	
 	public static final String PLAIN_DATETIME_FORMAT = "yyyyMMddHHmmss";
 	private static final ThreadLocal<DateFormat> PLAIN_DATETIME_FORMAT_TL = ThreadLocal.withInitial(() -> new SimpleDateFormat(PLAIN_DATETIME_FORMAT));
+
+	public static final String UTC_WITH_ZONE_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss 'UTC'Z";
+	private static final ThreadLocal<DateFormat> UTC_WITH_ZONE_DATETIME_FORMAT_TL = ThreadLocal.withInitial(() -> new SimpleDateFormat(UTC_WITH_ZONE_DATETIME_FORMAT));
 }
