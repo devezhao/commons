@@ -51,7 +51,7 @@ public class ServletUtils {
 	 * @return
 	 */
 	public static HttpSession getSession(ServletRequest request) {
-		return getSession(request, false);
+		return getSession(request, true);
 	}
 
 	/**
