@@ -171,7 +171,7 @@ public class ServletUtils {
 			return;
 		}
 		cookie.setMaxAge(0);
-		cookie.setPath("/");
+//		cookie.setPath("/");
 		response.addCookie(cookie);
 	}
 	
