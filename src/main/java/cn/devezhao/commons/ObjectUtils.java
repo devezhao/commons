@@ -4,6 +4,7 @@ import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * 对象处理相关
@@ -131,7 +132,7 @@ public class ObjectUtils {
 	 */
 	public static double round(double value, int scale) {
 		return BigDecimal.valueOf(value)
-				.setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+				.setScale(scale, RoundingMode.HALF_UP).doubleValue();
 	}
 	
 	/**
@@ -153,9 +154,7 @@ public class ObjectUtils {
 	 * @return
 	 */
 	public static double divide(double divisor, double dividend) {
-		if (divisor == 0 || dividend == 0) {
-			return 0d;
-		}
+		if (divisor == 0 || dividend == 0) return 0d;
 		return divisor / dividend;
 	}
 }

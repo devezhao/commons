@@ -22,12 +22,9 @@ public class RegexUtils {
 	 * @return
 	 */
 	public static boolean isEMail(String email) {
-		if (StringUtils.isNotBlank(email) && EMAIL_PATTERN.matcher(email).find()
+		return StringUtils.isNotBlank(email) && EMAIL_PATTERN.matcher(email).find()
 				&& !(email.endsWith("yahoo.cn") || email.endsWith("yahoo.com.cn") || email.endsWith(".")
-				|| email.startsWith(".") || StringUtils.countMatches(email, "@") > 1 || email.contains(".."))) {
-			return true;
-		}
-		return false;
+				|| email.startsWith(".") || StringUtils.countMatches(email, "@") > 1 || email.contains(".."));
 	}
 	
 	/**

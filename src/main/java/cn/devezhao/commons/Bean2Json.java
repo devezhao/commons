@@ -20,7 +20,7 @@ public class Bean2Json {
 	 * @return
 	 */
 	public static String toJson(Map<?, ?> map) {
-		StringBuffer json = new StringBuffer("{");
+		StringBuilder json = new StringBuilder("{");
 		
 		boolean first = true;
 		for (Map.Entry<?, ?> e : map.entrySet()) {
@@ -65,7 +65,7 @@ public class Bean2Json {
 	 * @return
 	 */
 	public static String toJson(Object[] array) {
-		StringBuffer json = new StringBuffer("[");
+		StringBuilder json = new StringBuilder("[");
 		
 		boolean first = true;
 		for (Object v : array) {
@@ -101,7 +101,6 @@ public class Bean2Json {
 	
 	/**
 	 * @param value
-	 * @param escapeForce
 	 * @return
 	 */
 	public static String wrapJson(Object value) {

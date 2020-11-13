@@ -4,11 +4,9 @@ import cn.devezhao.commons.ThrowableUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -23,14 +21,12 @@ public abstract class BaseServlet extends HttpServlet implements RequestExecutor
 	private static final Log LOG = LogFactory.getLog(BaseServlet.class);
 	
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
 		execute(req, resp);
 	}
 	
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 		execute(req, resp);
 	}
 	
@@ -39,11 +35,8 @@ public abstract class BaseServlet extends HttpServlet implements RequestExecutor
 	 * 
 	 * @param request
 	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
 	 */
-	protected void execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void execute(HttpServletRequest request, HttpServletResponse response) {
 		RequestContext context = createRequestContext(request, response);
 		try {
 			long start = 0;

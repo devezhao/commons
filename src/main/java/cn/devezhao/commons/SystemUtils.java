@@ -117,8 +117,8 @@ public final class SystemUtils {
 
 		if (top == null) return 0L;
 		
-		int estimated_size = top.activeCount() * 2;
-		Thread[] slackList = new Thread[estimated_size];
+		int estimatedSize = top.activeCount() * 2;
+		Thread[] slackList = new Thread[estimatedSize];
 		return top.enumerate(slackList);
 	}
 	

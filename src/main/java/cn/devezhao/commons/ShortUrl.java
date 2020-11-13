@@ -25,6 +25,7 @@ import static org.apache.commons.lang.StringUtils.EMPTY;
  * @author Zhao Fangfang
  * @version $Id: ShortUrl.java 87 2015-09-28 14:51:01Z zhaoff@wisecrm.com $
  */
+@Deprecated
 public class ShortUrl {
 	
 	private static final Log LOG = LogFactory.getLog(ShortUrl.class);

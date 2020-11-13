@@ -24,7 +24,9 @@ import org.apache.http.util.EntityUtils;
  * 
  * @author zhaofang123@gmail.com
  * @since 05/24/2017
+ * @deprecated Use okhttp
  */
+@Deprecated
 public class HttpClientEx {
 	
 	private HttpClient httpClient;
@@ -87,7 +89,7 @@ public class HttpClientEx {
 	public String post(String url, Map<String, Object> dataMap) {
 		HttpPost httpPost = new HttpPost(url);
 		if (dataMap != null && !dataMap.isEmpty()) {
-			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			List<NameValuePair> params = new ArrayList<>();
 			for (Map.Entry<String, Object> e : dataMap.entrySet()) {
 				if (e.getValue() != null) {
 					params.add(new BasicNameValuePair(e.getKey(), e.getValue().toString()));

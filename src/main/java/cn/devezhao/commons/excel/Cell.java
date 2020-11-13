@@ -78,7 +78,15 @@ public class Cell implements Serializable {
 	 * @return
 	 */
 	public String asString() {
-		return value == null ? null : value.toString();
+		return asString(false);
+	}
+
+	/**
+	 * @param trim
+	 * @return
+	 */
+	public String asString(boolean trim) {
+		return value == null ? null : (trim ? value.toString().trim() : value.toString());
 	}
 	
 	@Override
@@ -127,7 +135,7 @@ public class Cell implements Serializable {
 		if (value instanceof Double) {
 			return (Double) value;
 		}
-		String istr = asString().replace(",", "");
+		String istr = asString(true).replace(",", "");
 		return NumberUtils.toDouble(istr);
 	}
 	
@@ -142,7 +150,7 @@ public class Cell implements Serializable {
 		if (value instanceof Boolean) {
 			return (Boolean) value;
 		}
-		return BooleanUtils.toBoolean(asString());
+		return BooleanUtils.toBoolean(asString(true));
 	}
 	
 	/**
@@ -158,7 +166,7 @@ public class Cell implements Serializable {
 			return (Date) value;
 		}
 		
-		String istr = asString();
+		String istr = asString(true);
 		if (NumberUtils.isNumber(istr)) {
 			double d = NumberUtils.toDouble(istr);
 			return DateUtil.getJavaDate(d);
@@ -179,7 +187,7 @@ public class Cell implements Serializable {
 			return (Date) value;
 		}
 		
-		String istr = asString();
+		String istr = asString(true);
 		for (String pattern : parsePatterns) {
 			Date d = CalendarUtils.parse(istr, pattern);
 			if (d != null) {

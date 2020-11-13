@@ -8,13 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,18 +21,39 @@ import java.util.List;
 public class SqlHelper {
 
 	private static final Log LOG = LogFactory.getLog(SqlHelper.class);
-	
+
+	private static final SqlHelper instance = new SqlHelper();
+
+	private SqlHelper() {}
+
+	private final Object comboPooledDataSourceLock = new Object();
+	private ComboPooledDataSource comboPooledDataSource;
+
 	/**
 	 * @return
 	 */
 	public static SqlHelper getInstance() {
-		return _instance;
+		return instance;
 	}
 
 	/**
 	 * @return
 	 */
 	public Connection doGetConnection() {
+		if (comboPooledDataSource == null) {
+			synchronized (comboPooledDataSourceLock) {
+				if (comboPooledDataSource == null) {
+					try {
+						C3P0Config.initializeUserOverridesAsString();
+						comboPooledDataSource = new ComboPooledDataSource();
+					} catch (Exception ex) {
+						LOG.error("Initialize ComboPooledDataSource failure!!!", ex);
+						throw new ExceptionInInitializerError(ex);
+					}
+				}
+			}
+		}
+
 		try {
 			return comboPooledDataSource.getConnection();
 		} catch (SQLException ex) {
@@ -383,22 +398,5 @@ public class SqlHelper {
 		
 		Throwable cause = ThrowableUtils.getRootCause(ex);
 		return cause instanceof SQLIntegrityConstraintViolationException;
-	}
-
-	// -------------------------------------------------------------------------------------
-	static SqlHelper _instance;
-	static {
-		_instance = new SqlHelper();
-	}
-	
-	private final ComboPooledDataSource comboPooledDataSource;
-	private SqlHelper() {
-		try {
-			C3P0Config.initializeUserOverridesAsString();
-			comboPooledDataSource = new ComboPooledDataSource();
-		} catch (Exception ex) {
-			LOG.error("Initialize ComboPooledDataSource failure!!!", ex);
-			throw new ExceptionInInitializerError(ex);
-		}
 	}
 }
