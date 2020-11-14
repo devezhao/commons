@@ -35,7 +35,6 @@ public final class SystemUtils {
 	 * 
 	 * @param command
 	 * @param stream
-	 * @return
 	 */
 	public static void command(String command, PrintStream stream) {
 		if (StringUtils.isBlank(command)) {

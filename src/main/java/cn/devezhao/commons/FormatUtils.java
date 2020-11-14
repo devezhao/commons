@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
  * 
  * @author Zhao Fangfang
  * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@gmail.com $
- * @date 2011-4-10
+ * @since 2011-4-10
  */
 public class FormatUtils extends DateFormatUtils {
 

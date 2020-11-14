@@ -9,7 +9,7 @@ import java.lang.management.MemoryPoolMXBean;
 public class MemoryInformationBean implements MemoryInformation {
 
 	/**
-	 * byte > MiB
+	 * byte &gt; MiB
 	 */
 	public static final long MEGABYTES = 1048576L;
 	

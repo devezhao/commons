@@ -94,7 +94,7 @@ public class UUIDHexGenerator implements IdentifierGenerator {
 	}
 
 	/**
-	 * Unique in a millisecond for this JVM instance (unless there are >
+	 * Unique in a millisecond for this JVM instance (unless there are &gt;
 	 * Short.MAX_VALUE instances created in a millisecond)
 	 */
 	protected short getCount() {
