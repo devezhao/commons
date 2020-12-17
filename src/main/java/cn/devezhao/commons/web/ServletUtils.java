@@ -305,6 +305,13 @@ public class ServletUtils {
 		if (StringUtils.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getRemoteAddr();
 		}
+
+		// Fix ip prefix
+		if (ip != null && ip.length() > 7) {
+			if (ip.startsWith("::ffff:")) ip = ip.substring(7);
+			else if (ip.equalsIgnoreCase("0:0:0:0:0:0:0:1")) ip = "127.0.0.1";
+		}
+
 		return ip;
 	}
 	
