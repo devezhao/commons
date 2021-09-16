@@ -1,10 +1,9 @@
 package cn.devezhao.commons;
 
-import java.util.Set;
-
+import cn.devezhao.commons.sql.Builder;
 import org.junit.Test;
 
-import cn.devezhao.commons.sql.Builder;
+import java.util.Set;
 
 public class ReflectUtilsTest {
 

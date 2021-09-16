@@ -1,14 +1,13 @@
 package cn.devezhao.commons.sql.builder;
 
-import org.apache.commons.lang.StringUtils;
-
 import cn.devezhao.commons.sql.SqlHelper;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * delete
  * 
  * @author <a href="mailto:zhaofang123@gmail.com">FANGFANG ZHAO</a>
- * @version $Id: DeleteBuilder.java 6 2015-06-08 08:56:34Z zhaoff@wisecrm.com $
+ * @version $Id: DeleteBuilder.java 6 2015-06-08 08:56:34Z zhaofang123@gmail.com $
  */
 public class DeleteBuilder extends ConditionalBuilder {
 

@@ -1,10 +1,10 @@
 package cn.devezhao.commons;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author Zhao Fangfang

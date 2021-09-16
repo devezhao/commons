@@ -2,12 +2,7 @@ package cn.devezhao.commons;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;

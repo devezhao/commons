@@ -16,7 +16,7 @@ public class RegexUtils {
 	public static final Pattern URL_PATTERN = Pattern.compile("^(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 	public static final Pattern CNMOBILE_PATTERN = Pattern.compile("^(1[3-9][0-9])\\d{8}$");
 	public static final Pattern TEL_PATTERN = Pattern.compile("[0-9\\-]{7,18}");
-	
+
 	/**
 	 * @param email
 	 * @return

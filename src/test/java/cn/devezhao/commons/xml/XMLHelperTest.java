@@ -2,7 +2,6 @@ package cn.devezhao.commons.xml;
 
 import junit.framework.TestCase;
 import org.junit.Test;
-import org.xml.sax.InputSource;
 
 import java.io.StringReader;
 

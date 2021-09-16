@@ -1,11 +1,10 @@
 package cn.devezhao.commons.xml;
 
-import java.io.InputStream;
-
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
+import java.io.InputStream;
 
 /**
  * XSLT 解析者工厂

@@ -23,7 +23,7 @@ import static org.apache.commons.lang.StringUtils.EMPTY;
  * 短链处理
  * 
  * @author Zhao Fangfang
- * @version $Id: ShortUrl.java 87 2015-09-28 14:51:01Z zhaoff@wisecrm.com $
+ * @version $Id: ShortUrl.java 87 2015-09-28 14:51:01Z zhaofang123@gmail.com $
  */
 @Deprecated
 public class ShortUrl {

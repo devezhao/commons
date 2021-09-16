@@ -1,16 +1,12 @@
 package cn.devezhao.commons.sql;
 
-import cn.devezhao.commons.sql.builder.DeleteBuilder;
-import cn.devezhao.commons.sql.builder.InsertBuilder;
-import cn.devezhao.commons.sql.builder.SelectBuilder;
-import cn.devezhao.commons.sql.builder.UpdateBuilder;
-import cn.devezhao.commons.sql.builder.WhereClause;
+import cn.devezhao.commons.sql.builder.*;
 
 /**
  * Build select, insert, update, delete, where
  * 
  * @author <a href="mailto:zhaofang123@gmail.com">FANGFANG ZHAO</a>
- * @version $Id: SqlBuilder.java 6 2015-06-08 08:56:34Z zhaoff@wisecrm.com $
+ * @version $Id: SqlBuilder.java 6 2015-06-08 08:56:34Z zhaofang123@gmail.com $
  */
 public class SqlBuilder {
 

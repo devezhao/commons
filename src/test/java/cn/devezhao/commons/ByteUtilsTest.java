@@ -1,10 +1,10 @@
 package cn.devezhao.commons;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 
