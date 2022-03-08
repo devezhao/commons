@@ -16,7 +16,7 @@ public class CSVReader extends ExcelReader  {
 
 	private BufferedReader bufferedReader;
 	
-	private final List<String> numberLines = new ArrayList<>();
+	private List<String> numberLines;
 	
 	/**
 	 * @param csv
@@ -52,7 +52,8 @@ public class CSVReader extends ExcelReader  {
 	
 	@Override
 	public int getRowCount() {
-		if (rowCount == -1) {
+		if (numberLines == null) {
+			numberLines = new ArrayList<>();
 			try {
 				String l;
 				while ((l = bufferedReader.readLine()) != null) {
@@ -70,25 +71,28 @@ public class CSVReader extends ExcelReader  {
 	
 	@Override
 	public Cell[] next() {
+		if (numberLines == null) getRowCount();  // init
+		if (rowIndex == numberLines.size()) return null;  // last
+
 		String l = numberLines.get(rowIndex++);
 		if (l == null) {
 			return null;
 		}
-		return parseLine(l);
+		return parseLine(l, rowIndex - 1);
 	}
-	
+
 	/**
 	 * @param line
 	 * @return
 	 */
-	private Cell[] parseLine(String line) {
+	private Cell[] parseLine(String line, int rowNo) {
 		String[] lines = line.split(",");
 		Cell[] row = new Cell[lines.length];
 		for (int i = 0; i < lines.length; i++) {
 			if (StringUtils.isEmpty(lines[i])) {
 				row[i] = Cell.NULL;
 			} else {
-				row[i] = new Cell(lines[i]);
+				row[i] = new Cell(lines[i], rowNo, i);
 			}
 		}
 		return row;
