@@ -28,7 +28,7 @@ public class Base64Encoder {
 
 	protected byte padding = (byte) '=';
 
-	/*
+	/**
 	 * set up the decoding table.
 	 */
 	protected final byte[] decodingTable = new byte[128];

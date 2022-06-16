@@ -67,7 +67,7 @@ public class FastSAXReader {
 		}
 	}
 	
-	/*-
+	/**
 	 * Initialize cache
 	 */
 	private void doInitAllCache() {

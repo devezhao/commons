@@ -141,7 +141,6 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 		if (cellText == null) {
 			return Cell.NULL;
 		} else {
-//			cellText = cellText.replaceAll("\n\t", "").replaceAll("\n", "").replaceAll("\t", "").replaceAll(" ", "").replaceAll(" ", "").trim();
 			cellText = cellText.trim();
 			return new Cell(cellText);
 		}

@@ -171,7 +171,6 @@ public class ServletUtils {
 			return;
 		}
 		cookie.setMaxAge(0);
-//		cookie.setPath("/");
 		response.addCookie(cookie);
 	}
 	
@@ -309,7 +308,7 @@ public class ServletUtils {
 		// Fix ip prefix
 		if (ip != null && ip.length() > 7) {
 			if (ip.startsWith("::ffff:")) ip = ip.substring(7);
-			else if (ip.equalsIgnoreCase("0:0:0:0:0:0:0:1")) ip = "127.0.0.1";
+			else if ("0:0:0:0:0:0:0:1".equalsIgnoreCase(ip)) ip = "127.0.0.1";
 		}
 
 		return ip;

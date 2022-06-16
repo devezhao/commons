@@ -80,7 +80,7 @@ public class RequestContextImpl implements RequestContext {
 	
 	@Override
 	public void writeStatus(int status, Object message) throws IOException {
-		Map<String, Object> map = new HashMap<>();
+		Map<String, Object> map = new HashMap<>(2);
 		map.put("status", status);
 		if (message != null) {
 			map.put("message", message);

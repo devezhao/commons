@@ -121,8 +121,8 @@ public class ShortUrl {
 		
 		String r = HttpClientEx.instance().execMethod(post);
 		r = r.replace("\\", EMPTY);
-		String[] r_split = r.split("dwz.cn");
-		String sUrl = r_split[1].split("\"")[0];
+		String[] rSplit = r.split("dwz.cn");
+		String sUrl = rSplit[1].split("\"")[0];
 		sUrl = "dwz.cn" + sUrl;
 		return sUrl;
 	}
