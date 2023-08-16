@@ -170,9 +170,11 @@ public class XExcelReader extends ExcelReader {
                     while (cellList.size() < cellReference.getCol()) {
                         cellList.add(Cell.NULL);
                     }
-                    
-                    String cellValue = readCell(cellReader.getAttributeValue(null, "t"));
-                    cellList.add(trimToStringCell(cellValue));
+
+                    String cellValue = readCellValue(cellReader.getAttributeValue(null, "t"));
+
+					// FIXME 列号/行号
+                    cellList.add(trimToStringCell(cellValue, -1, -1));
                 }
             } else if (cellReader.isEndElement()
                     && "row".equals(cellReader.getLocalName())) {
@@ -190,7 +192,7 @@ public class XExcelReader extends ExcelReader {
 	 * @throws XMLStreamException 
 	 * @throws NumberFormatException 
 	 */
-	private String readCell(String cellType) throws NumberFormatException, XMLStreamException {
+	private String readCellValue(String cellType) throws NumberFormatException, XMLStreamException {
 		while (cellReader.hasNext()) {
 			cellReader.next();
 			if (cellReader.isStartElement()) {

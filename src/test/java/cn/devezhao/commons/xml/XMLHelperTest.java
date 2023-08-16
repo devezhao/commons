@@ -1,11 +1,10 @@
 package cn.devezhao.commons.xml;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.io.StringReader;
 
-public class XMLHelperTest extends TestCase {
+public class XMLHelperTest {
 
     @Test
     public void testCreateDocument() {

@@ -116,33 +116,37 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 		if (cell == null) {
 			return Cell.NULL;
 		}
-		
+
+		int rowNo = cell.getAddress().getRow();
+		int columnNo = cell.getAddress().getColumn();
+
 		CellType type = cell.getCellTypeEnum();
 		if (type == CellType.BOOLEAN) {
-			return new Cell(cell.getBooleanCellValue());
+			return Cell.valueOf(cell.getBooleanCellValue(), rowNo, columnNo);
 		} else if (type == CellType.NUMERIC || type == CellType.FORMULA) {
 			if (DateUtil.isCellDateFormatted(cell)) {
-				return new Cell(cell.getDateCellValue());
+				return Cell.valueOf(cell.getDateCellValue(), rowNo, columnNo);
 			} else {
-				return new Cell(cell.getNumericCellValue());
+				return Cell.valueOf(cell.getNumericCellValue(), rowNo, columnNo);
 			}
 		} else if (type == CellType.STRING) {
-			return trimToStringCell(cell.getStringCellValue());
+			return trimToStringCell(cell.getStringCellValue(), rowNo, columnNo);
 		} else {
-			return Cell.NULL;
+			return Cell.valueOf(rowNo, columnNo);
 		}
 	}
-	
+
 	/**
 	 * @param cellText
+	 * @param rowNo
+	 * @param columnNo
 	 * @return
 	 */
-	protected Cell trimToStringCell(String cellText) {
+	protected Cell trimToStringCell(String cellText, int rowNo, int columnNo) {
 		if (cellText == null) {
-			return Cell.NULL;
+			return Cell.valueOf(rowNo, columnNo);
 		} else {
-			cellText = cellText.trim();
-			return new Cell(cellText);
+			return Cell.valueOf(cellText.trim(), rowNo, columnNo);
 		}
 	}
 

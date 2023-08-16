@@ -26,7 +26,6 @@ public class ExcelReaderTest {
 		System.out.println("SHEET-" + sheetIndex + " 行总数 : " + excelReader.getRowCount());
 		System.out.println();
 
-		int index = 1;
 		while (excelReader.hasNext()) {
 			Cell[] row = excelReader.next();
 			if (row == null) {
@@ -34,7 +33,7 @@ public class ExcelReaderTest {
 			}
 			System.out.println("DATE : " + row[3].asDate());
 			System.out.println("DATETIME : " + row[4].asDate());
-			System.out.println("#" + index++ + " >> " + StringUtils.join(row, " | "));
+			System.out.println("#" + row[0].getRowNo() + " >> " + StringUtils.join(row, " | "));
 		}
 	}
 }

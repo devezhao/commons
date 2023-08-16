@@ -3,6 +3,7 @@ package cn.devezhao.commons.excel;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class CSVReader extends ExcelReader  {
 	 */
 	public CSVReader(File csv, String charsetName) {
 		try {
-			InputStreamReader isr = new InputStreamReader(new FileInputStream(csv), charsetName);
+			InputStreamReader isr = new InputStreamReader(Files.newInputStream(csv.toPath()), charsetName);
 			this.bufferedReader = new BufferedReader(isr);
 		} catch (IOException e) {
 			close();
@@ -90,9 +91,9 @@ public class CSVReader extends ExcelReader  {
 		Cell[] row = new Cell[lines.length];
 		for (int i = 0; i < lines.length; i++) {
 			if (StringUtils.isEmpty(lines[i])) {
-				row[i] = Cell.NULL;
+				row[i] = Cell.valueOf(rowNo, i);
 			} else {
-				row[i] = new Cell(lines[i], rowNo, i);
+				row[i] = Cell.valueOf(lines[i], rowNo, i);
 			}
 		}
 		return row;

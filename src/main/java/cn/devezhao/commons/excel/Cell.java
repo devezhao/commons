@@ -22,7 +22,7 @@ public class Cell implements Serializable {
 	 * 空单元格
 	 */
 	public static final Cell NULL = new Cell(null);
-	
+
 	final private Object value;
 	
 	final private int rowNo;
@@ -34,13 +34,13 @@ public class Cell implements Serializable {
 	public Cell(Object value) {
 		this(value, -1, -1);
 	}
-	
+
     /**
      * @param value
      * @param rowNo
      * @param columnNo
      */
-    public Cell(Object value, int rowNo, int columnNo) {
+	public Cell(Object value, int rowNo, int columnNo) {
     	this.value = value;
     	this.rowNo = rowNo;
     	this.columnNo = columnNo;
@@ -71,7 +71,7 @@ public class Cell implements Serializable {
 	 * @return returns true if null or ''
 	 */
 	public boolean isEmpty() {
-		return StringUtils.isEmpty(asString());
+		return value == null || StringUtils.isEmpty(asString());
 	}
 	
 	/**
@@ -195,5 +195,24 @@ public class Cell implements Serializable {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @param value
+	 * @param rowNo
+	 * @param columnNo
+	 * @return
+	 */
+	public static Cell valueOf(Object value, int rowNo, int columnNo) {
+		return new Cell(value, rowNo, columnNo);
+	}
+
+	/**
+	 * @param rowNo
+	 * @param columnNo
+	 * @return
+	 */
+	public static Cell valueOf(int rowNo, int columnNo) {
+		return valueOf(null, rowNo, columnNo);
 	}
 }
