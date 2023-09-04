@@ -1,5 +1,7 @@
 package cn.devezhao.commons;
 
+import cn.hutool.core.util.ReflectUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.*;
@@ -95,8 +97,21 @@ public final class ReflectUtils {
 	 */
 	public static Class<?> classForName(String clazzName, Class<?> caller)
 			throws ClassNotFoundException {
+		return classForName(clazzName, caller.getClassLoader());
+	}
+
+	/**
+	 * 使用指定CL加载 Class
+	 *
+	 * @param clazzName
+	 * @param classLoader
+	 * @return
+	 * @throws ClassNotFoundException
+	 */
+	public static Class<?> classForName(String clazzName, ClassLoader classLoader)
+			throws ClassNotFoundException {
 		try {
-			return Class.forName(clazzName, true, caller.getClassLoader());
+			return Class.forName(clazzName, true, classLoader);
 		} catch (Throwable ignore) {
 		}
 		return classForName(clazzName);
@@ -306,6 +321,19 @@ public final class ReflectUtils {
 		Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
 		if (superClass == null || (superClass.isAssignableFrom(clazz) && !superClass.equals(clazz))) {
 			into.add(clazz);
+		}
+	}
+
+	/**
+	 * @param clazz
+	 * @param params
+	 * @return
+	 */
+	public static Object newObject(String clazz, Object... params) {
+		try {
+			return ReflectUtil.newInstance(ReflectUtils.classForName(clazz), params);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
 		}
 	}
 	
