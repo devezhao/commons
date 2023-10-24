@@ -54,7 +54,6 @@ public class IRow {
             columnNo += no;
         }
 
-        System.out.println(columnName + " = " + columnNo);
         return getCell(columnNo);
     }
 }
