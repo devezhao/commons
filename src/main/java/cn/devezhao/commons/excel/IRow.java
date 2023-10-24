@@ -35,7 +35,7 @@ public class IRow {
      * @return
      */
     public Cell getCell(int columnNo) {
-        return getCells()[columnNo];
+        return cells.length > columnNo ? cells[columnNo] : null;
     }
 
     /**
@@ -53,7 +53,6 @@ public class IRow {
             no *= (int) Math.pow(26, i);
             columnNo += no;
         }
-
         return getCell(columnNo);
     }
 }

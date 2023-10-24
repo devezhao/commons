@@ -52,4 +52,12 @@ public class ExcelReaderTest {
 			System.out.println(row.getCell("R"));
 		}
 	}
+
+	@Test
+	public void  test() {
+		System.out.println(new IRow(new Cell[] { Cell.NULL, Cell.NULL }, 0).getCell(0));
+		System.out.println(new IRow(new Cell[] { Cell.NULL, Cell.NULL }, 0).getCell(1));
+		System.out.println(new IRow(new Cell[] { Cell.NULL, Cell.NULL }, 0).getCell(2));
+		System.out.println(new IRow(new Cell[] { Cell.NULL, Cell.NULL }, 0).getCell(21));
+	}
 }
