@@ -94,7 +94,7 @@ public class XExcelReader extends ExcelReader {
 		}
 		
 		if (cellReader == null) {
-			throw new ExcelReaderException("无效 SHEET 位置: " + index);
+			throw new ExcelReaderException("Invalid sheet position: " + index);
 		}
 		sheetIndex = index;
 	}
@@ -102,6 +102,7 @@ public class XExcelReader extends ExcelReader {
 	@Override
 	public int getRowCount() {
 		sheetAt(sheetIndex);
+
 		int rowCount = 0;
 		try {
 			while (cellReader.hasNext()) {
@@ -153,7 +154,7 @@ public class XExcelReader extends ExcelReader {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 读行
 	 * 

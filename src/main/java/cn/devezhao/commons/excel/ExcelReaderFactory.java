@@ -17,7 +17,7 @@ public class ExcelReaderFactory {
 	 * @throws ExcelReaderException
 	 */
 	public static ExcelReader create(File excel) throws ExcelReaderException {
-		return create(excel, "utf-8");
+		return create(excel, "UTF-8");
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class ExcelReaderFactory {
 		} else if (excel != null && excel.getName().endsWith(".csv")) {
 			return new CSVReader(excel, encoding);
 		} else {
-			throw new ExcelReaderException("无效 Excel/CSV 文件: " + excel);
+			throw new ExcelReaderException("Invalid Excel/CSV file: " + excel);
 		}
 	}
 	

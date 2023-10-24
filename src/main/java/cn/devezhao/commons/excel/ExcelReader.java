@@ -105,6 +105,15 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 		}
 		return rowValues.toArray(new Cell[0]);
 	}
+
+	/**
+	 * @return
+	 */
+	public IRow nextRow() {
+		Cell[] cells = next();
+		if (cells == null) return null;
+		return new IRow(cells, rowIndex);
+	}
 	
 	/**
 	 * 读单元格
@@ -113,9 +122,7 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 	 * @return
 	 */
 	private Cell readCell(org.apache.poi.ss.usermodel.Cell cell) {
-		if (cell == null) {
-			return Cell.NULL;
-		}
+		if (cell == null) return Cell.NULL;
 
 		int rowNo = cell.getAddress().getRow();
 		int columnNo = cell.getAddress().getColumn();

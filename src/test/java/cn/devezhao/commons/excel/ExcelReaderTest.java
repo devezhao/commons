@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 /**
  * 
@@ -34,6 +36,20 @@ public class ExcelReaderTest {
 			System.out.println("DATE : " + row[3].asDate());
 			System.out.println("DATETIME : " + row[4].asDate());
 			System.out.println("#" + row[0].getRowNo() + " >> " + StringUtils.join(row, " | "));
+		}
+	}
+
+	@Test
+	public void testIRow() {
+		ExcelReader excelReader = ExcelReaderFactory.create(
+				new File("D:\\GitHub\\for-production\\rebuild-market\\202211东航\\01出口\\出口台账_汪超_新模板-1024.xlsx"));
+
+		while (excelReader.hasNext()) {
+			IRow row = excelReader.nextRow();
+			if (row == null) break;
+
+			System.out.println(row.getCell("N"));
+			System.out.println(row.getCell("R"));
 		}
 	}
 }
