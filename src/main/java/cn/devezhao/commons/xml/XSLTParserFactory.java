@@ -41,7 +41,7 @@ public class XSLTParserFactory {
 		try {
 			return transformerFactory.newTransformer(source);
 		} catch (TransformerConfigurationException e) {
-			throw new RuntimeException("Could't create xslt transformer!", e);
+			throw new RuntimeException("Couldn't create xslt transformer!", e);
 		}
 	}
 }

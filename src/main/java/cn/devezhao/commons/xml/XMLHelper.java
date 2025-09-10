@@ -40,7 +40,7 @@ public class XMLHelper {
 		try {
 			return createDocument(new FileInputStream(fileName));
 		} catch (FileNotFoundException ex) {
-			throw new RuntimeException("Could't found specify file: " + fileName, ex);
+			throw new RuntimeException("Couldn't found specify file: " + fileName, ex);
 		}
 	}
 	
@@ -54,7 +54,7 @@ public class XMLHelper {
 			saxReader.setEncoding(WebUtils.ENCODING_DEFAULT);
 			return saxReader.read(stream);
 		} catch (DocumentException ex) {
-			throw new RuntimeException("Could't read XML from InputStream!", ex);
+			throw new RuntimeException("Couldn't read XML from InputStream!", ex);
 		} finally {
 			FAST_SAX_READER.release(saxReader);
 			try {
@@ -92,7 +92,7 @@ public class XMLHelper {
 			saxReader.setEncoding(encoding);
 			return saxReader.read(reader);
 		} catch (DocumentException ex) {
-			throw new RuntimeException("Could't read XML from InputStream!", ex);
+			throw new RuntimeException("Couldn't read XML from InputStream!", ex);
 		} finally {
 			FAST_SAX_READER.release(saxReader);
 			try {

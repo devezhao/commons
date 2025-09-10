@@ -182,7 +182,7 @@ public class ServletUtils {
 		try {
 			return response.getWriter();
 		} catch (IOException ex) {
-			throw new RuntimeException("Could't gets writer of response!", ex);
+			throw new RuntimeException("Couldn't gets writer of response!", ex);
 		}
 	}
 	
@@ -237,7 +237,7 @@ public class ServletUtils {
 				return null;
 			}
 		} catch (IOException ex) {
-			throw new RuntimeException("Could't gets reader of response!", ex);
+			throw new RuntimeException("Couldn't gets reader of response!", ex);
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -247,7 +247,7 @@ public class ServletUtils {
 				sb.append(line);
 			}
 		} catch (IOException ex) {
-			throw new RuntimeException("Could't read line of reader!", ex);
+			throw new RuntimeException("Couldn't read line of reader!", ex);
 		}
 		return sb.toString();
 	}
@@ -271,7 +271,7 @@ public class ServletUtils {
 		try {
 			request.getRequestDispatcher(path).forward(request, response);
 		} catch (Exception ex) {
-			throw new RuntimeException("Could't forward to url: " + path, ex);
+			throw new RuntimeException("Couldn't forward to url: " + path, ex);
 		}
 	}
 	
