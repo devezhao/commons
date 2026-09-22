@@ -103,7 +103,7 @@ public class ServletUtils {
 	 */
 	public static Cookie getCookie(HttpServletRequest request, String cookieName) {
 		Cookie[] cookies = request.getCookies();
-		if (cookies != null && cookies[0] != null) {
+		if (cookies != null && cookies.length > 0) {
 			for (Cookie cookie : cookies) {
 				if (cookieName.equals(cookie.getName())) {
 					return cookie;
@@ -182,7 +182,7 @@ public class ServletUtils {
 		try {
 			return response.getWriter();
 		} catch (IOException ex) {
-			throw new RuntimeException("Couldn't gets writer of response!", ex);
+			throw new RuntimeException("Couldn't get writer of response!", ex);
 		}
 	}
 	
@@ -237,7 +237,7 @@ public class ServletUtils {
 				return null;
 			}
 		} catch (IOException ex) {
-			throw new RuntimeException("Couldn't gets reader of response!", ex);
+			throw new RuntimeException("Couldn't get reader of request!", ex);
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -290,6 +290,11 @@ public class ServletUtils {
 	}
 	
 	/**
+	 * 获取客户端 IP
+	 *
+	 * 注意：此方法信任客户端可伪造的 x-forwarded-for 等代理头，
+	 * 建议使用 {@link #getRemoteAddr(HttpServletRequest, int)} 显式指定可信代理层数
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -305,12 +310,58 @@ public class ServletUtils {
 			ip = request.getRemoteAddr();
 		}
 
-		// Fix ip prefix
+		return normalizeIp(ip);
+	}
+
+	/**
+	 * 获取客户端 IP（显式指定可信代理层数）
+	 *
+	 * x-forwarded-for 格式为 <tt>client, proxy1, ..., proxyN</tt>，从右端去除 trustedProxyLevels 个
+	 * 可信代理后剩余的最右侧地址即客户端真实 IP；trustedProxyLevels 不大于 0 时直接返回 TCP 对端地址
+	 *
+	 * @param request
+	 * @param trustedProxyLevels 前方可信的反向代理层数
+	 * @return
+	 */
+	public static String getRemoteAddr(HttpServletRequest request, int trustedProxyLevels) {
+		if (trustedProxyLevels <= 0) {
+			return normalizeIp(request.getRemoteAddr());
+		}
+
+		String ip = request.getHeader("x-forwarded-for");
+		if (StringUtils.isNotBlank(ip) && !"unknown".equalsIgnoreCase(ip)) {
+			String[] hops = ip.split(",");
+			int idx = hops.length - trustedProxyLevels;
+			if (idx < 0) {
+				idx = 0;
+			}
+			String client = hops[idx].trim();
+			if (StringUtils.isNotBlank(client) && !"unknown".equalsIgnoreCase(client)) {
+				return normalizeIp(client);
+			}
+		}
+
+		ip = request.getHeader("Proxy-Client-IP");
+		if (StringUtils.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (StringUtils.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		return normalizeIp(ip);
+	}
+
+	/**
+	 * 规范化 IPv6 映射的 IPv4 地址（如 ::ffff:192.168.1.1）与 IPv6 环回地址
+	 *
+	 * @param ip
+	 * @return
+	 */
+	private static String normalizeIp(String ip) {
 		if (ip != null && ip.length() > 7) {
 			if (ip.startsWith("::ffff:")) ip = ip.substring(7);
 			else if ("0:0:0:0:0:0:0:1".equalsIgnoreCase(ip)) ip = "127.0.0.1";
 		}
-
 		return ip;
 	}
 	

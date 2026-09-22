@@ -15,7 +15,7 @@ public class DateFormatUtils {
 	public static final Locale DEFAULT_LOCALE = Locale.CHINESE;
 	
 	/**
-	 * 获取日志格式<tt>yyyy年MM月dd日</tt>
+	 * 获取日期格式<tt>yyyy年MM月dd日</tt>
 	 * 
 	 * @return
 	 */
@@ -24,7 +24,7 @@ public class DateFormatUtils {
 	}
 	
 	/**
-	 * 获取日志格式<tt>HH时mm分ss秒</tt>
+	 * 获取日期格式<tt>HH时mm分ss秒</tt>
 	 * 
 	 * @return
 	 */
@@ -33,7 +33,7 @@ public class DateFormatUtils {
 	}
 	
 	/**
-	 * 获取日志格式<tt>yyyy年MM月dd日 HH时mm分ss秒</tt>
+	 * 获取日期格式<tt>yyyy年MM月dd日 HH时mm分ss秒</tt>
 	 * 
 	 * @return
 	 */
@@ -42,7 +42,7 @@ public class DateFormatUtils {
 	}
 	
 	/**
-	 * 获取日志格式<tt>yyyy-MM-dd</tt>
+	 * 获取日期格式<tt>yyyy-MM-dd</tt>
 	 * 
 	 * @return
 	 */
@@ -51,7 +51,7 @@ public class DateFormatUtils {
 	}
 	
 	/**
-	 * 获取日志格式<tt>yyyy-MM-dd HH:mm:ss</tt>
+	 * 获取日期格式<tt>yyyy-MM-dd HH:mm:ss</tt>
 	 * 
 	 * @return
 	 */
@@ -60,7 +60,7 @@ public class DateFormatUtils {
 	}
 	
 	/**
-	 * 获取日志格式<tt>yyyyMMdd</tt>
+	 * 获取日期格式<tt>yyyyMMdd</tt>
 	 * 
 	 * @return
 	 */
@@ -69,7 +69,7 @@ public class DateFormatUtils {
 	}
 	
 	/**
-	 * 获取日志格式<tt>yyyyMMddHHmmss</tt>
+	 * 获取日期格式<tt>yyyyMMddHHmmss</tt>
 	 * 
 	 * @return
 	 */
@@ -78,7 +78,7 @@ public class DateFormatUtils {
 	}
 
 	/**
-	 * 获取日志格式<tt>yyyy-MM-dd HH:mm:ss 'UTC'Z</tt>
+	 * 获取日期格式<tt>yyyy-MM-dd HH:mm:ss 'UTC'Z</tt>
 	 *
 	 * @return
 	 */
@@ -87,7 +87,7 @@ public class DateFormatUtils {
 	}
 	
 	/**
-	 * 获取指定格式的日志格式化对象
+	 * 获取指定格式的日期格式化对象
 	 * 
 	 * @return
 	 */

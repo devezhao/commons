@@ -35,6 +35,10 @@ public class UpdateBuilder extends ConditionalBuilder {
 	
 	@Override
     public String toSql() {
+		if (columns.isEmpty()) {
+			throw new IllegalArgumentException("No columns specified for update: " + table);
+		}
+		
 		StringBuilder sql = new StringBuilder("update ");
 		sql.append(SqlHelper.wrapIdent(table.toLowerCase())).append(" set ");
 		

@@ -10,13 +10,16 @@ import oshi.software.os.OperatingSystem;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * 基于硬件信息（厂商、主板序列号、处理器标识、逻辑处理器数）生成机器标识。
+ * 注意 {@link #generateIdentifierKey()} 使用 CRC32，不具备抗碰撞与抗伪造能力，不能用于安全场景
+ *
  * @author devezhao
  * @since 2022/1/18
  */
 public class ComputerIdentifier {
 
     /**
-     * @return
+     * @return 形如 {@code vendor#serial#processorIdentifier#processors} 的原始机器标识
      */
     public static String generateIdentifier() {
         SystemInfo systemInfo = new SystemInfo();
@@ -42,7 +45,7 @@ public class ComputerIdentifier {
     }
 
     /**
-     * @return
+     * @return 机器标识的 CRC32 十六进制表示（8 位）
      */
     public static String generateIdentifierKey() {
         String id = generateIdentifier();

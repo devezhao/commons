@@ -7,6 +7,9 @@ import java.net.InetAddress;
 
 /**
  * UUID Hex Generator
+ *
+ * <p>生成形如 {@code ip-jvm-motime-lotime-count} 的 36 位十六进制标识（Hibernate uuid.hex 策略风格）。
+ * 这不是标准 UUID（无版本/变体位、无密码学保证），需要标准 UUID 请使用 {@code java.util.UUID.randomUUID()}</p>
  * 
  * @author <a href="mailto:zhaofang123@gmail.com">FANGFANG ZHAO</a>
  * @since 0.1, 06/13/08
@@ -47,7 +50,8 @@ public class UUIDHexGenerator implements IdentifierGenerator {
 	}
 
 	/**
-	 * Generate uuid hex
+	 * Generate uuid hex，格式为 5 段 36 位十六进制字符（以构造时指定的分隔符连接）：
+	 * IP(8) + JVM(8) + MoTime(4) + LoTime(8) + Count(4)
 	 * 
 	 * @return
 	 */
@@ -79,7 +83,7 @@ public class UUIDHexGenerator implements IdentifierGenerator {
 	 * Format a short value
 	 */
 	protected String format(short shortval) {
-		String formatted = Integer.toHexString(shortval);
+		String formatted = Integer.toHexString(shortval & 0xffff);
 		StringBuilder buf = new StringBuilder("0000");
 		buf.replace(4 - formatted.length(), 4, formatted);
 		return buf.toString();

@@ -27,4 +27,15 @@ public class RegexUtilsTest {
 		Assert.assertFalse(RegexUtils.isCNMobile("12761512988"));
 		Assert.assertFalse(RegexUtils.isCNMobile("1387689099"));
 	}
+
+	@Test
+	public void testIsValid() throws Exception {
+		Assert.assertTrue(RegexUtils.isValidEmail("zhaofang123@gmail.com"));
+		Assert.assertFalse(RegexUtils.isValidEmail("invalid-email"));
+		Assert.assertTrue(RegexUtils.isValidUrl("https://github.com/devezhao/commons"));
+		Assert.assertTrue(RegexUtils.isValidCNMobile("13761512988"));
+		Assert.assertFalse(RegexUtils.isValidCNMobile("123"));
+		Assert.assertTrue(RegexUtils.isValidTel("1234567"));
+		Assert.assertFalse(RegexUtils.isValidTel("123456"));
+	}
 }

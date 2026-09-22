@@ -7,6 +7,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
+import org.xml.sax.SAXException;
 
 import java.io.*;
 
@@ -23,7 +24,9 @@ public class XMLHelper {
 	/**
 	 * @param text
 	 * @return
+	 * @deprecated 未启用 XXE 防护，请改用 {@link #parseText(String, boolean)}，对不可信输入指定 {@code xxe=true}
 	 */
+	@Deprecated
 	public static Document parseText(String text) {
 		try {
 			return DocumentHelper.parseText(text);
@@ -33,23 +36,71 @@ public class XMLHelper {
 	}
 	
 	/**
-	 * @param fileName
+	 * 解析 XML 文本
+	 *
+	 * @param text
+	 * @param xxe 是否启用 XXE 防护（禁止 DTD 声明，阻断外部实体注入）
 	 * @return
 	 */
-	public static Document createDocument(String fileName) {
+	public static Document parseText(String text, boolean xxe) {
+		if (!xxe) {
+			return parseText(text);
+		}
 		try {
-			return createDocument(new FileInputStream(fileName));
+			SAXReader saxReader = new SAXReader();
+			saxReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+			return saxReader.read(new StringReader(text));
+		} catch (DocumentException ex) {
+			throw new IllegalArgumentException("Bad XML content: " + text, ex);
+		} catch (SAXException ex) {
+			throw new IllegalArgumentException("Couldn't enable XXE protection!", ex);
+		}
+	}
+	
+	/**
+	 * @param fileName
+	 * @return
+	 * @deprecated 未启用 XXE 防护，请改用 {@link #createDocument(String, boolean)}，对不可信输入指定 {@code xxe=true}
+	 */
+	@Deprecated
+	public static Document createDocument(String fileName) {
+		return createDocument(fileName, false);
+	}
+	
+	/**
+	 * 读取 XML 文件
+	 *
+	 * @param fileName
+	 * @param xxe 是否启用 XXE 防护（禁止 DTD 声明，阻断外部实体注入）
+	 * @return
+	 */
+	public static Document createDocument(String fileName, boolean xxe) {
+		try {
+			return createDocument(new FileInputStream(fileName), xxe);
 		} catch (FileNotFoundException ex) {
-			throw new RuntimeException("Couldn't found specify file: " + fileName, ex);
+			throw new RuntimeException("Couldn't find specified file: " + fileName, ex);
 		}
 	}
 	
 	/**
 	 * @param stream
 	 * @return
+	 * @deprecated 未启用 XXE 防护，请改用 {@link #createDocument(InputStream, boolean)}，对不可信输入指定 {@code xxe=true}
 	 */
+	@Deprecated
 	public static Document createDocument(InputStream stream) {
-		SAXReader saxReader = FAST_SAX_READER.getSAXParser(false);
+		return createDocument(stream, false);
+	}
+	
+	/**
+	 * 从输入流读取 XML
+	 *
+	 * @param stream
+	 * @param xxe 是否启用 XXE 防护（禁止 DTD 声明，阻断外部实体注入）
+	 * @return
+	 */
+	public static Document createDocument(InputStream stream, boolean xxe) {
+		SAXReader saxReader = FAST_SAX_READER.getSAXParser(xxe);
 		try {
 			saxReader.setEncoding(WebUtils.ENCODING_DEFAULT);
 			return saxReader.read(stream);
@@ -66,24 +117,30 @@ public class XMLHelper {
 	/**
 	 * @param reader
 	 * @return
+	 * @deprecated 未启用 XXE 防护，请改用 {@link #createDocument(Reader, String, boolean)}，对不可信输入指定 {@code xxe=true}
 	 */
+	@Deprecated
 	public static Document createDocument(Reader reader) {
 		return createDocument(reader, WebUtils.ENCODING_DEFAULT);
-	}
-
-	/**
-	 * @param reader
-	 * @param encoding
-	 * @return
-	 */
-	public static Document createDocument(Reader reader, String encoding) {
-		return createDocument(reader, encoding, false);
 	}
 	
 	/**
 	 * @param reader
 	 * @param encoding
-	 * @param xxe
+	 * @return
+	 * @deprecated 未启用 XXE 防护，请改用 {@link #createDocument(Reader, String, boolean)}，对不可信输入指定 {@code xxe=true}
+	 */
+	@Deprecated
+	public static Document createDocument(Reader reader, String encoding) {
+		return createDocument(reader, encoding, false);
+	}
+	
+	/**
+	 * 从字符流读取 XML
+	 *
+	 * @param reader
+	 * @param encoding
+	 * @param xxe 是否启用 XXE 防护（禁止 DTD 声明，阻断外部实体注入）
 	 * @return
 	 */
 	public static Document createDocument(Reader reader, String encoding, boolean xxe) {
@@ -92,7 +149,7 @@ public class XMLHelper {
 			saxReader.setEncoding(encoding);
 			return saxReader.read(reader);
 		} catch (DocumentException ex) {
-			throw new RuntimeException("Couldn't read XML from InputStream!", ex);
+			throw new RuntimeException("Couldn't read XML from Reader!", ex);
 		} finally {
 			FAST_SAX_READER.release(saxReader);
 			try {

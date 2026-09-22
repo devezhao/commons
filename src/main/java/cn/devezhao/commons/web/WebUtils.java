@@ -51,7 +51,13 @@ public class WebUtils {
 		return (String) request.getAttribute(WebUtils.REQUEST_MESSAGE);
 	}
 	
+	/** 敏感请求头（值不予明文输出，避免凭据泄露到日志） */
+	private static final String[] SENSITIVE_HEADERS = {
+			"cookie", "set-cookie", "authorization", "proxy-authorization", "x-auth-token", "x-api-key" };
+
 	/**
+	 * 输出所有请求头。其中 Cookie、Authorization 等敏感头的值会被脱敏为 <tt>&lt;masked&gt;</tt>
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -61,9 +67,27 @@ public class WebUtils {
 		while (names.hasMoreElements()) {
 			String name = (String) names.nextElement();
 			String value = request.getHeader(name);
-			sb.append(name).append('=').append(StringUtils.isBlank(value) ? "<blank>" : value).append("; ");
+			if (isSensitiveHeader(name)) {
+				value = "<masked>";
+			} else {
+				value = StringUtils.isBlank(value) ? "<blank>" : value;
+			}
+			sb.append(name).append('=').append(value).append("; ");
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	private static boolean isSensitiveHeader(String name) {
+		for (String sensitive : SENSITIVE_HEADERS) {
+			if (sensitive.equalsIgnoreCase(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**

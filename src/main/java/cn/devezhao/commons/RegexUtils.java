@@ -64,4 +64,48 @@ public class RegexUtils {
 		}
 		return TEL_PATTERN.matcher(tel).find();
 	}
+	
+	/**
+	 * 校验是否为合法的 Email 地址
+	 *
+	 * @param email
+	 * @return
+	 * @see #isEMail(String)
+	 */
+	public static boolean isValidEmail(String email) {
+		return isEMail(email);
+	}
+	
+	/**
+	 * 校验是否为合法的 URL
+	 *
+	 * @param url
+	 * @return
+	 * @see #isUrl(String)
+	 */
+	public static boolean isValidUrl(String url) {
+		return isUrl(url);
+	}
+	
+	/**
+	 * 校验是否为合法的中国大陆手机号
+	 *
+	 * @param mobile
+	 * @return
+	 * @see #isCNMobile(String)
+	 */
+	public static boolean isValidCNMobile(String mobile) {
+		return isCNMobile(mobile);
+	}
+	
+	/**
+	 * 校验是否为合法的固定电话号码
+	 *
+	 * @param tel
+	 * @return
+	 * @see #isTel(String)
+	 */
+	public static boolean isValidTel(String tel) {
+		return isTel(tel);
+	}
 }

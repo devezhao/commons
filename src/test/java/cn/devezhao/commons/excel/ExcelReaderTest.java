@@ -1,12 +1,12 @@
 package cn.devezhao.commons.excel;
 
 import org.apache.commons.lang.StringUtils;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 /**
  * 
@@ -21,24 +21,34 @@ public class ExcelReaderTest {
 		
 		ExcelReader excelReader = ExcelReaderFactory.create(new File(fileUrl.toURI()));
 		String[] sNames = excelReader.getSheetNames();
+		Assert.assertTrue(sNames.length > 0);
 		System.out.println("SHEET 列表 : " + StringUtils.join(sNames, " | "));
 
 		int sheetIndex = 0;
 		excelReader.sheetAt(sheetIndex);
+		Assert.assertTrue(excelReader.getRowCount() > 0);
 		System.out.println("SHEET-" + sheetIndex + " 行总数 : " + excelReader.getRowCount());
 		System.out.println();
 
+		int rows = 0;
 		while (excelReader.hasNext()) {
 			Cell[] row = excelReader.next();
 			if (row == null) {
 				break;
 			}
-			System.out.println("DATE : " + row[3].asDate());
-			System.out.println("DATETIME : " + row[4].asDate());
-			System.out.println("#" + row[0].getRowNo() + " >> " + StringUtils.join(row, " | "));
+			rows++;
+			if (row.length > 4) {
+				System.out.println("DATE : " + row[3].asDate());
+				System.out.println("DATETIME : " + row[4].asDate());
+			}
+			if (row.length > 0) {
+				System.out.println("#" + row[0].getRowNo() + " >> " + StringUtils.join(row, " | "));
+			}
 		}
+		Assert.assertTrue(rows > 0);
 	}
 
+	@Ignore("依赖本地指定路径的 Excel 文件（作者工作机路径），不可移植")
 	@Test
 	public void testIRow() {
 		ExcelReader excelReader = ExcelReaderFactory.create(
@@ -54,10 +64,13 @@ public class ExcelReaderTest {
 	}
 
 	@Test
-	public void  test() {
-		System.out.println(new IRow(new Cell[] { Cell.NULL, Cell.NULL }, 0).getCell(0));
-		System.out.println(new IRow(new Cell[] { Cell.NULL, Cell.NULL }, 0).getCell(1));
-		System.out.println(new IRow(new Cell[] { Cell.NULL, Cell.NULL }, 0).getCell(2));
-		System.out.println(new IRow(new Cell[] { Cell.NULL, Cell.NULL }, 0).getCell(21));
+	public void test() {
+		IRow row = new IRow(new Cell[] { Cell.NULL, Cell.NULL }, 0);
+		Assert.assertSame(Cell.NULL, row.getCell(0));
+		Assert.assertSame(Cell.NULL, row.getCell(1));
+		Assert.assertNull(row.getCell(2));
+		Assert.assertNull(row.getCell(21));
+		Assert.assertSame(Cell.NULL, row.getCell("A"));
+		Assert.assertNull(row.getCell("C"));
 	}
 }

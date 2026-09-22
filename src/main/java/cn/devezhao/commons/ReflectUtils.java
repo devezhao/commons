@@ -209,18 +209,30 @@ public final class ReflectUtils {
 	
 	/**
 	 * 获取父级类
-	 * 
+	 *
+	 * @param clazz
+	 * @return
+	 * @deprecated 拼写错误，请使用 {@link #getSuperclassGenericType(Class)}
+	 */
+	@Deprecated
+	public static Class<?> getSuperclassGenricType(Class<?> clazz) {
+		return getSuperclassGenericType(clazz);
+	}
+
+	/**
+	 * 获取父级类（泛型参数）
+	 *
 	 * @param clazz
 	 * @return
 	 */
-	public static Class<?> getSuperclassGenricType(Class<?> clazz) {
+	public static Class<?> getSuperclassGenericType(Class<?> clazz) {
 		Type genType = clazz.getGenericSuperclass();
 		if (!(genType instanceof ParameterizedType)) {
 			return Object.class;
 		}
 		
 		Type[] genTypes = ((ParameterizedType) genType).getActualTypeArguments();
-		if (!(genTypes[0] instanceof Class<?>)) {
+		if (genTypes.length == 0 || !(genTypes[0] instanceof Class<?>)) {
 			return Object.class;
 		}
 		
@@ -264,15 +276,17 @@ public final class ReflectUtils {
 					}
 
 					if (name.startsWith(packageDirName)) {
+						// 注意不可修改外层 packageName，否则会污染后续 URL（多 classpath 源）的扫描
+						String entryPackageName = packageName;
 						int idx = name.lastIndexOf('/');
 						if (idx != -1) {
-							packageName = name.substring(0, idx).replace('/', '.');
+							entryPackageName = name.substring(0, idx).replace('/', '.');
 						}
 
 						if ((idx != -1) || recursive) {
 							if (name.endsWith(".class") && !entry.isDirectory()) {
-								String className = name.substring(packageName.length() + 1, name.length() - 6);
-								addScanClass(packageName + '.' + className, superClass, classes);
+								String className = name.substring(entryPackageName.length() + 1, name.length() - 6);
+								addScanClass(entryPackageName + '.' + className, superClass, classes);
 							}
 						}
 					}

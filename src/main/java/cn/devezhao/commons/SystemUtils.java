@@ -46,6 +46,18 @@ public final class SystemUtils {
 			Runtime rtx = Runtime.getRuntime();
 			Process process = rtx.exec(command);
 			reader = new BufferedReader(new InputStreamReader( process.getInputStream() ));
+
+			Thread errorDrainer = new Thread(() -> {
+				try (BufferedReader errReader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+					String str;
+					while ((str = errReader.readLine()) != null) {
+						System.err.println(str);
+					}
+				} catch (Exception ignore) { }
+			});
+			errorDrainer.setDaemon(true);
+			errorDrainer.start();
+
 			if (stream != null) {
 				String str;
 				while ((str = reader.readLine()) != null) {
@@ -54,9 +66,13 @@ public final class SystemUtils {
 			}
 			
 			try {
-				System.out.println("Exit: " + process.waitFor());
+				if (stream != null) {
+					stream.println("Exit: " + process.waitFor());
+				} else {
+					System.out.println("Exit: " + process.waitFor());
+				}
 			} catch (Exception ex) {
-				System.err.println("Processes was interrupted");
+				System.err.println("Process was interrupted");
 				throw ex;
 			}
 			
@@ -64,7 +80,7 @@ public final class SystemUtils {
 			if (!command.startsWith("cmd /c")) {
 				command("cmd /c " + command);
 			} else {
-				throw new RuntimeException("Error executing commond: " + command, ex);
+				throw new RuntimeException("Error executing command: " + command, ex);
 			}
 		} finally {
 			try {
@@ -130,7 +146,7 @@ public final class SystemUtils {
 	synchronized public static RuntimeInformation getRuntimeInformation() {
 		if (runtimeInformation == null) {
 			if (!org.apache.commons.lang.SystemUtils.isJavaVersionAtLeast(1.5f)) {
-				throw new RuntimeException("Java version least 1.5");
+				throw new RuntimeException("Java version must be at least 1.5");
 			}
 			runtimeInformation = new RuntimeInformation();
 		}

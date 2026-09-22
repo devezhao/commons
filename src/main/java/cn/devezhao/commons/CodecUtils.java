@@ -23,7 +23,9 @@ public class CodecUtils {
 	/** 0-9a-zA-Z */
 	public static final String CODES64 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	
+	@SuppressWarnings("deprecation")
 	private static final Base64Encoder BASE64_ENCODER = new Base64Encoder();
+	@SuppressWarnings("deprecation")
 	private static final UrlBase64Encoder URL_BASE64_ENCODER = new UrlBase64Encoder();
 	
 	/**
@@ -77,7 +79,7 @@ public class CodecUtils {
 	}
 	
 	/**
-	 * BASE64 UR L解码
+	 * BASE64 URL 解码
 	 * 
 	 * @param data
 	 * @return

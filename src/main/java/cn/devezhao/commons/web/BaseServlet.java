@@ -48,7 +48,7 @@ public abstract class BaseServlet extends HttpServlet implements RequestExecutor
 			execute(context);
 			
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("Execute completed. Time of is: " + (System.currentTimeMillis() - start) + " ms.");
+				LOG.debug("Execute completed. Time cost: " + (System.currentTimeMillis() - start) + " ms.");
 			}
 			
 		} catch (Exception ex) {
@@ -62,7 +62,7 @@ public abstract class BaseServlet extends HttpServlet implements RequestExecutor
 	@Override
     public void handleException(RequestContext context, Throwable ex) {
 		Throwable cause = getRootCause(ex);
-		LOG.error("Execute request failure!", cause);
+		LOG.error("Failed to execute request!", cause);
 		
 		if (cause instanceof RuntimeException) {
 			throw (RuntimeException) cause;

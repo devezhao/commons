@@ -36,7 +36,12 @@ public class JhtmlForward extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String toUrl = request.getRequestURI();
-		toUrl = toUrl.replaceFirst(contextPath, prefix);
+		// 仅去除开头的 contextPath（原实现用 replaceFirst 把路径当正则，含正则元字符时出错）
+		if (StringUtils.isNotEmpty(contextPath) && toUrl.startsWith(contextPath)) {
+			toUrl = prefix + toUrl.substring(contextPath.length());
+		} else {
+			toUrl = prefix + toUrl;
+		}
 		toUrl = toUrl.replace(suffix, ".jsp");
 		
 		try {

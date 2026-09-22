@@ -34,6 +34,10 @@ public class InsertBuilder extends BaseBuilder {
 	
 	@Override
     public String toSql() {
+		if (columns.isEmpty()) {
+			throw new IllegalArgumentException("No columns specified for insert: " + getTable());
+		}
+		
 		StringBuilder sql = new StringBuilder("insert into ");
 		sql.append(SqlHelper.wrapIdent(getTable().toLowerCase())).append(" (");
 		

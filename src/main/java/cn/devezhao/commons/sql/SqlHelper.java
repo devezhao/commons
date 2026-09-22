@@ -47,7 +47,7 @@ public class SqlHelper {
 						C3P0Config.initializeUserOverridesAsString();
 						comboPooledDataSource = new ComboPooledDataSource();
 					} catch (Exception ex) {
-						LOG.error("Initialize ComboPooledDataSource failure!!!", ex);
+						LOG.error("Failed to initialize ComboPooledDataSource!", ex);
 						throw new ExceptionInInitializerError(ex);
 					}
 				}
@@ -96,11 +96,11 @@ public class SqlHelper {
 			return keyRs.getLong(1);
 			
 		} catch (SQLException ex) {
-			LOG.error("Execute SQL(insert) failure!", ex);
-			throw new DataAccessException("Execute SQL(insert) failure!", ex);
+			LOG.error("Failed to execute SQL(insert)!", ex);
+			throw new DataAccessException("Failed to execute SQL(insert)!", ex);
 		} catch (Throwable ex) {
-			LOG.error("Execute SQL(insert) unexception error!", ex);
-			throw new DataAccessException("Execute SQL(insert) unexception error!", ex);
+			LOG.error("Unexpected error executing SQL(insert)!", ex);
+			throw new DataAccessException("Unexpected error executing SQL(insert)!", ex);
 		} finally {
 			SqlHelper.attemptClose(keyRs);
 			attemptClose(pstmt);
@@ -128,11 +128,11 @@ public class SqlHelper {
 			stmt = connect.createStatement();
 			return stmt.executeUpdate(asql);
 		} catch (SQLException ex) {
-			LOG.error("Execute SQL failure!", ex);
-			throw new DataAccessException("Execute SQL failure!", ex);
+			LOG.error("Failed to execute SQL!", ex);
+			throw new DataAccessException("Failed to execute SQL!", ex);
 		} catch (Throwable ex) {
-			LOG.error("Execute SQL unexception error!", ex);
-			throw new DataAccessException("Execute SQL unexception error!", ex);
+			LOG.error("Unexpected error executing SQL!", ex);
+			throw new DataAccessException("Unexpected error executing SQL!", ex);
 		} finally {
 			attemptClose(stmt);
 			attemptClose(connect);
@@ -143,18 +143,18 @@ public class SqlHelper {
 	 * @param builders
 	 * @return
 	 */
-	public static int executeBtachSql(Builder[] builders) {
+	public static int executeBatchSql(Builder[] builders) {
 		String[] sqls = new String[builders.length];
 		int idx = 0;
 		for (Builder b : builders) sqls[idx++] = b.toSql();
-		return executeBtachSql(sqls);
+		return executeBatchSql(sqls);
 	}
 	
 	/**
 	 * @param asqls
 	 * @return
 	 */
-	public static int executeBtachSql(String[] asqls) {
+	public static int executeBatchSql(String[] asqls) {
 		if (asqls.length == 1) return executeSql(asqls[0]);
 		
 		Connection connect = getConnection();
@@ -169,15 +169,75 @@ public class SqlHelper {
 			for (int a : affs) aff += a;
 			return aff;
 		} catch (SQLException ex) {
-			LOG.error("Execute SQL batch failure!", ex);
-			throw new DataAccessException("Execute SQL batch failure!", ex);
+			LOG.error("Failed to execute SQL batch!", ex);
+			throw new DataAccessException("Failed to execute SQL batch!", ex);
 		} catch (Throwable ex) {
-			LOG.error("Execute SQL batch unexception error!", ex);
-			throw new DataAccessException("Execute SQL batch unexception error!", ex);
+			LOG.error("Unexpected error executing SQL batch!", ex);
+			throw new DataAccessException("Unexpected error executing SQL batch!", ex);
 		} finally {
 			attemptClose(stmt);
 			attemptClose(connect);
 		}
+	}
+	
+	/**
+	 * 在同一事务中执行多条 SQL，任一失败则整体回滚
+	 * 
+	 * @param asqls
+	 * @return 影响行数合计
+	 */
+	public static int executeBatchSqlInTransaction(String[] asqls) {
+		Connection connect = getConnection();
+		Statement stmt = null;
+		boolean oldAutoCommit = true;
+		try {
+			oldAutoCommit = connect.getAutoCommit();
+			connect.setAutoCommit(false);
+			
+			stmt = connect.createStatement();
+			for (String asql : asqls) stmt.addBatch(asql);
+			
+			int[] affs = stmt.executeBatch();
+			int aff = 0;
+			for (int a : affs) aff += a;
+			
+			connect.commit();
+			return aff;
+		} catch (Throwable ex) {
+			try {
+				connect.rollback();
+			} catch (SQLException ignore) {
+			}
+			LOG.error("Failed to execute SQL batch(tx)!", ex);
+			throw new DataAccessException("Failed to execute SQL batch(tx)!", ex);
+		} finally {
+			try {
+				connect.setAutoCommit(oldAutoCommit);
+			} catch (SQLException ignore) {
+			}
+			attemptClose(stmt);
+			attemptClose(connect);
+		}
+	}
+	
+	/**
+	 * @param builders
+	 * @return
+	 * @deprecated 拼写错误，请使用 {@link #executeBatchSql(Builder[])}
+	 */
+	@Deprecated
+	public static int executeBtachSql(Builder[] builders) {
+		return executeBatchSql(builders);
+	}
+	
+	/**
+	 * @param asqls
+	 * @return
+	 * @deprecated 拼写错误，请使用 {@link #executeBatchSql(String[])}
+	 */
+	@Deprecated
+	public static int executeBtachSql(String[] asqls) {
+		return executeBatchSql(asqls);
 	}
 	
 	/**
@@ -220,11 +280,11 @@ public class SqlHelper {
 			}
 			
 		} catch (SQLException ex) {
-			LOG.error("Execute SQL(select) failure!", ex);
-			throw new DataAccessException("Execute SQL(select) failure!", ex);
+			LOG.error("Failed to execute SQL(select)!", ex);
+			throw new DataAccessException("Failed to execute SQL(select)!", ex);
 		} catch (Throwable ex) {
-			LOG.error("Execute SQL(select) unexception error!", ex);
-			throw new DataAccessException("Execute SQL(select) unexception error!", ex);
+			LOG.error("Unexpected error executing SQL(select)!", ex);
+			throw new DataAccessException("Unexpected error executing SQL(select)!", ex);
 		} finally {
 			attemptClose(rs);
 			attemptClose(pstmt);
@@ -277,11 +337,11 @@ public class SqlHelper {
 			return tmp;
 
 		} catch (SQLException ex) {
-			LOG.error("Execute SQL(select) failure!", ex);
-			throw new DataAccessException("Execute SQL(select) failure!", ex);
+			LOG.error("Failed to execute SQL(select)!", ex);
+			throw new DataAccessException("Failed to execute SQL(select)!", ex);
 		} catch (Throwable ex) {
-			LOG.error("Execute SQL(select) unexception error!", ex);
-			throw new DataAccessException("Execute SQL(select) unexception error!", ex);
+			LOG.error("Unexpected error executing SQL(select)!", ex);
+			throw new DataAccessException("Unexpected error executing SQL(select)!", ex);
 		} finally {
 			attemptClose(rs);
 			attemptClose(pstmt);
@@ -308,7 +368,7 @@ public class SqlHelper {
 		if (clause != null) sql.append(" where ").append(clause.toSql());
 		
 		Object[][] result = executeQuery(sql.toString());
-		return result.length == 0 ? 0 : (Long) result[0][0];
+		return result.length == 0 ? 0 : ((Number) result[0][0]).longValue();
 	}
 
 	/**
@@ -321,7 +381,7 @@ public class SqlHelper {
 			connect.close();
 		} catch (AbstractMethodError ignore) {
 		} catch (SQLException sqlex) {
-			LOG.error("Close Connection failure!", sqlex);
+			LOG.error("Failed to close Connection!", sqlex);
 		}
 	}
 
@@ -335,7 +395,7 @@ public class SqlHelper {
 			stmt.close();
 		} catch (AbstractMethodError ignore) {
 		} catch (SQLException sqlex) {
-			LOG.error("Close Statement failure!", sqlex);
+			LOG.error("Failed to close Statement!", sqlex);
 		}
 	}
 
@@ -349,7 +409,7 @@ public class SqlHelper {
 			rs.close();
 		} catch (AbstractMethodError ignore) {
 		} catch (SQLException sqlex) {
-			LOG.error("Close ResultSet failure!", sqlex);
+			LOG.error("Failed to close ResultSet!", sqlex);
 		}
 	}
 	
@@ -373,6 +433,17 @@ public class SqlHelper {
 	 */
 	public static String wrapIdent(String identifier) {
 		return "`" + identifier + '`';
+	}
+	
+	/**
+	 * 使用指定引号包裹标识符（{@link #wrapIdent(String)} 固定反引号，MySQL 方言）
+	 * 
+	 * @param identifier
+	 * @param quote 标识符引号字符，如 '`' 或 '"'
+	 * @return
+	 */
+	public static String wrapIdent(String identifier, char quote) {
+		return quote + identifier + quote;
 	}
 	
 	/**

@@ -17,14 +17,7 @@ import java.util.List;
 public class ByteUtils {
 
 	private static final int BUFFER_SIZE = 1024;
-	private static MessageDigest md5Digest = null;
-	
 	private ByteUtils() {
-		try {
-			md5Digest = MessageDigest.getInstance("MD5");
-		} catch (NoSuchAlgorithmException e) {
-			throw new ExceptionInInitializerError(e);
-		}
 	}
 
 	/**
@@ -148,7 +141,12 @@ public class ByteUtils {
 	 * @throws IOException
 	 */
 	public static String hash(InputStream stream) throws IOException {
-		md5Digest.reset();
+		MessageDigest md5Digest;
+		try {
+			md5Digest = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("MD5 algorithm not available", e);
+		}
 		
 		byte[] buffer = new byte[1024];
 		int read;

@@ -2,7 +2,11 @@ package cn.devezhao.commons.excel;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.NPOIFSFileSystem;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.Closeable;
 import java.io.File;
@@ -63,7 +67,7 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 	 * @param index
 	 */
 	public void sheetAt(int index) {
-		if (index > workbook.getNumberOfSheets()) {
+		if (index < 0 || index >= workbook.getNumberOfSheets()) {
 			throw new ExcelReaderException("无效 SHEET 位置: " + index);
 		}
 		
@@ -98,7 +102,18 @@ public class ExcelReader implements Iterator<Cell[]>, Closeable {
 	@Override
 	public Cell[] next() {
 		List<Cell> rowValues = new ArrayList<>();
-		Row row = sheet.getRow(rowIndex++);
+
+		Row row = null;
+		while (rowIndex < rowCount) {
+			row = sheet.getRow(rowIndex++);
+			if (row != null) {
+				break;
+			}
+		}
+		if (row == null) {
+			return null;
+		}
+
 		for (int i = 0; i < row.getPhysicalNumberOfCells(); i++) {
 			org.apache.poi.ss.usermodel.Cell cell = row.getCell(i);
 			rowValues.add(readCell(cell));

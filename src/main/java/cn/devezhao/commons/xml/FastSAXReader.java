@@ -23,7 +23,7 @@ public class FastSAXReader {
 	
 	private final int initial;
 	
-	private final Queue<XMLReader> xmlReadres = new ConcurrentLinkedQueue<>();
+	private final Queue<XMLReader> xmlReaders = new ConcurrentLinkedQueue<>();
 
 	/**
 	 * @param initial
@@ -34,24 +34,24 @@ public class FastSAXReader {
 	}
 
 	/**
-	 * @param xxe
+	 * 从缓存池获取 SAXReader
+	 *
+	 * @param xxe 是否启用 XXE 防护（禁止 DTD 声明，阻断外部实体注入）
 	 * @return
 	 */
 	public SAXReader getSAXParser(boolean xxe) {
-		XMLReader xmlReader = xmlReadres.poll();
+		XMLReader xmlReader = xmlReaders.poll();
 		if (xmlReader == null) {
-			LOG.warn("No more cache, create new XMLReader ....");
+			LOG.warn("No more cached XMLReaders, creating a new one");
 			xmlReader = doCachingOneReader(null);
 		}
 		
 		SAXReader saxReader = new SAXReader(xmlReader);
 		saxReader.setMergeAdjacentText(true);
-		if (xxe) {
-			try {
-				saxReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-			} catch (SAXException ignored) {
-				// NOOP
-			}
+		try {
+			saxReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", xxe);
+		} catch (SAXException ignored) {
+			// NOOP
 		}
 		return saxReader;
 	}
@@ -61,9 +61,9 @@ public class FastSAXReader {
 	 */
 	public void release(SAXReader reader) {
 		try {
-			xmlReadres.add(reader.getXMLReader());
+			xmlReaders.add(reader.getXMLReader());
 		} catch (SAXException e) {
-			LOG.warn("Release SAXReader to cache fail!", e);
+			LOG.warn("Failed to release SAXReader to cache!", e);
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class FastSAXReader {
 	 * Initialize cache
 	 */
 	private void doInitAllCache() {
-		LOG.debug("Initializing " + initial + " SAXReader in cache");
+		LOG.debug("Initializing " + initial + " SAXReaders in cache");
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			
@@ -92,7 +92,7 @@ public class FastSAXReader {
 			SAXParser parser = factory.newSAXParser();
 			XMLReader reader = parser.getXMLReader();
 			reader.setFeature("http://xml.org/sax/features/validation", false);
-			xmlReadres.add(reader);
+			xmlReaders.add(reader);
 			
 			return reader;
 		} catch (Exception ex) {

@@ -21,7 +21,7 @@ public final class ThrowableUtils {
 	 */
 	public static Throwable getRootCause(Throwable ex) {
 		if (ex == null) {
-			throw new RuntimeException("Unknow exception");
+			throw new RuntimeException("Unknown exception");
 		}
 		
 		Throwable cause = ExceptionUtils.getRootCause(ex);

@@ -67,16 +67,20 @@ public class SelectBuilder extends ConditionalBuilder {
     public String toSql() {
 		StringBuilder sql = new StringBuilder("select ");
 		
-		for (String c : columns) {
-			if (c.contains("(")) {  // 函数
-				sql.append(c);
-			} else {
-				sql.append(SqlHelper.wrapIdent(c));
+		if (columns.isEmpty()) {
+			sql.append("*");  // 未指定列时查询全部列，避免空列时截断关键字生成非法 SQL
+		} else {
+			for (String c : columns) {
+				if (c.contains("(") || "*".equals(c)) {  // 函数或 *
+					sql.append(c);
+				} else {
+					sql.append(SqlHelper.wrapIdent(c));
+				}
+				sql.append(", ");
 			}
-			sql.append(", ");
+			int len  = sql.length();
+			sql.delete(len - 2, len);
 		}
-		int len  = sql.length();
-		sql.delete(len - 2, len);
 		
 		sql.append(" from ").append(SqlHelper.wrapIdent(table.toLowerCase())).append(" where (1 = 1)");
 		if (whereClause != null) {

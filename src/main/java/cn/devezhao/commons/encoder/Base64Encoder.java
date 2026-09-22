@@ -2,13 +2,16 @@ package cn.devezhao.commons.encoder;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 /**
  * <tt>org.bouncycastle.util.encoders.Base64Encoder</tt>
- * 
+ *
  * @author Zhao Fangfang
  * @version $Id: Bean2Json.java 48 2015-08-18 02:57:54Z zhaofang123@gmail.com $
+ * @deprecated 历史遗留实现，请使用 JDK 自带的 {@code java.util.Base64}（JDK 8+）
  */
+@Deprecated
 public class Base64Encoder {
 
 	protected final byte[] encodingTable = { (byte) 'A', (byte) 'B',
@@ -34,6 +37,7 @@ public class Base64Encoder {
 	protected final byte[] decodingTable = new byte[128];
 
 	protected void initialiseDecodingTable() {
+		Arrays.fill(decodingTable, (byte) -1);
 		for (int i = 0; i < encodingTable.length; i++) {
 			decodingTable[encodingTable[i]] = (byte) i;
 		}
@@ -107,6 +111,16 @@ public class Base64Encoder {
 	}
 
 	/**
+	 * 查表解码单个 base64 字符，非法字符抛出异常
+	 */
+	private byte decodeValue(char c) {
+		if (c >= 128 || decodingTable[c] < 0) {
+			throw new IllegalArgumentException("Invalid base 64 character: " + (int) c);
+		}
+		return decodingTable[c];
+	}
+
+	/**
 	 * decode the base 64 encoded byte data writing it to the given output
 	 * stream, whitespace characters will be ignored.
 	 * 
@@ -133,19 +147,19 @@ public class Base64Encoder {
 		i = nextI(data, i, finish);
 
 		while (i < finish) {
-			b1 = decodingTable[data[i++]];
+			b1 = decodeValue((char) data[i++]);
 
 			i = nextI(data, i, finish);
 
-			b2 = decodingTable[data[i++]];
+			b2 = decodeValue((char) data[i++]);
 
 			i = nextI(data, i, finish);
 
-			b3 = decodingTable[data[i++]];
+			b3 = decodeValue((char) data[i++]);
 
 			i = nextI(data, i, finish);
 
-			b4 = decodingTable[data[i++]];
+			b4 = decodeValue((char) data[i++]);
 
 			out.write((b1 << 2) | (b2 >> 4));
 			out.write((b2 << 4) | (b3 >> 2));
@@ -154,6 +168,13 @@ public class Base64Encoder {
 			outLen += 3;
 
 			i = nextI(data, i, finish);
+		}
+
+		if (end == off) {
+			return outLen;
+		}
+		if (end - off < 4) {
+			throw new IllegalArgumentException("Invalid base 64 data - insufficient data");
 		}
 
 		outLen += decodeLastBlock(out, (char) data[end - 4],
@@ -196,19 +217,19 @@ public class Base64Encoder {
 		i = nextI(data, i, finish);
 
 		while (i < finish) {
-			b1 = decodingTable[data.charAt(i++)];
+			b1 = decodeValue(data.charAt(i++));
 
 			i = nextI(data, i, finish);
 
-			b2 = decodingTable[data.charAt(i++)];
+			b2 = decodeValue(data.charAt(i++));
 
 			i = nextI(data, i, finish);
 
-			b3 = decodingTable[data.charAt(i++)];
+			b3 = decodeValue(data.charAt(i++));
 
 			i = nextI(data, i, finish);
 
-			b4 = decodingTable[data.charAt(i++)];
+			b4 = decodeValue(data.charAt(i++));
 
 			out.write((b1 << 2) | (b2 >> 4));
 			out.write((b2 << 4) | (b3 >> 2));
@@ -217,6 +238,13 @@ public class Base64Encoder {
 			length += 3;
 
 			i = nextI(data, i, finish);
+		}
+
+		if (end == 0) {
+			return length;
+		}
+		if (end < 4) {
+			throw new IllegalArgumentException("Invalid base 64 data - insufficient data");
 		}
 
 		length += decodeLastBlock(out, data.charAt(end - 4), data
@@ -230,26 +258,26 @@ public class Base64Encoder {
 		byte b1, b2, b3, b4;
 
 		if (c3 == padding) {
-			b1 = decodingTable[c1];
-			b2 = decodingTable[c2];
+			b1 = decodeValue(c1);
+			b2 = decodeValue(c2);
 
 			out.write((b1 << 2) | (b2 >> 4));
 
 			return 1;
 		} else if (c4 == padding) {
-			b1 = decodingTable[c1];
-			b2 = decodingTable[c2];
-			b3 = decodingTable[c3];
+			b1 = decodeValue(c1);
+			b2 = decodeValue(c2);
+			b3 = decodeValue(c3);
 
 			out.write((b1 << 2) | (b2 >> 4));
 			out.write((b2 << 4) | (b3 >> 2));
 
 			return 2;
 		} else {
-			b1 = decodingTable[c1];
-			b2 = decodingTable[c2];
-			b3 = decodingTable[c3];
-			b4 = decodingTable[c4];
+			b1 = decodeValue(c1);
+			b2 = decodeValue(c2);
+			b3 = decodeValue(c3);
+			b4 = decodeValue(c4);
 
 			out.write((b1 << 2) | (b2 >> 4));
 			out.write((b2 << 4) | (b3 >> 2));

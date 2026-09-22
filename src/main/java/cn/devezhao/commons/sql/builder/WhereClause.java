@@ -20,7 +20,7 @@ public class WhereClause implements Builder {
 	
 	private final Builder parentBuilder;
 	
-	private final LinkedList<String> caluseQueue = new LinkedList<>();
+	private final LinkedList<String> clauseQueue = new LinkedList<>();
 	
 	/**
 	 * 1 = 谓词, 2 = 连接(or, and) */
@@ -35,59 +35,59 @@ public class WhereClause implements Builder {
 	}
 	
 	public WhereClause eq(String column, Object value) {
-		addToCaluseQueue(column, "=", value);
+		addToClauseQueue(column, "=", value);
 		return this;
 	}
 	
 	public WhereClause gt(String column, Object value) {
-		addToCaluseQueue(column, ">", value);
+		addToClauseQueue(column, ">", value);
 		return this;
 	}
 	
 	public WhereClause lt(String column, Object value) {
-		addToCaluseQueue(column, "<", value);
+		addToClauseQueue(column, "<", value);
 		return this;
 	}
 	
 	public WhereClause isnull(String column) {
-		addToCaluseQueue(column, "is", ObjectUtils.NULL);
+		addToClauseQueue(column, "is", ObjectUtils.NULL);
 		return this;
 	}
 	
 	public WhereClause isnotnull(String column) {
-		addToCaluseQueue(column, "is not", ObjectUtils.NULL);
+		addToClauseQueue(column, "is not", ObjectUtils.NULL);
 		return this;
 	}
 	
 	public WhereClause like(String column, Object value) {
-		addToCaluseQueue(column, "like", value);
+		addToClauseQueue(column, "like", value);
 		return this;
 	}
 	
 	public WhereClause and() {
 		if (previousAppendItem == 2) {
-			LOG.warn("Previous append item is join item(or, and)");
+			LOG.warn("Previous appended item is a join item (or/and)");
 		}
 		previousAppendItem = 2;
 		
-		caluseQueue.add("and");
+		clauseQueue.add("and");
 		return this;
 	}
 	
 	public WhereClause or() {
 		if (previousAppendItem == 2) {
-			LOG.warn("Previous append item is join item(or, and)");
+			LOG.warn("Previous appended item is a join item (or/and)");
 		}
 		previousAppendItem = 2;
 		
-		caluseQueue.add("or");
+		clauseQueue.add("or");
 		return this;
 	}
 	
 	@Override
     public String toSql() {
 		StringBuilder sql = new StringBuilder("( ");
-		for (String s : caluseQueue) {
+		for (String s : clauseQueue) {
 			sql.append(s).append(' ');
 		}
 		return sql.append(")").toString();
@@ -97,23 +97,23 @@ public class WhereClause implements Builder {
 		return (parentBuilder != null) ? parentBuilder.toSql() : toSql();
 	}
 	
-	private void addToCaluseQueue(String column, String operate, Object v) {
+	private void addToClauseQueue(String column, String operate, Object v) {
 		if (previousAppendItem == 1) {
-			LOG.warn("Previous append item is predication");
+			LOG.warn("Previous appended item is a predicate");
 		}
 		previousAppendItem = 1;
 		
-		caluseQueue.add(SqlHelper.wrapIdent(column));
-		caluseQueue.add(operate);
+		clauseQueue.add(SqlHelper.wrapIdent(column));
+		clauseQueue.add(operate);
 		
 		if (v == null) {
-			caluseQueue.add("?");
+			clauseQueue.add("?");
 		} else if (ObjectUtils.NULL == v) {
-			caluseQueue.add("null");
+			clauseQueue.add("null");
 		} else if (Number.class.isAssignableFrom(v.getClass())) {
-			caluseQueue.add(v.toString());
+			clauseQueue.add(v.toString());
 		} else {
-			caluseQueue.add('\'' + SqlHelper.escapeSql(v) + '\'');
+			clauseQueue.add('\'' + SqlHelper.escapeSql(v) + '\'');
 		}
 	}
 }
